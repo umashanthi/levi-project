@@ -1,10 +1,8 @@
-package org.levi.bpmn.bpmn20.event;
+package org.levi.bpmn.runtime.event;
 
 
-import org.apache.ode.jacob.examples.bpmn20.EndEvent;
-import org.levi.bpmn.bpmn20.Node;
-import org.levi.bpmn.bpmn20.StartEvent;
-import org.levi.bpmn.bpmn20.Task;
+
+import org.levi.bpmn.runtime.Node;
 import org.omg.spec.bpmn.x20100524.model.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.levi.bpmn.bpmn20;
+package org.levi.bpmn.runtime;
 
 import org.apache.ode.jacob.examples.bpmn20.event.NodeFactory;
 

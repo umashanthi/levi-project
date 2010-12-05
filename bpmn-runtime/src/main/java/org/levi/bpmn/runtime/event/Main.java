@@ -1,4 +1,4 @@
-package org.levi.bpmn.bpmn20.event;
+package org.levi.bpmn.runtime.event;
 
 import java.io.File;
 

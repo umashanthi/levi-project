@@ -1,4 +1,4 @@
-package org.levi.bpmn.bpmn20;
+package org.levi.bpmn.runtime;
 
 import org.apache.ode.jacob.examples.bpmn20.event.NodeFactory;
 
@@ -6,13 +6,13 @@ import org.apache.ode.jacob.examples.bpmn20.event.NodeFactory;
  * Created by IntelliJ IDEA.
  * User: ishan
  * Date: Nov 22, 2010
- * Time: 3:40:28 PM
+ * Time: 3:46:52 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ExclusiveGateway extends Gateway {
+public class ComplexGateway extends Gateway {
     NodeFactory _nodeFac;
 
-    public ExclusiveGateway(NodeFactory nodeFac) {
+    public ComplexGateway(NodeFactory nodeFac) {
         super();
         _nodeFac = nodeFac;
     }

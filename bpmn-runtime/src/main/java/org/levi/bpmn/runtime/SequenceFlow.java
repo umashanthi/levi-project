@@ -1,4 +1,4 @@
-package org.levi.bpmn.bpmn20;
+package org.levi.bpmn.runtime;
 
 /**
  * Created by IntelliJ IDEA.

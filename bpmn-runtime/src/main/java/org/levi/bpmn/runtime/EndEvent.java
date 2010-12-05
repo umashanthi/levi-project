@@ -1,6 +1,6 @@
-package org.levi.bpmn.bpmn20;
+package org.levi.bpmn.runtime;
 
-import org.levi.bpmn.bpmn20.Event;
+
 
 /**
  * Created by IntelliJ IDEA.

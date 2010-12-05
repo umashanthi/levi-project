@@ -1,4 +1,4 @@
-package org.levi.bpmn.bpmn20.event;
+package org.levi.bpmn.runtime.event;
 
 import org.apache.ode.jacob.vpu.ExecutionQueueImpl;
 import org.apache.ode.jacob.vpu.JacobVPU;
