@@ -1,0 +1,119 @@
+10
+
+dir
+0
+http://svn.apache.org/repos/asf/ode/tags/APACHE_ODE_1.3.4/jacob/src/main/java/org/apache/ode/jacob/examples/bpmn20
+http://svn.apache.org/repos/asf
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+13f79535-47bb-0310-9956-ffa450edef68
+
+Activity.java
+file
+
+
+
+add
+
+ComplexGateway.java
+file
+
+
+
+add
+
+EndEvent.java
+file
+
+
+
+add
+
+Event.java
+file
+
+
+
+add
+
+ExclusiveGateway.java
+file
+
+
+
+add
+
+Gateway.java
+file
+
+
+
+add
+
+InclusiveGateway.java
+file
+
+
+
+add
+
+Node.java
+file
+
+
+
+add
+
+ParallelGateway.java
+file
+
+
+
+add
+
+SequenceFlow.java
+file
+
+
+
+add
+
+StartEvent.java
+file
+
+
+
+add
+
+Task.java
+file
+
+
+
+add
+
+event
+dir
+
+
+
+add
+
