@@ -1,6 +1,7 @@
 package org.levi.bpmn.runtime;
 
-import org.apache.ode.jacob.examples.bpmn20.event.NodeFactory;
+import org.levi.bpmn.runtime.event.NodeFactory;
+
 
 /**
  * Created by IntelliJ IDEA.
