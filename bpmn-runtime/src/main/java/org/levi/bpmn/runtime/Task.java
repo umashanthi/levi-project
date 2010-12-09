@@ -1,6 +1,8 @@
 package org.levi.bpmn.runtime;
 
-import org.apache.ode.jacob.examples.bpmn20.event.NodeFactory;
+
+
+import org.levi.bpmn.runtime.event.NodeFactory;
 import org.omg.spec.bpmn.x20100524.model.TTask;
 
 /**

@@ -2,7 +2,10 @@ package org.levi.bpmn.runtime.event;
 
 
 
+import org.levi.bpmn.runtime.EndEvent;
 import org.levi.bpmn.runtime.Node;
+import org.levi.bpmn.runtime.StartEvent;
+import org.levi.bpmn.runtime.Task;
 import org.omg.spec.bpmn.x20100524.model.*;
 
 import java.util.ArrayList;
@@ -18,8 +21,8 @@ import java.util.List;
  */
 public class NodeFactory {
     private ObjectModel _om;
-    /*private List<TFlowElement> _flowElemList;
-    private Iterator<TFlowElement> _flowElemI;*/
+    private List<TFlowElement> _flowElemList;
+    private Iterator<TFlowElement> _flowElemI;
 
     public NodeFactory(ObjectModel om) {
         _om = om;
@@ -27,16 +30,16 @@ public class NodeFactory {
     }
 
     private void makeFlowElementList() {
-       /* assert _om != null;
+        assert _om != null;
         TFlowElement[] flowElems = _om.getFlowElements(0);
         _flowElemList = new ArrayList<TFlowElement>(flowElems.length);
         for (int i = 0; i < flowElems.length; ++i) {
             _flowElemList.add(flowElems[i]);
         }
-        _flowElemI = _flowElemList.iterator();*/
+        _flowElemI = _flowElemList.iterator();
     }
     public Node createNextNode() {
-      /*  if (_flowElemI.hasNext()) {
+        if (_flowElemI.hasNext()) {
             TFlowElement e = _flowElemI.next();
             if (e instanceof TTask) {
                 return new Task((TTask)e, this);
@@ -64,7 +67,6 @@ public class NodeFactory {
             }
         } else {
             throw new NullPointerException("No more flow elements found");
-        }*/
-       return null;
+        }
     }
 }

@@ -11,7 +11,7 @@ import java.io.File;
  */
 public class Main {
     public static void main(String[] args) {
-        String path = "jacob/src/main/java/org/apache/ode/jacob/examples/bpmn20/data";
+        String path = "bpmn-runtime/src/main/java/org/levi/bpmn/runtime/data";
         ObjectModel om = new ObjectModel(new File(path + "/TroubleTicketSystem.bpmn"));
         Process p = new Process(om);
         p.execute();
