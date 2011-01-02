@@ -1,6 +1,5 @@
 package org.levi.engine.impl.bpmn;
 
-import org.levi.engine.bpmn.Gateway;
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.omg.spec.bpmn.x20100524.model.TGateway;
 import org.omg.spec.bpmn.x20100524.model.TGatewayDirection;
@@ -9,34 +8,32 @@ import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class GatewayNode extends RunnableFlowNode {
-    private final Gateway gateway;
-    private final FlowNodeFactory flowNodeFactory;
-    private final SequenceFlowSet incomingSeqFlowSet;
-    private final SequenceFlowSet outgoingSeqFlowSet;
-    private final List<String> incomingTokens;
-    private final int gatewayDirection;
-
-    public GatewayNode(TGateway gateway, FlowNodeFactory flowNodeFactory) {
-        super();
+public abstract class Gateway extends RunnableFlowNode {
+    private final TGateway gateway;
+    protected final FlowNodeFactory flowNodeFactory;
+    protected final SequenceFlowSet incomingSeqFlowSet;
+    protected final SequenceFlowSet outgoingSeqFlowSet;
+    protected final List<String> incomingTokens;
+    protected final int gatewayDirection;
+    
+    public Gateway(TGateway gateway, FlowNodeFactory flowNodeFactory) {
         assert gateway != null;
-        assert flowNodeFactory != null;
-        // TODO check the validity of the parameters
-
+        assert flowNodeFactory !=  null;
+        
         this.flowNodeFactory = flowNodeFactory;
-        incomingSeqFlowSet = flowNodeFactory.getTargetSequenceFlowSet(gateway.getId());
-        outgoingSeqFlowSet = flowNodeFactory.getSourceSequenceFlowSet(gateway.getId());
-        gatewayDirection = gateway.getGatewayDirection().intValue();
+        this.gateway = gateway;
+        this.incomingSeqFlowSet = this.flowNodeFactory.getTargetSequenceFlowSet(this.gateway.getId());
+        this.outgoingSeqFlowSet = this.flowNodeFactory.getSourceSequenceFlowSet(this.gateway.getId());
         incomingTokens = new ArrayList<String>(incomingSeqFlowSet.size());
-        this.gateway = GatewayFactory.newGateway(gateway, this);
-    }
-
-    public TGateway getGatewaType() {
-        return gateway.getType();
+        gatewayDirection = gateway.getGatewayDirection().intValue();
     }
 
     public String getId() {
         return gateway.getId();
+    }
+
+    public String getName() {
+        return gateway.getName();
     }
 
     public void insertToken(String id) {
@@ -46,7 +43,18 @@ public final class GatewayNode extends RunnableFlowNode {
         } else {
             throw new IllegalStateException("Inserting already existing seq flow");
         }
-        //gateway.insertToken(id);
+    }
+
+    public abstract List<TSequenceFlow> evaluate();
+
+    public void run() {
+        List<TSequenceFlow> output = evaluate();
+        //if (!isConverging() && output.isEmpty()) {// todo move this check inside exclusive gateway
+        //    throw new IllegalArgumentException("empty evaluation result for gateway");
+        //}
+        for (TSequenceFlow result : output) {
+            instance(flowNodeFactory.getNextNode(result));
+        }
     }
 
     public List<String> getIncomingTokens() {
@@ -75,16 +83,6 @@ public final class GatewayNode extends RunnableFlowNode {
 
     public boolean isUnspecified() {
         return gatewayDirection == TGatewayDirection.INT_UNSPECIFIED;
-    }
-
-    @Override public void run() {
-        List<TSequenceFlow> output = gateway.evaluate();
-        //if (!isConverging() && output.isEmpty()) {// todo move this check inside exclusive gateway
-        //    throw new IllegalArgumentException("empty evaluation result for gateway");
-        //}
-        for (TSequenceFlow result : output) {
-            instance(flowNodeFactory.getNextNode(result));
-        }
     }
 }
 

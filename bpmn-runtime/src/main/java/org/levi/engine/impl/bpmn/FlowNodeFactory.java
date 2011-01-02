@@ -29,7 +29,7 @@ public class FlowNodeFactory {
         return startEvent;
     }
 
-    // this method will be invoked by GatewayNode objects.
+    // this method will be invoked by Gateway objects.
     public RunnableFlowNode getNextNode(TSequenceFlow sequenceFlow) {
         // get the target ref
         RunnableFlowNode flowNode = makeNode(sequenceFlow.getTargetRef());
@@ -38,7 +38,7 @@ public class FlowNodeFactory {
     }
 
     // this method will be invoked by RunnableFlowNode objects other than
-    // the GatewayNode objects.
+    // the Gateway objects.
     public RunnableFlowNode getNextNode(RunnableFlowNode currentFlowNode) {
         String id = currentFlowNode.getId();
         // get next seq flow (from the source based map)
@@ -56,8 +56,8 @@ public class FlowNodeFactory {
 
     // this method is used to insert a
     public static void insertToken(RunnableFlowNode flowNode, String sfId) {
-        if (flowNode instanceof GatewayNode) {
-            ((GatewayNode)flowNode).insertToken(sfId);
+        if (flowNode instanceof Gateway) {
+            ((Gateway)flowNode).insertToken(sfId);
         }
     }
 
@@ -72,7 +72,7 @@ public class FlowNodeFactory {
             if (e instanceof TTask) {
                 flowNode = new TaskNode((TTask)e, this);
             } else if (e instanceof TGateway) {
-                flowNode = new GatewayNode((TGateway)e, this);
+                flowNode = makeGateway((TGateway)e);
             } else if (e instanceof TEndEvent) {
                 flowNode = new EndEvent((TEndEvent)e);
             } else {
@@ -109,5 +109,19 @@ public class FlowNodeFactory {
 
     private RunnableFlowNode getNode(String id) {
         return (id != null) ? (flowNodes.get(id)) : null;
+    }
+
+    private RunnableFlowNode makeGateway(TGateway g) {
+        if (g instanceof TExclusiveGateway) {
+            return new ExclusiveGateway((TExclusiveGateway)g, this);
+        } else if (g instanceof TParallelGateway) {
+            return new ParallelGateway((TParallelGateway)g, this);
+        } else if (g instanceof TInclusiveGateway) {
+            throw new IllegalArgumentException("unsupproted Gateway type");
+        } else if (g instanceof TComplexGateway) {
+            throw new IllegalArgumentException("unsupproted Gateway type");
+        } else {
+            throw new IllegalArgumentException("unknown Gateway type");
+        }
     }
 }

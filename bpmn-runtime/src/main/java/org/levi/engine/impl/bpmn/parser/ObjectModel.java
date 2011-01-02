@@ -118,4 +118,5 @@ public class ObjectModel {
     public String getProcessName() {
         return processArray[DEFAULT_PROCESS].getName();
     }
+    // todo toString() methods
 }

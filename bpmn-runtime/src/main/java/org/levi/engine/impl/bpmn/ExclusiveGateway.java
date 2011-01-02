@@ -1,43 +1,34 @@
 package org.levi.engine.impl.bpmn;
 
-import org.levi.engine.bpmn.Gateway;
 import org.levi.samples.utils.UserInput;
 import org.omg.spec.bpmn.x20100524.model.TExclusiveGateway;
-import org.omg.spec.bpmn.x20100524.model.TGateway;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ExclusiveGateway implements Gateway {
-    private final TExclusiveGateway gateway;
-    private final GatewayNode gatewayNode;
+public final class ExclusiveGateway extends Gateway {
     private final List<TSequenceFlow> output;
 
-    public ExclusiveGateway(TExclusiveGateway gateway, GatewayNode gatewayNode) {
-        this.gateway = gateway;
-        this.gatewayNode = gatewayNode;
+    public ExclusiveGateway(TExclusiveGateway gateway, FlowNodeFactory factory) {
+        super(gateway, factory);
         output = new ArrayList<TSequenceFlow>(1); // because it can have only a single result
     }
 
-    public TGateway getType() {
-        return gateway;
-    }
-
     public List<TSequenceFlow> evaluate() {
-        System.out.println("<Exclusive Gateway " + gateway.getName() + " Evaluating>");
+        System.out.println("<Exclusive Gateway " + getName() + " Evaluating>");
         output.clear();
         compare(); // TODO where should this go? this place is the right place
-        if (gatewayNode.isDiverging()
-            || gatewayNode.isConverging()
-            || gatewayNode.isMixed()
-            || gatewayNode.isUnspecified()) { //for exclusive gateway, all these are similar
-            if (gatewayNode.getOutgoingSeqFlowSet().size() == 1) {// typical converging case
-                output.add(gatewayNode.getOutgoingSeqFlowSet().get(0));
+        if (isDiverging()
+            || isConverging()
+            || isMixed()
+            || isUnspecified()) { //for exclusive gateway, all these are similar
+            if (outgoingSeqFlowSet.size() == 1) {// typical converging case
+                output.add(outgoingSeqFlowSet.get(0));
             } else { //typical diverging case
                 // TODO evaluate!
-                int which = UserInput.read(gatewayNode.getOutgoingSeqFlowSet().size());
-                output.add(gatewayNode.getOutgoingSeqFlowSet().get(which));
+                int which = UserInput.read(outgoingSeqFlowSet.size());
+                output.add(outgoingSeqFlowSet.get(which));
             }
             return output;
         } else {
@@ -45,17 +36,7 @@ public final class ExclusiveGateway implements Gateway {
         }
     }
 
-    public String getId() {
-        return gateway.getId();
-    }
-
-    public TSequenceFlow getSeqFlowByTargetRef(String id) {
-        return gatewayNode.getOutgoingSeqFlowSet().getByTargetRef(id);
-    }
-
     private void compare() {
-        List<String> incomingTokens = gatewayNode.getIncomingTokens();
-        SequenceFlowSet incomingSeqFlowSet = gatewayNode.getIncomingSeqFlowSet();
         assert incomingTokens.size() <= incomingSeqFlowSet.size();
         for (int i = incomingSeqFlowSet.size() - 1; i >= 0; --i) {
             for (String token : incomingTokens) {
@@ -66,5 +47,11 @@ public final class ExclusiveGateway implements Gateway {
             }
         }
         throw new IllegalArgumentException("incoming sequence flows unmatched");
+    }
+
+    @Override public String toString() {
+        String out = "{";
+        out += "ExclusiveGateway: " + getId() + "}";
+        return out;
     }
 }

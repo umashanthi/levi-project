@@ -18,9 +18,18 @@ public class StartEvent extends Event {
     public String getId() {
         return startEvent.getId();
     }
+    
     public void run() {
         System.out.println(this.getClassName());
 
         instance(flowNodeFac.getNextNode(this));
+    }
+
+    public String toString() {
+        String out = "{";
+        out += "flowNodeFactory: " + flowNodeFac + ", ";
+        out += "startEvent: " + startEvent;
+        out += "}";
+        return out;
     }
 }
