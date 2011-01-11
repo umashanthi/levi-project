@@ -49,8 +49,7 @@ public class ObjectModel {
         try { // XmlException, IOException
             definitionsDoc = DefinitionsDocument.Factory.parse(instance);
         } catch (Exception e) {
-            //e.printStackTrace();
-            throw new IllegalArgumentException(e.getMessage());            
+            throw new RuntimeException(e);           
         }
         processArray = getProcessArray();
         createMaps();

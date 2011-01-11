@@ -18,14 +18,14 @@ public final class ExclusiveGateway extends Gateway {
     public List<TSequenceFlow> evaluate() {
         System.out.println("<Exclusive Gateway " + getName() + " Evaluating>");
         output.clear();
-        compare(); // TODO where should this go? this place is the right place
+        compare();
         if (isDiverging()
             || isConverging()
             || isMixed()
-            || isUnspecified()) { //for exclusive gateway, all these are similar
-            if (outgoingSeqFlowSet.size() == 1) {// typical converging case
+            || isUnspecified()) { // for exclusive gateway, all these are similar
+            if (outgoingSeqFlowSet.size() == 1) { // typical converging case
                 output.add(outgoingSeqFlowSet.get(0));
-            } else { //typical diverging case
+            } else { // typical diverging case
                 // TODO evaluate!
                 int which = UserInput.read(outgoingSeqFlowSet.size());
                 output.add(outgoingSeqFlowSet.get(which));
@@ -38,20 +38,26 @@ public final class ExclusiveGateway extends Gateway {
 
     private void compare() {
         assert incomingTokens.size() <= incomingSeqFlowSet.size();
-        for (int i = incomingSeqFlowSet.size() - 1; i >= 0; --i) {
+        /*for (int i = incomingSeqFlowSet.size() - 1; i >= 0; --i) {
             for (String token : incomingTokens) {
                 if (token.equals(incomingSeqFlowSet.get(i).getId())) {
                     incomingTokens.clear();
                     return;
                 }
             }
+        }*/
+        for (TSequenceFlow sf : incomingSeqFlowSet) {
+            for (String token : incomingTokens) {
+                if (token.equals(sf.getId())) {
+                    incomingTokens.clear();
+                    return;
+                }
+            }
         }
-        throw new IllegalArgumentException("incoming sequence flows unmatched");
+        throw new RuntimeException("incoming sequence flows unmatched");
     }
 
     @Override public String toString() {
-        String out = "{";
-        out += "ExclusiveGateway: " + getId() + "}";
-        return out;
+        return "{ExclusiveGateway: " + getId() + "}";
     }
 }

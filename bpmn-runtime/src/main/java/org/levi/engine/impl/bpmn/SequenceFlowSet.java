@@ -3,31 +3,25 @@ package org.levi.engine.impl.bpmn;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ishan
- * Date: Dec 20, 2010
- * Time: 1:44:25 PM
- * To change this template use File | Settings | File Templates.
- */
-public class SequenceFlowSet {
+public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSequenceFlow> {
     private TSequenceFlow firstItem;
     private List<TSequenceFlow> seqFlowList = null;
     private int size;
+    private int count = 0;
 
     public SequenceFlowSet(TSequenceFlow firstItem) {
-        // TODO
-        //if (firstItem == null) {
-        //    throw new NullPointerExeption();
-        //}
-        //seqFlowList = new ArrayList<TSequenceFlow>(3);
-        assert firstItem != null; // this should be handled with an exception instead
+        if (firstItem == null) {
+            throw new NullPointerException("Attempt to create a SequenceFlowSet from a null TSequenceFlow reference");
+        }
         this.firstItem = firstItem;
         size = 1;
     }
 
+    // TODO do with synchronization?
     public void add(TSequenceFlow seqFlow) {
         if (seqFlow == null) {
             throw new NullPointerException();
@@ -44,14 +38,11 @@ public class SequenceFlowSet {
         return size;
     }
 
-    public String getSourceRef() {
-        return firstItem.getSourceRef();
-    }
     public String getId() {
         if (!isMultiSet()) {
             return firstItem.getId();
         } else {
-            throw new IllegalArgumentException("Cannot return a single id for a multiset");
+            throw new UnsupportedOperationException("Cannot return a single id for a multiset");
         }
     }
 
@@ -59,24 +50,12 @@ public class SequenceFlowSet {
         return (i == 0) ? firstItem : seqFlowList.get(i-1);
     }
 
-    public TSequenceFlow getByTargetRef(String id) {
-        if (id.equals(firstItem.getTargetRef())) {
-            return firstItem;
-        }
-        for (TSequenceFlow sf : seqFlowList) {
-            if (id.equals(sf.getTargetRef())) {
-                return sf;
-            }
-        }
-        return null;
-    }
-
     public String getTargetRef() {
         return firstItem.getTargetRef();
     }
 
     public boolean isMultiSet() {
-        return (seqFlowList == null) ? false : true;
+        return (seqFlowList != null);
     }
 
     public String toString() {
@@ -96,5 +75,25 @@ public class SequenceFlowSet {
         }
         s += "}";
         return s;
+    }
+
+    public Iterator<TSequenceFlow> iterator() {
+        return this;
+    }
+
+    public boolean hasNext() {
+        return (count < size);   
+    }
+
+    public TSequenceFlow next() {
+        if (count == size) {
+            throw new NoSuchElementException("No more elements"); 
+        }
+        ++count;
+        return get(count - 1); // TODO count++ instead?
+    }
+
+    public void remove() {
+        throw new UnsupportedOperationException("remove operation not supported for SequenceFlowSet");   
     }
 }

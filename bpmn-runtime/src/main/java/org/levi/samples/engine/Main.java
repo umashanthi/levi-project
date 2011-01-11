@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
         //ProcessManager.newProcess(path);
         String path = "bpmn-runtime/src/main/java/org/levi/samples/data";
-        // /TroubleTicketSystem.engine
-        // /book_fig61.engine
-        // /parallel_gateway_1.engine
+        // /TroubleTicketSystem.bpmn
+        // /book_fig61.bpmn
+        // /parallel_gateway_1.bpmn
         ObjectModel om = ObjectModel.getInstance(new File(path + "/book_fig49.bpmn"));
         ProcessInstance p = new ProcessInstance(om);
         p.execute();

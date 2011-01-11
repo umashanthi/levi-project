@@ -25,7 +25,7 @@ public abstract class Gateway extends RunnableFlowNode {
         this.incomingSeqFlowSet = this.flowNodeFactory.getTargetSequenceFlowSet(this.gateway.getId());
         this.outgoingSeqFlowSet = this.flowNodeFactory.getSourceSequenceFlowSet(this.gateway.getId());
         incomingTokens = new ArrayList<String>(incomingSeqFlowSet.size());
-        gatewayDirection = gateway.getGatewayDirection().intValue();
+        gatewayDirection = this.gateway.getGatewayDirection().intValue();
     }
 
     public String getId() {
@@ -49,26 +49,11 @@ public abstract class Gateway extends RunnableFlowNode {
 
     public void run() {
         List<TSequenceFlow> output = evaluate();
-        //if (!isConverging() && output.isEmpty()) {// todo move this check inside exclusive gateway
-        //    throw new IllegalArgumentException("empty evaluation result for gateway");
-        //}
         for (TSequenceFlow result : output) {
             instance(flowNodeFactory.getNextNode(result));
         }
     }
-
-    public List<String> getIncomingTokens() {
-        return incomingTokens;
-    }
-
-    public SequenceFlowSet getIncomingSeqFlowSet() {
-        return incomingSeqFlowSet;
-    }
-
-    public SequenceFlowSet getOutgoingSeqFlowSet() {
-        return outgoingSeqFlowSet;
-    }
-
+    
     public boolean isConverging() {
         return gatewayDirection == TGatewayDirection.INT_CONVERGING;
     }

@@ -30,9 +30,9 @@ public final class ParallelGateway extends Gateway {
     private boolean compare() {
         boolean result = false;
         if (incomingTokens.size() == incomingSeqFlowSet.size()) {
-            for (int i = incomingSeqFlowSet.size() - 1; i >= 0; --i) {
+            for (TSequenceFlow sf : incomingSeqFlowSet) {
                 for (String token : incomingTokens) {
-                    if (token.equals(incomingSeqFlowSet.get(i).getId())) {
+                    if (token.equals(sf.getId())) {
                         result = true;
                         break;
                     }

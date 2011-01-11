@@ -40,18 +40,18 @@ public class FlowNodeFactory {
     // this method will be invoked by RunnableFlowNode objects other than
     // the Gateway objects.
     public RunnableFlowNode getNextNode(RunnableFlowNode currentFlowNode) {
-        String id = currentFlowNode.getId();
         // get next seq flow (from the source based map)
-        SequenceFlowSet sfs = om.getSourceSequenceFlowSet(id);
+        SequenceFlowSet sfs = om.getSourceSequenceFlowSet(currentFlowNode.getId());
         if (sfs.isMultiSet()) {// TODO this method name is funny! i know :P
             // TODO we do not support this yet.
+            throw new RuntimeException("sequence flow set size is greater than 1");
         } else {
             // get the target ref
             RunnableFlowNode flowNode = makeNode(sfs.getTargetRef());
             insertToken(flowNode, sfs.getId());
             return flowNode;
         }
-        return null;
+        //return null;
     }
 
     // this method is used to insert a
