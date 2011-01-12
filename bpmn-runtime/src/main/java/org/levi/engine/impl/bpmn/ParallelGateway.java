@@ -17,13 +17,33 @@ public final class ParallelGateway extends Gateway {
     public List<TSequenceFlow> evaluate() {
         System.out.println("<Parallel Gateway " + getName() + " Evaluating>");
         output.clear();
-        if (compare()) {
-            for (int i = outgoingSeqFlowSet.size()-1; i >= 0; --i) {
+        //if (compare()) {
+        //    for (int i = outgoingSeqFlowSet.size()-1; i >= 0; --i) {
+        //        output.add(outgoingSeqFlowSet.get(i));
+        //    }
+        //} else {
+        //    //System.out.println(" not done...");
+        //}
+
+        if(isDiverging() || (incomingSeqFlowSet.size()==1)) {
+            for(int i=0;i< outgoingSeqFlowSet.size();i++){
+                System.out.println(">>>>>=============>>>>>");
                 output.add(outgoingSeqFlowSet.get(i));
             }
+        } else if(isConverging() || (outgoingSeqFlowSet.size()==1)) {
+            System.out.println("<<<<<=============<<<<<");
+            if(incomingSeqFlowSet.size() == 1){
+                output.add(outgoingSeqFlowSet.get(0));
+            } else {
+                if(incomingTokens.size() == incomingSeqFlowSet.size()) {
+                    output.add(outgoingSeqFlowSet.get(0));
+                }
+            }
+
         } else {
-            //System.out.println(" not done...");
+            throw new IllegalArgumentException("Invalid gateway direction: Exclusive Gateway");
         }
+
         return output;
     }
 
