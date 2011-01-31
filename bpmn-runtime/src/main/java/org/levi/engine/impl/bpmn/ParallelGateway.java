@@ -18,6 +18,7 @@ public final class ParallelGateway extends Gateway {
         System.out.println("<Parallel Gateway " + getName() + " Evaluating>");
         output.clear();
         if (compare()) {
+<<<<<<< HEAD
             for (TSequenceFlow sf : outgoingSeqFlowSet) {
                 output.add(sf);
             }
@@ -27,7 +28,35 @@ public final class ParallelGateway extends Gateway {
             }*/
         } else {
             //System.out.println(" not done...");
+=======
+        //    for (int i = outgoingSeqFlowSet.size()-1; i >= 0; --i) {
+        //        output.add(outgoingSeqFlowSet.get(i));
+        //    }
+        //} else {
+        //    //System.out.println(" not done...");
+        //}
+
+            if(isDiverging() || (incomingSeqFlowSet.size()==1)) {
+                for(int i=0;i< outgoingSeqFlowSet.size();i++){
+                    System.out.println(">>>>>=============>>>>>");
+                    output.add(outgoingSeqFlowSet.get(i));
+                }
+            } else if(isConverging() || (outgoingSeqFlowSet.size()==1)) {
+                System.out.println("<<<<<=============<<<<<");
+                if(incomingSeqFlowSet.size() == 1){
+                    output.add(outgoingSeqFlowSet.get(0));
+                } else {
+                    if(incomingTokens.size() == incomingSeqFlowSet.size()) {
+                        output.add(outgoingSeqFlowSet.get(0));
+                    }
+                }
+
+            } else {
+                System.out.println(" not done...");
+            }
+>>>>>>> 5c28ef3a90c97cca86f6880eb6a240539ef81be0
         }
+
         return output;
     }
 
