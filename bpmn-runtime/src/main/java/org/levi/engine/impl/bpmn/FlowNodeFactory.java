@@ -90,7 +90,7 @@ public class FlowNodeFactory {
         }
         return flowNode;
     }
-    
+
     public SequenceFlowSet getSourceSequenceFlowSet(String id) {
         return om.getSourceSequenceFlowSet(id);
     }

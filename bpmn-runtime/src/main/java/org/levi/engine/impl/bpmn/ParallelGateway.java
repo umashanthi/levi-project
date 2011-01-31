@@ -18,9 +18,13 @@ public final class ParallelGateway extends Gateway {
         System.out.println("<Parallel Gateway " + getName() + " Evaluating>");
         output.clear();
         if (compare()) {
+            for (TSequenceFlow sf : outgoingSeqFlowSet) {
+                output.add(sf);
+            }
+            /*
             for (int i = outgoingSeqFlowSet.size()-1; i >= 0; --i) {
                 output.add(outgoingSeqFlowSet.get(i));
-            }
+            }*/
         } else {
             //System.out.println(" not done...");
         }

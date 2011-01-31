@@ -7,7 +7,6 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        //ProcessManager.newProcess(path);
         String path = "bpmn-runtime/src/main/java/org/levi/samples/data";
         // /TroubleTicketSystem.bpmn
         // /book_fig61.bpmn
