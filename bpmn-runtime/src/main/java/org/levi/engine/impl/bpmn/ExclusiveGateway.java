@@ -21,7 +21,7 @@ public final class ExclusiveGateway extends Gateway {
     public List<TSequenceFlow> evaluate() {
         System.out.println("<Exclusive Gateway " + getName() + " Evaluating>");
         output.clear();
-        //compare();
+        compare();
         //if (isDiverging()
         //    || isConverging()
         //    || isMixed()

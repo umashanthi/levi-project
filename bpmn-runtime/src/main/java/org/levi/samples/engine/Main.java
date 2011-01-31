@@ -12,7 +12,7 @@ public class Main {
         // /TroubleTicketSystem.bpmn
         // /book_fig61.bpmn
         // /parallel_gateway_1.bpmn
-        ObjectModel om = ObjectModel.getInstance(new File(path + "/book_fig49.bpmn"));
+        ObjectModel om = ObjectModel.getInstance(new File(path + "/book_fig49.1.bpmn"));
         ProcessInstance p = new ProcessInstance(om);
         p.execute();
     }
