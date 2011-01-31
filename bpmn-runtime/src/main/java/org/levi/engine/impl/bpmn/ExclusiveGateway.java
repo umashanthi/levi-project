@@ -40,8 +40,8 @@ public final class ExclusiveGateway extends Gateway {
 
         //Ignore the multiple input and multiple output Gateways since they are not recommended.
         if(isDiverging() || (incomingSeqFlowSet.size()==1)) {
-            for(int i=0;i< outgoingSeqFlowSet.size();i++){
-                TExpression expression = outgoingSeqFlowSet.get(i).getConditionExpression();
+            for(TSequenceFlow sf : outgoingSeqFlowSet){
+                TExpression expression = sf.getConditionExpression();
                 String script = null;
                 if(expression != null){
                     script = expression.newXMLStreamReader().getText();
@@ -54,7 +54,7 @@ public final class ExclusiveGateway extends Gateway {
                 try {
                     if((Boolean)manager.eval("groovy", "myScript", 0, 0, script)){
                         //this evaluation may more complex
-                        output.add(outgoingSeqFlowSet.get(i));
+                        output.add(sf);
                         return output;
                     }
                 } catch (BSFException e) {
