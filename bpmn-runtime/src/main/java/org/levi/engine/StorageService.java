@@ -2,10 +2,11 @@ package org.levi.engine;
 
 /**
  * Created by IntelliJ IDEA.
- * User: ishan
- * Date: Dec 30, 2010
- * Time: 12:32:00 PM
- * To change this template use File | Settings | File Templates.
+ * User: keheliya
+ * Date: Feb 1, 2011
+ * Time: 11:41:48 AM
+ * For Levi - The Native BPMN 2.0 Execution Engine
  */
 public interface StorageService {
+    DeploymentBuilder createDeployment();
 }
