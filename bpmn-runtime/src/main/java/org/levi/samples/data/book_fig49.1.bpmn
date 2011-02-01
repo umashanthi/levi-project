@@ -20,7 +20,7 @@
         <userTask name="User Task 4" id="t_4"/>
         <sequenceFlow sourceRef="t_4" targetRef="pg_4" id="sf_7" />
 
-        <exclusiveGateway name="EG 1" gatewayDirection="Diverging" id="eg_1" />
+        <exclusiveGateway name="EG 1" gatewayDirection="Diverging" id="eg_1" default="sf_23"/>
         <sequenceFlow sourceRef="eg_1" targetRef="t_2" id="sf_5">
         <conditionExpression>
                 price1 = 20
@@ -35,7 +35,7 @@
         <sequenceFlow sourceRef="eg_1" targetRef="t_3" id="sf_6">
         <conditionExpression>
                 price1 = 10
-                price2 = 10
+                price2 = 20
                 if(price1 == price2){
                     return true
                 } else {
@@ -43,6 +43,7 @@
                 }
             </conditionExpression>
         </sequenceFlow>
+        <sequenceFlow sourceRef="eg_1" targetRef="t_3" id="sf_23" />
 
         <userTask name="User Task 2" id="t_2"/>
         <sequenceFlow sourceRef="t_2" targetRef="eg_2" id="sf_8" />
