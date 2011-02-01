@@ -15,15 +15,20 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addUser(User user) {
+    /**
+     * This method saves a User to the database; if the User already exists, it updates the attributes
+     *
+     * @param user The user
+     */
+    public void saveUser(User user) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addGroup(Group group) {
+    public void saveGroup(Group group) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void addPermission(Permission permission) {
+    public void savePermission(Permission permission) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
