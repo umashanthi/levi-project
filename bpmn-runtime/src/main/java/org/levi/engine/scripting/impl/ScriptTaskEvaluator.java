@@ -1,5 +1,7 @@
 package org.levi.engine.scripting.impl;
 
+import org.levi.engine.scripting.Evaluable;
+
 /**
  * Created by IntelliJ IDEA.
  * User: eranda
@@ -7,5 +9,8 @@ package org.levi.engine.scripting.impl;
  * Time: 12:12:19 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ScriptTaskEvaluator {
+public class ScriptTaskEvaluator implements Evaluable {
+    public boolean evaluate() {
+        return false;
+    }
 }

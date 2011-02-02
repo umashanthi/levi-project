@@ -1,7 +1,7 @@
 package org.levi.engine.impl.bpmn;
 
-import org.levi.engine.scripting.ScriptEvaluator;
-import org.levi.engine.scripting.impl.ScriptEvaluatorImpl;
+import org.levi.engine.scripting.impl.ExpressionEvaluator;
+import org.levi.engine.scripting.impl.ScriptEvaluator;
 import org.omg.spec.bpmn.x20100524.model.TExclusiveGateway;
 import org.omg.spec.bpmn.x20100524.model.TExpression;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
@@ -27,13 +27,13 @@ public final class ExclusiveGateway extends Gateway {
         //Ignore the multiple input and multiple output Gateways since they are not recommended.
         TSequenceFlow defaultSequenceFlow = null;
         if (isDiverging() || (incomingSeqFlowSet.size() == 1)) {
-            ScriptEvaluator evaluator = new ScriptEvaluatorImpl();
             for (TSequenceFlow sf : outgoingSeqFlowSet) {
                 TExpression expression = sf.getConditionExpression();
-                String script;
                 if (expression != null) {
                     //expression evaluated by scripting package
-                    if ((Boolean) evaluator.evaluate(expression)) {
+                    ExpressionEvaluator scriptEngine = new ExpressionEvaluator(expression, "groovy");
+                    ScriptEvaluator evaluator = new ScriptEvaluator(scriptEngine);
+                    if ((Boolean) evaluator.evaluate()) {
                         output.add(sf);
                         break;
                     }
