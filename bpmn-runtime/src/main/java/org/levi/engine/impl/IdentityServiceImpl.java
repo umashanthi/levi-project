@@ -1,24 +1,11 @@
-package org.levi.engine.impl.cmd;
+package org.levi.engine.impl;
 
-import org.levi.engine.cmd.CommandExecutor;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.IdentityService;
 import org.levi.engine.identity.User;
 import org.levi.engine.impl.identity.Permission;
-import org.levi.engine.impl.identity.UserImpl;
 
-public class Test {
-    public static void main(String[] args) {
-        User u = new UserImpl();
-        u.setLastName("afddsf");
-        IS is = new IS();
-        is.saveUser(u);
-    }
-
-
-}
-
-class IS implements IdentityService {
+public class IdentityServiceImpl implements IdentityService {
     /**
      * Checks whether the given username exists and the given username&password pair matches
      *
@@ -30,8 +17,13 @@ class IS implements IdentityService {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    /**
+     * Persists a User; if the user already exists, updates the attributes
+     *
+     * @param user the User object to persist
+     */
     public void saveUser(User user) {
-        new CommandExecutor().execute(new SaveUserCmd(user));
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /**
@@ -98,5 +90,4 @@ class IS implements IdentityService {
     public void removeUserFromGroup(String userId, String groupId) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
-
 }

@@ -1,4 +1,7 @@
 package org.levi.engine.cmd;
 
-public interface Command {
+public interface Command<T> {
+
+    T execute();
+
 }
