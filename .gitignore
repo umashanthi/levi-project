@@ -21,3 +21,4 @@ target
 reports
 test-output
 target/
+out/ #currently the webapp's output directory is out - this should be changed later
