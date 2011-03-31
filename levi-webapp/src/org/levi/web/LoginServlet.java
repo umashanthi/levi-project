@@ -22,7 +22,8 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         } else {
             // Valid login. Make a note in the session object.
             HttpSession session = request.getSession();
-            session.setAttribute("logon.isDone", username);
+            session.setAttribute("username", username);
+            session.setAttribute("logged", "true");
             // Try redirecting the client to the page he first tried to access
             try {
                 String target = (String) session.getAttribute("login.target");
@@ -34,7 +35,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             }
 
             // Couldn't redirect to the target. Redirect to the site's home page.
-            response.sendRedirect("index.html");
+            response.sendRedirect("index.jsp");
         }
 
     }

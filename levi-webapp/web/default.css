@@ -75,6 +75,12 @@ img.right {
     background: url(images/img01.jpg) no-repeat left top;
 }
 
+#bodylogo {
+    width: 800px;
+    height: 500px;
+    background: url(images/aa.png) no-repeat left top;
+}
+
 #logo h1, #logo p {
     float: left;
     margin: 0;
@@ -359,9 +365,9 @@ img.right {
 /* Body */
 #body {
     width: 960px;
-    height: 250px;
+    height: 500px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 20px 20px;
     background: white;
 }
 
