@@ -1,7 +1,7 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.scripting.impl.ExpressionEvaluator;
-import org.levi.engine.scripting.impl.ScriptEvaluator;
+import org.levi.engine.scripting.impl.ScriptHandler;
 import org.omg.spec.bpmn.x20100524.model.TExclusiveGateway;
 import org.omg.spec.bpmn.x20100524.model.TExpression;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
@@ -31,9 +31,10 @@ public final class ExclusiveGateway extends Gateway {
                 TExpression expression = sf.getConditionExpression();
                 if (expression != null) {
                     //expression evaluated by scripting package
-                    ExpressionEvaluator scriptEngine = new ExpressionEvaluator(expression, "groovy");
-                    ScriptEvaluator evaluator = new ScriptEvaluator(scriptEngine);
-                    if ((Boolean) evaluator.evaluate()) {
+                    ScriptHandler handler = new ScriptHandler();
+                    ExpressionEvaluator evaluator = new ExpressionEvaluator(expression, "groovy"); //TODO variable languages
+                    handler.setEvaluator(evaluator);
+                    if ((Boolean) handler.execute()) {
                         output.add(sf);
                         break;
                     }
@@ -45,7 +46,6 @@ public final class ExclusiveGateway extends Gateway {
                 }
             }
         } else if (isConverging() || (outgoingSeqFlowSet.size() == 1)) {
-            System.out.println("<<<<<=============<<<<<");
             output.add(outgoingSeqFlowSet.get(0));
         } else {
             throw new IllegalArgumentException("Invalid gateway direction: Exclusive Gateway");  //TODO create new exception for this.
