@@ -5,8 +5,17 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+/*
+    Extract the files from a lar archive
+*/
+
 public class Extractor {
 
+    /*
+            Change the file and directories and do separate extraction
+            Extract the files and directories to enumerator as Zip entry and extract them one by one.
+            @param String
+     */
     public void extract(String addr) {
         Enumeration<?> enumEntries;
 
