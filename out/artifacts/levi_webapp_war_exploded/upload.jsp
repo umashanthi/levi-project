@@ -10,9 +10,8 @@
 <head><title>Simple jsp page</title></head>
 <body>Place your content here
 <%= request.getParameter("form")
-
-
 %>
-
+<%= request.getParameter("form[file]")
+%>
 </body>
 </html>

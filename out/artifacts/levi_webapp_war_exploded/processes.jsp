@@ -1,3 +1,9 @@
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.DataInputStream" %>
+<%@ page import="java.io.FileInputStream" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%--
   Created by IntelliJ IDEA.
   User: umashanthi
@@ -62,32 +68,42 @@ Released : 20090303
     <script type="text/javascript"><!--mce:1--></script>
     <br/><br/>
 
-    <h1> Upload Business Archive File</h1>
+    <h1> Available Processes</h1>
 
     <div><br></div>
-    <form action="upload" method="post" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <td><label>Process Name:</label>
-                </td>
-                <td><input name="processName" type="text" size="30"/></td>
-            </tr>
-
-
-            <tr>
-                <td><label>Business Archive File(*.lar):</label>
-                </td>
-                <td><input name="processArchive" type="file" size="40"/></td>
-            </tr>
-
-
-            <tr>
-                <td></td>
+    <%
+        List processesList = new ArrayList<String>();
+        try {
+            FileInputStream fstream = new FileInputStream("LeviEngine/processes.txt");
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            //Read File Line By Line
+            while ((strLine = br.readLine()) != null) {
+                processesList.add(strLine);
+            }
+            //Close the input stream
+            in.close();
+        } catch (Exception e) {//Catch exception if any
+            out.println("Error: " + e.getMessage());
+        } %>
+    <table>
+        <%for (Object process : processesList) { %>
+        <tr>
+            <form action="">
                 <td>
-                    <input type="submit" value="Upload"/></td>
-            </tr>
-        </table>
-    </form>
+                    <%=process.toString()%>
+                </td>
+                <td>
+                   &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="Start" >
+                </td>
+            </form>
+        </tr>
+        <% }
+        %>
+    </table>
+
+    <% %>
 
 
     <% } else { %>

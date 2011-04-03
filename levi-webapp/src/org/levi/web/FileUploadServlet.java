@@ -9,12 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
 public class FileUploadServlet extends HttpServlet {
+    String dirName = "";
+
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,6 +30,7 @@ public class FileUploadServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         if (ServletFileUpload.isMultipartContent(request)) {
+            String processName = null;
             ServletFileUpload servletFileUpload = new ServletFileUpload(new DiskFileItemFactory());
             FileItem fileItem = null;
             try {
@@ -39,8 +44,7 @@ public class FileUploadServlet extends HttpServlet {
                 while (it.hasNext()) {
                     FileItem fileItemTemp = (FileItem) it.next();
                     if (fileItemTemp.isFormField()) {
-                        response.getWriter().println("success");
-
+                        processName = fileItemTemp.getString();
                     } else {
                         fileItem = fileItemTemp;
                         if (fileItem != null) {
@@ -51,13 +55,15 @@ public class FileUploadServlet extends HttpServlet {
                             response.getWriter().println(fileItem.getSize());
                             if (fileItem.getSize() > 0) {
                                 fileName = fileItem.getName();
-                                String dirName = "";
+                                String dirName = "LeviEngine/";
                                 response.getWriter().println(dirName);
                                 File saveTo = new File(dirName + fileName);
                                 try {
                                     fileItem.write(saveTo);
                                     response.getWriter().println(saveTo.getAbsoluteFile());
                                     response.getWriter().println(saveTo.getCanonicalPath());
+                                    // if the file has been successfully uploaded, persist the processName
+                                    saveProcessName(processName);
                                 }
                                 catch (Exception e) {
                                     response.getWriter().println(e.getMessage());
@@ -74,4 +80,15 @@ public class FileUploadServlet extends HttpServlet {
 
         }
     }
+
+    private void saveProcessName(String processName) throws IOException {
+        FileOutputStream file = new FileOutputStream("LeviEngine/processes.txt", true);
+        DataOutputStream out = new DataOutputStream(file);
+        out.writeBytes(processName+"\n");         
+        out.flush();
+        out.close();
+
+    }
+
+
 }
