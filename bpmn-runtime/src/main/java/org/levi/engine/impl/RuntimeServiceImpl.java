@@ -1,13 +1,61 @@
 package org.levi.engine.impl;
 
+import org.levi.engine.Deployment;
+import org.levi.engine.EngineData;
 import org.levi.engine.RuntimeService;
+import org.levi.engine.impl.bpmn.parser.ObjectModel;
+import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.ObjectLoader;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ishan
- * Date: Dec 30, 2010
- * Time: 12:40:53 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.io.IOException;
+import java.util.List;
+
 public class RuntimeServiceImpl implements RuntimeService {
+    private EngineData engineData;
+
+    public RuntimeServiceImpl(EngineData engineData) {
+        assert engineData != null;
+        this.engineData = engineData;
+    }
+    // TODO path != uri, Path.toUri()
+    public void runProcess(String processId)
+            throws IOException, ClassNotFoundException {
+        assert processId != null;
+        if (engineData.isRunning(processId)) {
+            System.out.println("[Warning] Process <"+ processId +">is already running");
+            return;
+        }
+        // check if the om is available for this process id
+        Deployment dep = engineData.getDeployment(processId);
+        if (dep == null) {
+            throw new RuntimeException("[Error] No deployment found for <" + processId + ">");
+        }
+        // get the path of the om
+        String omPath = dep.getOmPath();
+        // read it in
+        ObjectLoader loader = new ObjectLoader(omPath);
+        ObjectModel om = (ObjectModel)loader.readNextObject();
+        if (om == null) {
+            throw new RuntimeException("[Error] Retrieved OM is null");
+        }
+        // create a new process instance with that om
+        ProcessInstance p = new ProcessInstance(om);
+        // record this as a running process
+        engineData.addProcessInstance(processId, p);
+        System.out.println("[Info] Process <" + processId + "> is running...");
+        // run it
+        p.execute();
+    }
+
+    public void stopProcess(String processId) {
+        
+    }
+
+    public void showRunningProcess() {
+        System.out.println("Running processes:");
+        List<String> runningProcesses = engineData.getRunningProcessIds();
+        for (String id : runningProcesses) {
+            System.out.println("  " + id);
+        }
+    }
 }

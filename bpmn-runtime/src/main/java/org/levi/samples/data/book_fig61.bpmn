@@ -8,7 +8,7 @@
     <collaboration id="C1275940773964">
         <participant name="Trouble Ticket System" processRef="tns:WFP-1-1" id="_1-1" />
     </collaboration>
-    <process isExecutable="true" name="Produce Advertisement" id="WFP-1-1">
+    <process isExecutable="true" name="ProduceAdvertisement" id="WFP-1-1">
         <startEvent name="Issue received" id="_1-13">
         </startEvent>
         <sequenceFlow sourceRef="_1-13" targetRef="_1-26" id="_1-390" />

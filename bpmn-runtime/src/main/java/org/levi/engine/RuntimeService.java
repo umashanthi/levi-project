@@ -1,5 +1,8 @@
 package org.levi.engine;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ishan
@@ -8,4 +11,7 @@ package org.levi.engine;
  * To change this template use File | Settings | File Templates.
  */
 public interface RuntimeService {
+    public void runProcess(String processId) throws IOException, ClassNotFoundException;
+    public void stopProcess(String processId);
+    public void showRunningProcess();
 }

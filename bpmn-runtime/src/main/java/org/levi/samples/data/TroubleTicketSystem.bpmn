@@ -12,7 +12,7 @@
     <collaboration id="C1275940773964">
         <participant name="Trouble Ticket System" processRef="tns:WFP-1-1" id="_1-1" />
     </collaboration>
-    <process isExecutable="true" id="WFP-1-1">
+    <process isExecutable="true" name="TroubleTicketSystem" id="WFP-1-1">
         <ioSpecification>
             <dataInput itemSubjectRef="tns:IssueItem" id="IssueDataInputOfProcess" />
             <inputSet>

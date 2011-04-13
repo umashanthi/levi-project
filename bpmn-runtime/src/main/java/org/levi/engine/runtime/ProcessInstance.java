@@ -6,13 +6,6 @@ import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.impl.bpmn.FlowNodeFactory;
 import org.levi.engine.impl.bpmn.parser.ObjectModel;
 
-/**
- * Created by IntelliJ IDEA.
- * User: ishan
- * Date: Nov 24, 2010
- * Time: 9:34:59 PM
- * To change this template use File | Settings | File Templates.
- */
 public class ProcessInstance extends BPMNJacobRunnable {
     ObjectModel om;
     ExecutionQueueImpl soup;
@@ -38,7 +31,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     public void run() {
-        System.out.println("Starting ProcessInstance: " + om.getProcessName());
+        //System.out.println("Starting ProcessInstance: " + om.getProcessName());
         instance(flowNodeFac.getStartEvent());
     }
 }
