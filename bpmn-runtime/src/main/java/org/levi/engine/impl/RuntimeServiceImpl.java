@@ -17,18 +17,30 @@ public class RuntimeServiceImpl implements RuntimeService {
         assert engineData != null;
         this.engineData = engineData;
     }
+
+    public boolean start() {
+        System.out.println("[Info] Runtime Service started");
+        return true;
+    }
+
+    public boolean stop() {
+        System.out.println("[Info] Runtime Service stopped");
+        return true;
+    }
+
     // TODO path != uri, Path.toUri()
     public void runProcess(String processId)
             throws IOException, ClassNotFoundException {
         assert processId != null;
         if (engineData.isRunning(processId)) {
-            System.out.println("[Warning] Process <"+ processId +">is already running");
+            System.out.println("[Warning] Process already running <"+ processId +">");
             return;
         }
         // check if the om is available for this process id
         Deployment dep = engineData.getDeployment(processId);
         if (dep == null) {
-            throw new RuntimeException("[Error] No deployment found for <" + processId + ">");
+            System.err.println("[Error] No deployment found for <" + processId + ">");
+            return;
         }
         // get the path of the om
         String omPath = dep.getOmPath();
@@ -42,7 +54,7 @@ public class RuntimeServiceImpl implements RuntimeService {
         ProcessInstance p = new ProcessInstance(om);
         // record this as a running process
         engineData.addProcessInstance(processId, p);
-        System.out.println("[Info] Process <" + processId + "> is running...");
+        System.out.println("[Info] Process running <" + processId + ">");
         // run it
         p.execute();
     }

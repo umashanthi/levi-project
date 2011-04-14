@@ -3,21 +3,16 @@ package org.levi.engine;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: keheliya
- * Date: Feb 1, 2011
- * Time: 11:41:48 AM
- * For Levi - The Native BPMN 2.0 Execution Engine
- */
 public interface StorageService {
     //DeploymentBuilder createDeployment();
     
-    Deployment createDeployment(String larUri) throws IOException;
-    public void init();
-    public void remove(String processId);
-    public void clearAll();
+    Deployment createDeployment(String larPath) throws IOException;
+    public boolean start();
+    public boolean stop() throws IOException;
     public List<String> getDeployedProcessList();
     public void showDeployedProcessList();
     public boolean deploy(Deployment d);
+    public boolean undeploy(Deployment d) throws IOException;
+    public boolean undeploy(String id) throws IOException;
+
 }
