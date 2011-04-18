@@ -17,8 +17,8 @@ public class EngineData implements Serializable {
     private int nDeployments;
     private transient List<String> deploymentPIds;
     private int nDeploymentPIds;
-    private transient Map<String, String> deployedLarPaths; // <processId, larPath>
-    private int nDeploymentURIs;
+    //private transient Map<String, String> deployedLarPaths; // <processId, larPath>
+    //private int nDeploymentURIs;
     private transient Map<String, ProcessInstance>  runningProcesses;
     private int nRunningProcesses;
     private transient Map<String, ProcessInstance> stoppedProcesses;
@@ -28,7 +28,6 @@ public class EngineData implements Serializable {
     public EngineData() {
         nDeployments = 0;
         nDeploymentPIds = 0;
-        nDeploymentURIs = 0;
         nRunningProcesses = 0;
         init(25);
     }
@@ -37,7 +36,6 @@ public class EngineData implements Serializable {
         assert n > 0;
         deployments = new HashMap<String, Deployment>(n);
         deploymentPIds = new ArrayList<String>(n);
-        deployedLarPaths = new HashMap<String, String>(n);
         // TODO: handle this later on
         runningProcesses = new HashMap<String, ProcessInstance>(n);
         runningProcessIds = new ArrayList<String>(n);
@@ -61,14 +59,31 @@ public class EngineData implements Serializable {
         return deploymentPIds;
     }
 
+    public boolean removeDeployment(Deployment d) {
+        assert d != null;
+        return removeDeployment(d.getProcessId());
+    }
+
+    public boolean removeDeployment(String id) {
+        assert id != null;
+        if (deployments.containsKey(id)) {
+            deployments.remove(id);
+            deploymentPIds.remove(id);
+            System.out.println("[Info] Removed deployment " + id);
+            return true;
+        }
+        return false;
+    }
+    /*
     public void setDeployedLarPaths(Map<String, String> deploymentsURIs) {
         assert deploymentsURIs != null;
         this.deployedLarPaths = deploymentsURIs;
-    }
+    } */
 
+    /*
     public Map<String, String> getDeployedLarPaths() {
         return deployedLarPaths;
-    }
+    }*/
 
     public void setRunningProcesses(Map<String, ProcessInstance>  runningProcesses) {
         assert runningProcesses != null;
@@ -96,19 +111,14 @@ public class EngineData implements Serializable {
     	throws IOException {
         nDeployments = deployments.size();
         nDeploymentPIds = deploymentPIds.size();
-        nDeploymentURIs = deployedLarPaths.size();
-        //nRunningProcesses = runningProcesses.size();
     	s.defaultWriteObject();
         assert nDeploymentPIds == nDeployments;
-        assert nDeploymentPIds == nDeploymentURIs;
-        // we uniquely identify each process with it's process Id.
-        // A Deployment ==  pid, ompath, diagrampath
         for (int i = 0; i < nDeploymentPIds; ++i) {
             Deployment d = deployments.get(deploymentPIds.get(i));
             s.writeObject(d.getProcessId());
             s.writeObject(d.getOmPath());
             s.writeObject(d.getDiagramPath());
-            s.writeObject(deployedLarPaths.get(deploymentPIds.get(i)));
+            s.writeObject(d.getExtractPath());
         }
     }
 
@@ -121,8 +131,8 @@ public class EngineData implements Serializable {
             String processId = (String)s.readObject();
             String omPath = (String)s.readObject();
             String diagramPath = (String)s.readObject();
-            String larPath = (String)s.readObject();
-            Deployment d = new Deployment(processId, omPath, diagramPath, larPath);
+            String extractPath = (String)s.readObject();
+            Deployment d = new Deployment(processId, omPath, diagramPath, extractPath);
             addDeployment(d);
         }
     }
@@ -130,13 +140,17 @@ public class EngineData implements Serializable {
     public void addDeployment(Deployment dep) {
         assert dep != null;
         deployments.put(dep.getProcessId(), dep);
-        deployedLarPaths.put(dep.getProcessId(), dep.getLarPath());
         deploymentPIds.add(dep.getProcessId());
     }
 
+    /*
     public boolean hasLarPath(String larPath) {
         assert larPath != null;
         return deployedLarPaths.containsKey(larPath);
+    }*/
+    public boolean hasDeployment(Deployment d) {
+        assert d != null;
+        return hasDeployment(d.getProcessId());
     }
 
     public boolean hasDeployment(String processId) {

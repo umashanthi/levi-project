@@ -1,20 +1,20 @@
 package org.levi.engine;
 
-public class Deployment {
+public final class Deployment {
     private String processId;
-    private String larPath;
+    private String extractPath;
     private String oMPath;
     private String diagramPath;
 
-    public Deployment(String pid, String op, String dp, String larPath) {
+    public Deployment(String pid, String op, String dp, String extractPath) {
         assert pid != null;
         assert op != null;
         assert dp != null;
-        assert larPath != null;
+        assert extractPath != null;
         processId = pid;
         oMPath = op;
         diagramPath = dp;
-        this.larPath = larPath;
+        this.extractPath = extractPath;
     }
 
     public String getProcessId() {
@@ -29,7 +29,17 @@ public class Deployment {
         return diagramPath;
     }
 
-    public String getLarPath() {
-        return larPath;
+    public String getExtractPath() {
+        return extractPath;
+    }
+
+    public String toString() {
+        String s;
+        s = "{" + processId + ", "
+                + oMPath + ", "
+                + diagramPath + ", "
+                + extractPath
+                +"}";
+        return s;
     }
 }
