@@ -15,11 +15,24 @@ public class ProcessEngineImpl implements ProcessEngine {
     private IdentityService identityService = new IdentityServiceImpl();
     
     public static final String enginedatap =  StorageServiceImpl.LOM_PATH + "enginedata";
+    private static ProcessEngineImpl processEngine = new ProcessEngineImpl();
 
-    public ProcessEngineImpl() {    // todo <== process engine configuration
+
+    private ProcessEngineImpl() {    // todo <== process engine configuration
+        try {
+            start();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
-    public void start()
+    public static ProcessEngineImpl getProcessEngine() {
+        return processEngine;
+    }
+    
+    private void start()
             throws IOException, ClassNotFoundException {
         File inF = new File(enginedatap);
         if (inF.exists()) { // we have an engine data file
@@ -70,13 +83,9 @@ public class ProcessEngineImpl implements ProcessEngine {
         storageService.undeploy(id);
     }
 
-    public void runProcess(String id)
+    public void startProcess(String id)
             throws IOException, ClassNotFoundException {
         assert id != null;
-        runtimeService.runProcess(id);
-    }
-
-    public StorageService getStorageService(){
-        return this.storageService;
+        runtimeService.startProcess(id);
     }
 }
