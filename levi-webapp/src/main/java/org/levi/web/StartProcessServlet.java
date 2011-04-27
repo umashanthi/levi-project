@@ -24,7 +24,7 @@ public class StartProcessServlet extends HttpServlet {
         String processId = request.getParameter("id");
         ProcessEngine engine=(ProcessEngine)request.getSession().getAttribute("processEngine");
         try {
-            engine.runProcess(processId);
+            engine.startProcess(processId);
             response.sendRedirect("processes.jsp?isProcessStarted=true&processId="+processId);
         } catch (ClassNotFoundException e) {
             response.sendRedirect("processes.jsp?isProcessStarted=false&processId="+processId);

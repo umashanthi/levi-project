@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
-    public static final String LOM_PATH = "/home/ishan/devel/levi/serial/";
+    public static final String LOM_PATH = "/home/umashanthi/Development/FYP/LEVI/serial/";
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
-    public final static String LAR_EXTRACT_PATH = "/home/ishan/devel/levi/extract/";
+    public final static String LAR_EXTRACT_PATH = "/home/umashanthi/Development/FYP/LEVI/extract/";
     public final static String EMPTY = "__EMPTY__".intern();
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
