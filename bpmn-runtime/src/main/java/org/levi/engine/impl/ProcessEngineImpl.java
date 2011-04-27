@@ -75,4 +75,8 @@ public class ProcessEngineImpl implements ProcessEngine {
         assert id != null;
         runtimeService.runProcess(id);
     }
+
+    public StorageService getStorageService(){
+        return this.storageService;
+    }
 }
