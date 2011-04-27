@@ -6,6 +6,7 @@
     <groupId>org.levi.bpmn.bpmn-rutime</groupId>
     <artifactId>bpmn-runtime</artifactId>
     <name>bpmn-runtime</name>
+    <version>0.0.1</version>
     <parent>
         <groupId>org.levi.bpmn</groupId>
         <artifactId>levi-project</artifactId>

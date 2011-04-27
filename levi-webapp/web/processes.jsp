@@ -1,9 +1,5 @@
-<%@ page import="java.io.BufferedReader" %>
-<%@ page import="java.io.DataInputStream" %>
-<%@ page import="java.io.FileInputStream" %>
-<%@ page import="java.io.InputStreamReader" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%--
   Created by IntelliJ IDEA.
   User: umashanthi
@@ -44,7 +40,7 @@ Released : 20090303
         <ul id="main">
             <li class="current_page_item"><a href="index.jsp">Home</a></li>
             <li><a href="#">Tasks</a></li>
-            <li><a href="processes.jsp">Processes</a></li>
+            <li><a href="processes">Processes</a></li>
             <li></li>
             <li></li>
             <li>
@@ -52,7 +48,7 @@ Released : 20090303
                 <a href="logout">Logout</a></li>
 
             <%} else { %>
-            <a href="login.html">Login</a></li>
+            <a href="login.jsp">Login</a></li>
             <% }%>
         </ul>
     </div>
@@ -72,30 +68,35 @@ Released : 20090303
 
     <div><br></div>
     <%
-        List processesList = new ArrayList<String>();
-        try {
-            FileInputStream fstream = new FileInputStream("LeviEngine/processes.txt");
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            //Read File Line By Line
-            while ((strLine = br.readLine()) != null) {
-                processesList.add(strLine);
-            }
-            //Close the input stream
-            in.close();
-        } catch (Exception e) {//Catch exception if any
-            out.println("Error: " + e.getMessage());
-        } %>
+        List<String> processesList = (List<String>) session.getAttribute("processList");
+
+    %>
     <table>
-        <%for (Object process : processesList) { %>
+        <%for (String process : processesList) { %>
         <tr>
-            <form action="">
+            <form action="startProcess?id=<%=process.toString()%>" method="post" >
                 <td>
                     <%=process.toString()%>
                 </td>
                 <td>
-                   &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="Start" >
+
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="submit" value="Start">
+
+                </td>
+                <td>
+                    <% //show whether the process is started
+                        if (request.getParameter("isProcessStarted") != null && request.getParameter("processId") != null) {
+                            String result = request.getParameter("isProcessStarted");
+                            String processId = request.getParameter("processId");
+                            if (result.equals("true") && processId.equals(process.toString())) { %>
+                    <h3>&nbsp; &nbsp; &nbsp; &nbsp;Process started successfully</h3>
+                    <% } else if (result.equals("false") && processId.equals(process.toString())) { // provide suitable error message %>
+                    <h3>Failed to start process. Try again</h3>
+                    <%
+                            }
+                        }
+                        //else no start action carried out
+                    %>
                 </td>
             </form>
         </tr>

@@ -38,7 +38,7 @@ Released : 20090303
         <ul id="main">
             <li class="current_page_item"><a href="index.jsp">Home</a></li>
             <li><a href="#">Tasks</a></li>
-            <li><a href="processes.jsp">Processes</a></li>
+            <li><a href="processes">Processes</a></li>
             <li></li>
             <li></li>
             <li>
@@ -46,7 +46,7 @@ Released : 20090303
                 <a href="logout">Logout</a></li>
 
             <%} else { %>
-            <a href="login.html">Login</a></li>
+            <a href="login.jsp">Login</a></li>
             <% }%>
         </ul>
     </div>
@@ -88,7 +88,19 @@ Released : 20090303
             </tr>
         </table>
     </form>
-
+    <%
+        // If a process lar is uploaded shows the success/failure message
+        if(request.getParameter("isUploadSuccess")!=null){
+           String result=request.getParameter("isUploadSuccess");
+           if(result.equals("true")){ %>
+              <h3>Process archive uploaded successfully</h3>
+          <% }
+           else if(result.equals("false")){  %>
+               <h3>Failed to upload process archive. Try again</h3>
+           <%}
+        }
+        // else do nothing
+    %>
 
     <% } else { %>
     <div id="bodylogo"></div>

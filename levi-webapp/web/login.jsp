@@ -1,16 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
 
-Name       : Premium Series
-Description: A three-column, fixed-width blog design.
-Version    : 1.0
-Released   : 20090303
-
--->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -69,7 +59,12 @@ Released   : 20090303
             </tr>
         </table>
     </form>
-
+    <%
+    // if login  attempt was unsuccessful, show error message to user
+        if(request.getParameter("isLoginSuccess")!=null && request.getParameter("isLoginSuccess").equals("false")) {%>
+        <h3>Username or password is invalid. Please try again</h3>
+    <% }
+    %>
 </div>
 <div id="footer">
     <p class="copyright">&copy;&nbsp;&nbsp;2011 All Rights Reserved &nbsp;&bull;&nbsp; Design by <a

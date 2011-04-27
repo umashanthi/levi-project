@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.levi.bpmn.webapp</groupId>
     <artifactId>levi-webapp</artifactId>
     <name>levi-webapp</name>
@@ -12,8 +11,14 @@
         <artifactId>levi-project</artifactId>
         <version>0.0.1</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <dependencies>
+        <dependency>
+            <groupId>org.levi.bpmn.bpmn-rutime</groupId>
+            <artifactId>bpmn-runtime</artifactId>
+            <version>0.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -30,5 +35,6 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.1.1</version>
         </dependency>
+
     </dependencies>
 </project>

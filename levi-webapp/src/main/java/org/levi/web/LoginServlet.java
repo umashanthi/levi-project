@@ -1,5 +1,8 @@
 package org.levi.web;
 
+import org.levi.engine.ProcessEngine;
+import org.levi.engine.impl.ProcessEngineImpl;
+
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,10 +18,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         String password = request.getParameter("password");
 
         if (!allowUser(username, password)) {
-            out.println("<HTML><HEAD><TITLE>Access Denied</TITLE></HEAD>");
-            out.println("<BODY>Your login and password are invalid.<BR>");
-            out.println("You may want to <A HREF=\"/login.html\">try again</A>");
-            out.println("</BODY></HTML>");
+            response.sendRedirect("login.jsp?isLoginSuccess=false");
         } else {
             // Valid login. Make a note in the session object.
             HttpSession session = request.getSession();
@@ -33,7 +33,14 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 }
             } catch (Exception ignored) {
             }
+            // Start Engine
+            try {
+                ProcessEngine engine = new ProcessEngineImpl();
+                engine.start();
+                request.getSession().setAttribute("processEngine", engine);
+            } catch (ClassNotFoundException ex) {
 
+            }
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
         }

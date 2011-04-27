@@ -4,7 +4,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
-
+    <welcome-file-list>
+        <!-- call index.jsp as first page -->
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>org.levi.web.LoginServlet</servlet-class>
@@ -17,6 +20,14 @@
         <servlet-name>FileUploadServlet</servlet-name>
         <servlet-class>org.levi.web.FileUploadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InitializerServlet</servlet-name>
+        <servlet-class>org.levi.web.InitializerServlet</servlet-class>
+    </servlet>
+       <servlet>
+        <servlet-name>StartProcessServlet</servlet-name>
+        <servlet-class>org.levi.web.StartProcessServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -28,5 +39,13 @@
     <servlet-mapping>
         <servlet-name>FileUploadServlet</servlet-name>
         <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InitializerServlet</servlet-name>
+        <url-pattern>/processes</url-pattern>
+    </servlet-mapping>
+      <servlet-mapping>
+        <servlet-name>StartProcessServlet</servlet-name>
+        <url-pattern>/startProcess</url-pattern>
     </servlet-mapping>
 </web-app>
