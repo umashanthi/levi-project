@@ -1,5 +1,6 @@
 package org.levi.engine.impl.bpmn.parser;
 
+import org.levi.engine.LeviException;
 import org.levi.engine.impl.bpmn.SequenceFlowSet;
 import org.omg.spec.bpmn.x20100524.model.*;
 import org.omg.spec.bpmn.x20100524.model.impl.TProcessImpl;
@@ -77,10 +78,10 @@ public class ObjectModel implements Serializable {
 
         // TODO; we must handle this later
         if (executableProcessCount > 1) {
-            throw new RuntimeException("More than one executable process found");
+            throw new LeviException("More than one executable process found");
         }
         if (executableProcessCount == 0) {
-            throw new RuntimeException("No executable processes found");
+            throw new LeviException("No executable processes found");
         }
         return processList.toArray(new TProcess[processList.size()]);
     }
@@ -151,7 +152,7 @@ public class ObjectModel implements Serializable {
     	s.defaultReadObject(); // read the non transient fields
         // TODO;
         if (processArraySize != executableProcessCount) {
-            throw new RuntimeException("Process array size and executable process count do not match");
+            throw new LeviException("Process array size and executable process count do not match");
         }
         processArray = new TProcess[processArraySize];
     	for (int i = 0; i < processArraySize; ++i) {

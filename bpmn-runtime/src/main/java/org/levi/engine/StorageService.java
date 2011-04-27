@@ -12,7 +12,7 @@ public interface StorageService {
     public List<String> getDeployedProcessList();
     public void showDeployedProcessList();
     public boolean deploy(Deployment d);
-    public boolean undeploy(Deployment d) throws IOException;
-    public boolean undeploy(String id) throws IOException;
+    public void undeploy(Deployment d) throws IOException;
+    public void undeploy(String id) throws IOException;
 
 }

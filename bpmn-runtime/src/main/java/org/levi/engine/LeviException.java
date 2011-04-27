@@ -8,4 +8,7 @@ package org.levi.engine;
  * To change this template use File | Settings | File Templates.
  */
 public class LeviException extends RuntimeException {
+    public LeviException(String s) {
+        super(s);
+    }
 }

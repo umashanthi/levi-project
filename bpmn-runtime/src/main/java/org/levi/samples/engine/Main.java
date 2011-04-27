@@ -14,6 +14,7 @@ public class Main {
         engine.deploy(StorageServiceImpl.LAR_PATH + "book_fig49.1.lar"); // Process:Figure-49
         //engine.startProcess("Process:Figure-49");
         //engine.undeploy("Process:Figure-49");
+        //engine.startProcess("Book Figure 61");
         engine.stop();
     }
 }
