@@ -61,7 +61,7 @@ public class EngineData implements Serializable {
 
     public boolean removeDeployment(Deployment d) {
         assert d != null;
-        return removeDeployment(d.getProcessId());
+        return removeDeployment(d.getDefinitionsName());
     }
 
     public boolean removeDeployment(String id) {
@@ -115,7 +115,7 @@ public class EngineData implements Serializable {
         assert nDeploymentPIds == nDeployments;
         for (int i = 0; i < nDeploymentPIds; ++i) {
             Deployment d = deployments.get(deploymentPIds.get(i));
-            s.writeObject(d.getProcessId());
+            s.writeObject(d.getDefinitionsName());
             s.writeObject(d.getOmPath());
             s.writeObject(d.getDiagramPath());
             s.writeObject(d.getExtractPath());
@@ -139,8 +139,8 @@ public class EngineData implements Serializable {
 
     public void addDeployment(Deployment dep) {
         assert dep != null;
-        deployments.put(dep.getProcessId(), dep);
-        deploymentPIds.add(dep.getProcessId());
+        deployments.put(dep.getDefinitionsName(), dep);
+        deploymentPIds.add(dep.getDefinitionsName());
     }
 
     /*
@@ -150,7 +150,7 @@ public class EngineData implements Serializable {
     }*/
     public boolean hasDeployment(Deployment d) {
         assert d != null;
-        return hasDeployment(d.getProcessId());
+        return hasDeployment(d.getDefinitionsName());
     }
 
     public boolean hasDeployment(String processId) {

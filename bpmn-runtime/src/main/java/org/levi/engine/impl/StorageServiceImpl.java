@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
@@ -19,6 +20,7 @@ public class StorageServiceImpl implements StorageService {
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
     public final static String LAR_EXTRACT_PATH = "/home/ishan/devel/levi/extract/";
+    public final static String EMPTY = "__EMPTY__".intern();
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
@@ -35,11 +37,8 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public void showDeployedProcessList() {
-        System.out.println("Deployed processes:");
-        List<String> deploymentPids = engineData.getDeploymentPIds();
-        for (String id : deploymentPids) {
-            System.out.println("  " + id);
-        }
+        System.out.println("Deployed processes:\n\t");
+        System.out.println(engineData.getDeploymentPIds().toString());
     }
 
     public boolean deploy(Deployment d) {
@@ -53,7 +52,7 @@ public class StorageServiceImpl implements StorageService {
             return false;
         }
         engineData.addDeployment(d);
-        System.out.println("[Info] Deployed <" + d.getProcessId() + ">");
+        System.out.println("[Info] Deployed <" + d.getDefinitionsName() + ">");
         return true;
     }
 
@@ -68,7 +67,7 @@ public class StorageServiceImpl implements StorageService {
             deleteDeploymentData(d);
             return true;
         }
-        System.err.println("[Warning] Attempt to undeploy an untracked deployment " + d.getProcessId());
+        System.err.println("[Warning] Attempt to undeploy an untracked deployment " + d.getDefinitionsName());
         return false;
     }
 
@@ -85,7 +84,7 @@ public class StorageServiceImpl implements StorageService {
         delete(d.getExtractPath(), true);
         // delete other stuff: om, pic
         delete(d.getOmPath(), false);
-        if (!"empty".equals(d.getDiagramPath())) {
+        if (!EMPTY.equals(d.getDiagramPath())) {
             delete(d.getDiagramPath(), false);
         }
     }
@@ -105,25 +104,26 @@ public class StorageServiceImpl implements StorageService {
         // create the om
         ObjectModel om = new ObjectModel(new File(processURI));
         // get the process name
-        String processId = om.getProcessName();
-        if (processId.equals("")) {
+        //String processId = om.getProcessName();
+        String definitionsName = om.getDefinitionsName();
+        if ("".equals(definitionsName)) { // processId
             System.err.println("[Error] Cannot deploy a process with no/empty name");
             return null;
         }
-        if (engineData.hasDeployment(processId)) {
-            System.out.println("[Warning] Process already deployed <"+processId + ">");
+        if (engineData.hasDeployment(definitionsName)) { // processId
+            System.out.println("[Warning] Process already deployed <" + definitionsName + ">");
             delete(exData.getExtractPath(), true);
             return null;
         }
         // serialize it and get the path
-        String omPath = LOM_PATH + processId + "-" + om.hashCode()+ ".lom";
+        String omPath = LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
         ObjectSaver saver = new ObjectSaver(omPath);
         saver.saveObject(om);
         // create the BPMN diagram
         // save it and get the path
-        String diagramPath = "empty";
+        AtomicReference<String> diagramPath = new AtomicReference<String>(EMPTY);
         // make a deployment
-        Deployment d = new Deployment(processId, omPath, diagramPath, exData.getExtractPath());
+        Deployment d = new Deployment(definitionsName, omPath, diagramPath.get(), exData.getExtractPath());
         createdDeployments.add(d);
         return d;
     }
@@ -131,6 +131,9 @@ public class StorageServiceImpl implements StorageService {
     /**
      * deletes the content at path
      * @param path
+     * @param deleteParent
+     * @return
+     * @throws java.io.IOException
      */
     public static boolean delete(String path, boolean deleteParent)
             throws IOException {

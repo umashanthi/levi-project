@@ -137,10 +137,15 @@ public class ObjectModel implements Serializable {
     }
     
     public String getProcessName() {
+
         return processArray[DEFAULT_PROCESS].getName();
     }
-    // todo toString() methods
 
+    public String getDefinitionsName() {
+        return definitionsDoc.getDefinitions().getName(); 
+    }
+    
+    // todo toString() methods
     private void readObject(ObjectInputStream s)
     	throws IOException, ClassNotFoundException {
     	s.defaultReadObject(); // read the non transient fields

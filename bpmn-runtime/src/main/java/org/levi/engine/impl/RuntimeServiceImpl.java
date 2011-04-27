@@ -29,7 +29,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     // TODO path != uri, Path.toUri()
-    public void runProcess(String processId)
+    public void startProcess(String processId)
             throws IOException, ClassNotFoundException {
         assert processId != null;
         if (engineData.isRunning(processId)) {

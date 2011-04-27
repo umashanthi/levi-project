@@ -88,6 +88,8 @@ public final class Extractor {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
         path = dateFormat.format(date);
-        return StorageServiceImpl.LAR_EXTRACT_PATH + entryName.replaceAll("/", "") + "_" + path + "/";
+        String name = entryName.replaceAll("/", "");
+        name = name.replaceAll(" ", "_");
+        return StorageServiceImpl.LAR_EXTRACT_PATH + name + "_" + path + "/";
     }
 }
