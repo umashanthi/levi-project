@@ -8,12 +8,12 @@ import org.levi.engine.impl.bpmn.parser.ObjectModel;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.ObjectSaver;
+import org.levi.visualize.api.GraphViz;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
@@ -27,7 +27,6 @@ public class StorageServiceImpl implements StorageService {
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
     public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
-
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
@@ -127,10 +126,11 @@ public class StorageServiceImpl implements StorageService {
         ObjectSaver saver = new ObjectSaver(omPath);
         saver.saveObject(om);
         // create the BPMN diagram
+        GraphViz diagram = new GraphViz();
+        String diagramPath = diagram.getGraph(om, exData.getExtractPath());
         // save it and get the path
-        AtomicReference<String> diagramPath = new AtomicReference<String>(EMPTY);
         // make a deployment
-        Deployment d = new Deployment(definitionsName, omPath, diagramPath.get(), exData.getExtractPath());
+        Deployment d = new Deployment(definitionsName, omPath, diagramPath, exData.getExtractPath());
         createdDeployments.add(d);
         return d;
     }
