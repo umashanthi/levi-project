@@ -27,7 +27,7 @@ public class StorageServiceImpl implements StorageService {
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
     public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
-
+  //TODO Create Directory if not existing  
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
     public boolean start() {
