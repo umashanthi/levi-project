@@ -21,12 +21,12 @@
         <servlet-class>org.levi.web.FileUploadServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>InitializerServlet</servlet-name>
-        <servlet-class>org.levi.web.InitializerServlet</servlet-class>
+        <servlet-name>ListProcessesServlet</servlet-name>
+        <servlet-class>org.levi.web.ListProcessesServlet</servlet-class>
     </servlet>
        <servlet>
-        <servlet-name>StartProcessServlet</servlet-name>
-        <servlet-class>org.levi.web.StartProcessServlet</servlet-class>
+        <servlet-name>ProcessActionServlet</servlet-name>
+        <servlet-class>org.levi.web.ProcessActionServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -41,11 +41,11 @@
         <url-pattern>/upload</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>InitializerServlet</servlet-name>
+        <servlet-name>ListProcessesServlet</servlet-name>
         <url-pattern>/processes</url-pattern>
     </servlet-mapping>
       <servlet-mapping>
-        <servlet-name>StartProcessServlet</servlet-name>
+        <servlet-name>ProcessActionServlet</servlet-name>
         <url-pattern>/startProcess</url-pattern>
     </servlet-mapping>
 </web-app>
