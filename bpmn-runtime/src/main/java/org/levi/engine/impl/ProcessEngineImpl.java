@@ -13,8 +13,8 @@ public class ProcessEngineImpl implements ProcessEngine {
     private RuntimeService runtimeService;
     private TaskService taskService = new TaskServiceImpl();
     private IdentityService identityService = new IdentityServiceImpl();
-    
-    public static final String enginedatap =  StorageServiceImpl.LOM_PATH + "enginedata";
+
+    public static final String enginedatap = StorageServiceImpl.LOM_PATH + "enginedata";
     private static ProcessEngineImpl processEngine = new ProcessEngineImpl();
 
 
@@ -31,13 +31,13 @@ public class ProcessEngineImpl implements ProcessEngine {
     public static ProcessEngineImpl getProcessEngine() {
         return processEngine;
     }
-    
+
     private void start()
             throws IOException, ClassNotFoundException {
         File inF = new File(enginedatap);
         if (inF.exists()) { // we have an engine data file
             ObjectLoader loader = new ObjectLoader(enginedatap);
-	        EngineData engineData = (EngineData)loader.readNextObject();//objectIs.readObject();
+            EngineData engineData = (EngineData) loader.readNextObject();//objectIs.readObject();
             if (engineData == null) {
                 throw new RuntimeException("Retrieved engine data is null");
             }
@@ -52,14 +52,14 @@ public class ProcessEngineImpl implements ProcessEngine {
         runtimeService.start();
     }
 
-    public StorageService getStorageService(){
+    public StorageService getStorageService() {
         return this.storageService;
     }
 
     public void showRunningProcesses() {
         runtimeService.showRunningProcess();
     }
-    
+
     public void showDeployedProcesses() {
         storageService.showDeployedProcessList();
     }
@@ -92,4 +92,11 @@ public class ProcessEngineImpl implements ProcessEngine {
         assert id != null;
         runtimeService.startProcess(id);
     }
+
+    public void stopProcess(String id)
+            throws IOException, ClassNotFoundException {
+        assert id != null;
+        runtimeService.stopProcess(id);
+    }
+
 }

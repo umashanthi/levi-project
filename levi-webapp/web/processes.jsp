@@ -29,6 +29,20 @@ Released : 20090303
     <link href="default.css" rel="stylesheet" type="text/css" media="screen"/>
 </head>
 <body>
+<script type="text/javascript">
+    function startProcess(id) {
+        var processForm = document.createElement("form");
+        processForm.method = "post";
+        processForm.action = "startProcess?id=" + id + "&action=Start";
+        processForm.submit();
+    }
+    function stopProcess(id) {
+        var processForm = document.createElement("form");
+        processForm.method = "post";
+        processForm.action = "startProcess?id=" + id + "&action=Stop";
+        processForm.submit();
+    }
+</script>
 <!-- start header -->
 <div id="header">
     <div id="logo">
@@ -74,15 +88,48 @@ Released : 20090303
     <table>
         <%for (String process : processesList) { %>
         <tr>
-            <form action="startProcess?id=<%=process.toString()%>" method="post" >
+            <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">
                 <td>
                     <%=process.toString()%>
                 </td>
                 <td>
-
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="submit" value="Start">
+                    <%
+                        boolean isStartBtnActive = true; // by default it is true;
+                        boolean isStopBtnActive = false; // by default it is false;
+                        //show whether the process is started
+                        if (request.getParameter("isProcessStarted") != null
+                                && request.getParameter("processId") != null
+                                && request.getParameter("isProcessStarted").equals("true")
+                                && request.getParameter("processId").equals(process.toString())) {
+                            isStartBtnActive = false;
+                            isStopBtnActive = true;
+                        } else if (request.getParameter("isProcessStopped") != null
+                                && request.getParameter("processId") != null
+                                && request.getParameter("isProcessStopped").equals("true")
+                                && request.getParameter("processId").equals(process.toString())) {
+                            isStartBtnActive = true;
+                            isStopBtnActive = false;
+                        } else {
+                            isStartBtnActive = true; // default
+                            isStopBtnActive = false; // default
+                        }
+                        //else no start action carried out
+                    %>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
+                                                                    value="Start" <%if(!isStartBtnActive){%>
+                                                                    disabled="true" <%} %>
+                                                                    onclick="startProcess('<%=process.toString()%>')">
 
                 </td>
+                <td>
+
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
+                                                                    value="Stop" <%if(!isStopBtnActive){%>
+                                                                    disabled="true" <%} %>
+                                                                    onclick="stopProcess('<%=process.toString()%>')">
+
+                </td>
+                <%--
                 <td>
                     <% //show whether the process is started
                         if (request.getParameter("isProcessStarted") != null && request.getParameter("processId") != null) {
@@ -98,6 +145,7 @@ Released : 20090303
                         //else no start action carried out
                     %>
                 </td>
+                      ---%>
             </form>
         </tr>
         <% }
