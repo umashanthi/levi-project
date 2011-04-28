@@ -292,7 +292,7 @@ public class GraphViz
 	   this.graph = sb;
    }
 
-   public File getGraph(ObjectModel om)
+   public String getGraph(ObjectModel om, String dir)
    {
       //GraphViz gv = new GraphViz();
       BPMNSymbolFactory sf = new BPMNSymbolFactory(this);
@@ -336,11 +336,10 @@ public class GraphViz
       sf.end_BPMN_graph();
 
       System.out.println(this.getDotSource());
-
-      File out = new File("/home/keheliya/Projects/bpmnViz/new/bpmn1.svg");
+      String fullpath= dir+"bpmn1.svg";
+      File out = new File(fullpath);
       this.writeGraphToFile(this.getGraph(this.getDotSource(),"svg"), out);
-
-       return out;
+       return fullpath;
    }
 
 } // end of class GraphViz
