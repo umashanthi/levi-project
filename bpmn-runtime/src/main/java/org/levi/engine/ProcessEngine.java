@@ -11,4 +11,5 @@ public interface ProcessEngine {
     public void startProcess(String id) throws IOException, ClassNotFoundException;
     public void showRunningProcesses();
     public void showDeployedProcesses();
+    public StorageService getStorageService();
 }

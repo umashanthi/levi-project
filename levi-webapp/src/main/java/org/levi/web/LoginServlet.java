@@ -34,13 +34,10 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             } catch (Exception ignored) {
             }
             // Start Engine
-            try {
-                ProcessEngine engine = new ProcessEngineImpl();
-                engine.start();
-                request.getSession().setAttribute("processEngine", engine);
-            } catch (ClassNotFoundException ex) {
 
-            }
+                ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
+                request.getSession().setAttribute("processEngine", engine);
+
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
         }

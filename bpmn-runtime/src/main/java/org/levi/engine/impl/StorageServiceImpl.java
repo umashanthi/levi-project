@@ -17,15 +17,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
+
     public final static String HOME = "HOME";
     public final static String BPMN_FILE_EXTENSION = ".bpmn";
     public final static String LAR_EXTENSION = ".lar";
     public final static String EMPTY = "__EMPTY__".intern();
-    public static final String HOME_PATH = System.getenv().get(HOME);
-    public static final String LOM_PATH  = HOME_PATH + "/devel/levi/serial/";
+    public static final String SYSTEM_HOME = System.getenv().get(HOME);
+    public static final String LOM_PATH  = SYSTEM_HOME + "/devel/levi/serial/";
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
-    public final static String LAR_EXTRACT_PATH = HOME_PATH + "/devel/levi/extract/";
+    public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
+
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
@@ -48,13 +50,11 @@ public class StorageServiceImpl implements StorageService {
 
     public boolean deploy(Deployment d) {
         if (d == null) {
-            System.out.println("[Info] Deployment failed.");
-            return false;
+            throw new LeviException("Null Deployment. Deployment failed.");
         }
         boolean removed = createdDeployments.remove(d);
         if (!removed) {
-            System.err.println("[Warning] Attempt to deploy a non created deployment.");
-            return false;
+            throw new LeviException("Attempt to deploy a non created deployment.");
         }
         engineData.addDeployment(d);
         System.out.println("[Info] Deployed : " + d.getDefinitionsName());

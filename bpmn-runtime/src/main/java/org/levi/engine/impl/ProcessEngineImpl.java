@@ -52,6 +52,10 @@ public class ProcessEngineImpl implements ProcessEngine {
         runtimeService.start();
     }
 
+    public StorageService getStorageService(){
+        return this.storageService;
+    }
+
     public void showRunningProcesses() {
         runtimeService.showRunningProcess();
     }
