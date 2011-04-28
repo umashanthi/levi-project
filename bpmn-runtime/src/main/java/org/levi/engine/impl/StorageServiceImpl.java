@@ -2,6 +2,7 @@ package org.levi.engine.impl;
 
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
+import org.levi.engine.LeviException;
 import org.levi.engine.StorageService;
 import org.levi.engine.impl.bpmn.parser.ObjectModel;
 import org.levi.engine.utils.ExtractData;
@@ -17,12 +18,22 @@ import java.util.concurrent.atomic.AtomicReference;
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
 
+
+
+    public final static String HOME = "HOME";
+    public final static String BPMN_FILE_EXTENSION = ".bpmn";
+    public final static String LAR_EXTENSION = ".lar";
     public final static String EMPTY = "__EMPTY__".intern();
+    public static final String SYSTEM_HOME = System.getenv().get(HOME);
+    public static final String LOM_PATH  = SYSTEM_HOME + "/devel/levi/serial/";
+    public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
+    public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
+    public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
     public boolean start() {
-        System.out.println("[Info] Storage Service started") ;
+        System.out.println("[Info] Storage Service started");
         return true;
     }
 
@@ -40,39 +51,41 @@ public class StorageServiceImpl implements StorageService {
 
     public boolean deploy(Deployment d) {
         if (d == null) {
-            System.out.println("[Info] Deployment failed");
-            return false;
+            throw new LeviException("Null Deployment. Deployment failed.");
         }
         boolean removed = createdDeployments.remove(d);
         if (!removed) {
-            System.err.println("[Warning] Attempt to deploy a non created deployment");
-            return false;
+            throw new LeviException("Attempt to deploy a non created deployment.");
         }
         engineData.addDeployment(d);
-        System.out.println("[Info] Deployed <" + d.getDefinitionsName() + ">");
+        System.out.println("[Info] Deployed : " + d.getDefinitionsName());
         return true;
     }
 
-    public boolean undeploy(String id) throws IOException {
-        return undeploy(engineData.getDeployment(id));
+    public void undeploy(String id) throws IOException {
+        undeploy(engineData.getDeployment(id));
     }
 
-    public boolean undeploy(Deployment d)
+    public void undeployAll() throws IOException {
+        for (String id : engineData.getDeploymentPIds()) {
+            undeploy(id);
+        }
+    }
+    
+    public void undeploy(Deployment d)
             throws IOException {
         if (engineData.hasDeployment(d)) {
             engineData.removeDeployment(d);
             deleteDeploymentData(d);
-            return true;
         }
-        System.err.println("[Warning] Attempt to undeploy an untracked deployment " + d.getDefinitionsName());
-        return false;
+        throw new LeviException("Attempt to undeploy an untracked deployment : " + d.getDefinitionsName());
     }
 
     public boolean stop() throws IOException {
         for (Deployment d : createdDeployments) {
             deleteDeploymentData(d);
         }
-        System.out.println("[Info] Storage Service stopped");
+        System.out.println("[Info] Storage Service stopped.");
         return true;
     }
 
@@ -95,7 +108,7 @@ public class StorageServiceImpl implements StorageService {
             throws IOException {
         ExtractData exData = Extractor.extract(larPath);
         if (exData == null) {
-            return null;
+            throw new LeviException("Could not extract Levi archive: " + larPath);
         }
         String processURI  = exData.getBPMNFiles().get(0);
         // create the om
@@ -104,13 +117,11 @@ public class StorageServiceImpl implements StorageService {
         //String processId = om.getProcessName();
         String definitionsName = om.getDefinitionsName();
         if ("".equals(definitionsName)) { // processId
-            System.err.println("[Error] Cannot deploy a process with no/empty name");
-            return null;
+            throw new LeviException("Cannot deploy a process with no name.");
         }
         if (engineData.hasDeployment(definitionsName)) { // processId
-            System.out.println("[Warning] Process already deployed <" + definitionsName + ">");
             delete(exData.getExtractPath(), true);
-            return null;
+            throw new LeviException("Process already deployed : " + definitionsName);
         }
         // serialize it and get the path
         String omPath = LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
@@ -151,8 +162,7 @@ public class StorageServiceImpl implements StorageService {
            }
         }
         if (!path.delete()) {
-            System.err.println("[Warning] Could not delete <" + path + ">");
-            return false;
+            throw new LeviException("Could not delete : " + path);
         }
         return true;
     }

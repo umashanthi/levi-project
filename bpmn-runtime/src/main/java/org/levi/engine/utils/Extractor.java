@@ -29,13 +29,13 @@ public final class Extractor {
             //TODO in the storage service, after checking for duplicates, these dirs must be deleted
             boolean result = (new File(destDir)).mkdir();
             if (!result) {
-                System.err.println("Could not extract " + larPath);
+                //System.err.println("Could not extract " + larPath);
                 return null;
             }
             String topLevelDir = destDir + entry.getName();
             result = (new File(topLevelDir)).mkdir();
             if (!result) {
-                System.err.println("Could not extract " + larPath);
+                //System.err.println("Could not extract " + larPath);
                 return null;
             }
             exData.setExtractPath(topLevelDir);
@@ -45,7 +45,7 @@ public final class Extractor {
             if (entry.isDirectory()) {
                 boolean result = (new File(destDir + entry.getName())).mkdir();
                 if (!result) {
-                    System.err.println("Could not extract " + larPath);
+                    //System.err.println("Could not extract " + larPath);
                     return null;
                 }
                 continue;
@@ -53,7 +53,7 @@ public final class Extractor {
             int count;
             byte data[] = new byte[BUFSIZE];
             file = destDir + entry.getName();
-            if (file.endsWith(".bpmn")) {
+            if (file.endsWith(StorageServiceImpl.BPMN_FILE_EXTENSION)) {
                 exData.addBPMNFile(file);
             } else {
                 exData.addOtherFile(file);
@@ -77,7 +77,7 @@ public final class Extractor {
         if (larPath == null) {
             throw new IllegalArgumentException("Lar path is null");
         }
-        if (larPath.endsWith(".lar")) {
+        if (larPath.endsWith(StorageServiceImpl.LAR_EXTENSION)) {
             return;
         }
         throw new RuntimeException("Cannot deploy the archive " + larPath + ". Not a Levi archive(lar)");

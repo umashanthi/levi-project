@@ -2,6 +2,7 @@ package org.levi.engine.impl;
 
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
+import org.levi.engine.LeviException;
 import org.levi.engine.RuntimeService;
 import org.levi.engine.impl.bpmn.parser.ObjectModel;
 import org.levi.engine.runtime.ProcessInstance;
@@ -33,14 +34,12 @@ public class RuntimeServiceImpl implements RuntimeService {
             throws IOException, ClassNotFoundException {
         assert processId != null;
         if (engineData.isRunning(processId)) {
-            System.out.println("[Warning] Process already running <"+ processId +">");
-            return;
+            throw new LeviException("Process already running : "+ processId);
         }
         // check if the om is available for this process id
         Deployment dep = engineData.getDeployment(processId);
         if (dep == null) {
-            System.err.println("[Error] No deployment found for <" + processId + ">");
-            return;
+            throw new LeviException("No deployment found for : " + processId);
         }
         // get the path of the om
         String omPath = dep.getOmPath();
@@ -48,13 +47,13 @@ public class RuntimeServiceImpl implements RuntimeService {
         ObjectLoader loader = new ObjectLoader(omPath);
         ObjectModel om = (ObjectModel)loader.readNextObject();
         if (om == null) {
-            throw new RuntimeException("[Error] Retrieved OM is null");
+            throw new LeviException("Retrieved OM is null");
         }
         // create a new process instance with that om
         ProcessInstance p = new ProcessInstance(om);
         // record this as a running process
         engineData.addProcessInstance(processId, p);
-        System.out.println("[Info] Process running <" + processId + ">");
+        System.out.println("[Info] Process running : " + processId );
         // run it
         p.execute();
     }

@@ -1,5 +1,6 @@
 package org.levi.engine.impl.bpmn.parser;
 
+import org.levi.engine.LeviException;
 import org.levi.engine.impl.bpmn.SequenceFlowSet;
 import org.omg.spec.bpmn.x20100524.model.*;
 import org.omg.spec.bpmn.x20100524.model.impl.TProcessImpl;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 public class ObjectModel implements Serializable {
     // TODO: change this
@@ -77,10 +79,10 @@ public class ObjectModel implements Serializable {
 
         // TODO; we must handle this later
         if (executableProcessCount > 1) {
-            throw new RuntimeException("More than one executable process found");
+            throw new LeviException("More than one executable process found");
         }
         if (executableProcessCount == 0) {
-            throw new RuntimeException("No executable processes found");
+            throw new LeviException("No executable processes found");
         }
         return processList.toArray(new TProcess[processList.size()]);
     }
@@ -144,6 +146,14 @@ public class ObjectModel implements Serializable {
     public String getDefinitionsName() {
         return definitionsDoc.getDefinitions().getName(); 
     }
+
+     public Collection <TFlowElement> getFlowElementList() {
+        return flowElementMap.values();
+    }
+     public Collection <SequenceFlowSet> gettargetBasedSeqFlowMapList() {
+        return targetBasedSeqFlowMap.values();
+    }
+
     
     // todo toString() methods
     private void readObject(ObjectInputStream s)
@@ -151,7 +161,7 @@ public class ObjectModel implements Serializable {
     	s.defaultReadObject(); // read the non transient fields
         // TODO;
         if (processArraySize != executableProcessCount) {
-            throw new RuntimeException("Process array size and executable process count do not match");
+            throw new LeviException("Process array size and executable process count do not match");
         }
         processArray = new TProcess[processArraySize];
     	for (int i = 0; i < processArraySize; ++i) {
@@ -160,6 +170,7 @@ public class ObjectModel implements Serializable {
         }
         createMaps();
     }
+
 
     private void writeObject(ObjectOutputStream s)
     	throws IOException {
