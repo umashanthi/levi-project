@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+// TODO boolean to check source-based or target-based
 
 public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSequenceFlow> {
     private TSequenceFlow firstItem;
