@@ -32,6 +32,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Stack;
+
+import org.levi.engine.impl.bpmn.parser.ObjectModel;
+import org.levi.engine.impl.bpmn.TaskNode;
+import org.levi.engine.impl.bpmn.EndEvent;
+import org.levi.engine.impl.bpmn.SequenceFlowSet;
+import org.omg.spec.bpmn.x20100524.model.*;
 
 /**
  * <dl>
@@ -281,6 +290,57 @@ public class GraphViz
 	   }
 
 	   this.graph = sb;
+   }
+
+   public File getGraph(ObjectModel om)
+   {
+      //GraphViz gv = new GraphViz();
+      BPMNSymbolFactory sf = new BPMNSymbolFactory(this);
+
+      sf.start_BPMN_graph();
+      Collection c = om.getFlowElementList();
+      Collection d = om.gettargetBasedSeqFlowMapList();
+
+       Iterator itr = c.iterator();
+        while(itr.hasNext())
+        {
+            TFlowElement e =(TFlowElement)itr.next();
+            if (e instanceof TTask) {
+                sf.normalTask(e.getName(),e.getId());
+            } else if (e instanceof TGateway) {
+                sf.gateway(e.getName(),e.getId());
+            } else if (e instanceof TEndEvent) {
+                sf.endEvent(e.getName(),e.getId());
+            } else {
+                // TODO stuff here. e.g intermediate events, message flows, etc.
+               sf.normalTask(e.getName(),e.getId());
+            }
+
+        }
+
+        Iterator itrAgain = c.iterator();
+        while(itrAgain.hasNext())
+        {
+            TFlowElement e =(TFlowElement)itrAgain.next();
+            SequenceFlowSet sfs = om.getSourceSequenceFlowSet(e.getId());
+            Iterator itrSfs = sfs.iterator();
+            while(itrSfs.hasNext())
+            {
+                TSequenceFlow s = (TSequenceFlow)itrSfs.next();
+                sf.sequenceFlow(e.getId(),s.getTargetRef());
+            }
+
+
+        }
+
+      sf.end_BPMN_graph();
+
+      System.out.println(this.getDotSource());
+
+      File out = new File("/home/keheliya/Projects/bpmnViz/new/bpmn1.svg");
+      this.writeGraphToFile(this.getGraph(this.getDotSource(),"svg"), out);
+
+       return out;
    }
 
 } // end of class GraphViz

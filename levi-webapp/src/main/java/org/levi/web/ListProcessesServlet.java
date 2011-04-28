@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class InitializerServlet extends HttpServlet {
+public class ListProcessesServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request,
@@ -27,12 +27,6 @@ public class InitializerServlet extends HttpServlet {
         try {
             assert   request.getSession().getAttribute("processEngine")!=null;
             ProcessEngine engine = (ProcessEngine)request.getSession().getAttribute("processEngine");
-
-            /*String larPath="/home/umashanthi/Development/FYP/LEVI/levi-project/bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
-            engine.deploy(larPath + "book_fig61.lar"); // ProduceAdvertisement
-            engine.deploy(larPath + "book_fig49.1.lar"); // Process:Figure-49*/
-            // check whether the engine is started
-
             List processesList = engine.getStorageService().getDeployedProcessList();
             request.getSession().setAttribute("processList", processesList);
             response.sendRedirect("processes.jsp");

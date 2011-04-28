@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 public class ObjectModel implements Serializable {
     // TODO: change this
@@ -145,6 +146,14 @@ public class ObjectModel implements Serializable {
     public String getDefinitionsName() {
         return definitionsDoc.getDefinitions().getName(); 
     }
+
+     public Collection <TFlowElement> getFlowElementList() {
+        return flowElementMap.values();
+    }
+     public Collection <SequenceFlowSet> gettargetBasedSeqFlowMapList() {
+        return targetBasedSeqFlowMap.values();
+    }
+
     
     // todo toString() methods
     private void readObject(ObjectInputStream s)
@@ -161,6 +170,7 @@ public class ObjectModel implements Serializable {
         }
         createMaps();
     }
+
 
     private void writeObject(ObjectOutputStream s)
     	throws IOException {

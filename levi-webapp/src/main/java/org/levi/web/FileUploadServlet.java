@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FileUploadServlet extends HttpServlet {
-    String dirName = "";
+
 
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
@@ -36,11 +36,6 @@ public class FileUploadServlet extends HttpServlet {
             FileItem fileItem = null;
             try {
                 List fileItemsList = servletFileUpload.parseRequest(request);
-                //DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-                //diskFileItemFactory.setSizeThreshold(40960); /* the unit is bytes */
-                //File repositoryPath = new File("src");
-                //diskFileItemFactory.setRepository(repositoryPath);
-                //servletFileUpload.setSizeMax(81920); /* the unit is bytes */
                 Iterator it = fileItemsList.iterator();
                 while (it.hasNext()) {
                     FileItem fileItemTemp = (FileItem) it.next();
@@ -49,27 +44,17 @@ public class FileUploadServlet extends HttpServlet {
                     } else {
                         fileItem = fileItemTemp;
                         if (fileItem != null) {
-                            String fileName = fileItem.getName();
-                            /*response.getWriter().println(fileName);
-                            response.getWriter().println(fileItem.getContentType());
-                            response.getWriter().println(fileItem.getFieldName());
-                            response.getWriter().println(fileItem.getSize());*/
-                            if (fileItem.getSize() > 0) {
-                                fileName = fileItem.getName();
+
+                            if (fileItem.getSize() > 0) { //uploaded file item
+                                String fileName = fileItem.getName();
                                 String dirName = "LeviEngine/";
-                                //response.getWriter().println(dirName);
                                 File saveTo = new File(dirName + fileName);
                                 try {
-                                    fileItem.write(saveTo);
-                                    /*response.getWriter().println(saveTo.getAbsoluteFile());
-                                    response.getWriter().println(saveTo.getCanonicalPath());*/
-                                    // if the file has been successfully uploaded, persist the processName
-                                    saveProcessName(processName);
+                                    fileItem.write(saveTo);   // stores the uploaded business archive (lar) to a location inside the server
                                     ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
-                                    String larPath = dirName+fileName;
-                                    engine.deploy(larPath);
+                                    String larPath = dirName + fileName;
+                                    engine.deploy(larPath);   // deploys the stored business archive (lar)
                                     response.sendRedirect("index.jsp?isUploadSuccess=true");
-                                    //engine.deploy(larPath + "book_fig49.1.lar"); // Process:Figure-49
                                 } catch (Exception e) {
                                     response.sendRedirect("index.jsp?isUploadSuccess=false");
                                 }
@@ -85,15 +70,5 @@ public class FileUploadServlet extends HttpServlet {
 
         }
     }
-
-    private void saveProcessName(String processName) throws IOException {
-        FileOutputStream file = new FileOutputStream("LeviEngine/processes.txt", true);
-        DataOutputStream out = new DataOutputStream(file);
-        out.writeBytes(processName + "\n");
-        out.flush();
-        out.close();
-
-    }
-
 
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class StartProcessServlet extends HttpServlet {
+public class ProcessActionServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request,
@@ -22,12 +22,18 @@ public class StartProcessServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         String processId = request.getParameter("id");
-        ProcessEngine engine=(ProcessEngine)request.getSession().getAttribute("processEngine");
+        String action = request.getParameter("action");
+        ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
         try {
-            engine.startProcess(processId);
-            response.sendRedirect("processes.jsp?isProcessStarted=true&processId="+processId);
+            if (action.equals("Start")) {
+                engine.startProcess(processId);
+                response.sendRedirect("processes.jsp?isProcessStarted=true&processId=" + processId);
+            } else if (action.equals("Stop")) {
+                engine.stopProcess(processId);
+                response.sendRedirect("processes.jsp?isProcessStopped=true&processId=" + processId);
+            }
         } catch (ClassNotFoundException e) {
-            response.sendRedirect("processes.jsp?isProcessStarted=false&processId="+processId);
+            response.sendRedirect("processes.jsp?isProcessStarted=false&isProcessStopped=false&processId=" + processId);
         }
 
     }

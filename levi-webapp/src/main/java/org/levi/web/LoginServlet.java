@@ -34,7 +34,6 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             } catch (Exception ignored) {
             }
             // Start Engine
-
                 ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
                 request.getSession().setAttribute("processEngine", engine);
 

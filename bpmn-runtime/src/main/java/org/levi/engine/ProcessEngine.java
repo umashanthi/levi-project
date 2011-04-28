@@ -9,6 +9,7 @@ public interface ProcessEngine {
     public void deploy(String larPath) throws IOException;
     public void undeploy(String id) throws IOException;
     public void startProcess(String id) throws IOException, ClassNotFoundException;
+    public void stopProcess(String id) throws IOException, ClassNotFoundException;
     public void showRunningProcesses();
     public void showDeployedProcesses();
     public StorageService getStorageService();
