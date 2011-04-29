@@ -8,7 +8,6 @@ import org.levi.engine.utils.ObjectSaver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,7 +67,8 @@ public class ProcessEngineImpl implements ProcessEngine {
         if (list.isEmpty()) {
             return Collections.emptyList();
         }
-        return new ArrayList<E>(list);
+        //return new ArrayList<E>(list);
+        return Collections.unmodifiableList(list);
     }
 
     public synchronized void stop()

@@ -116,7 +116,8 @@ public class StorageServiceImpl implements StorageService {
         saver.saveObject(om);
         // create the BPMN diagram
         GraphViz diagram = new GraphViz();
-        String diagramPath = diagram.getGraph(om, exData.getExtractPath());
+        String diagramPath = diagram.getGraph(om,
+                exData.getExtractPath() + definitionsName.replace(" ", "_").replace("-", "_"));
         // save it and get the path
         // make a deployment
         Deployment d = new Deployment(definitionsName, omPath, diagramPath, exData.getExtractPath());

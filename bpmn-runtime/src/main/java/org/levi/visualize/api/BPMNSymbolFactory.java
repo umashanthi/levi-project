@@ -54,7 +54,7 @@ public class BPMNSymbolFactory {
     */
 
     public void sequenceFlow(String sourceRef, String targetRef) {
-        gv.addln(sourceRef+" -> "+targetRef+"[tailport=e, headport=w];") ;
+        gv.addln(sourceRef+" -> "+targetRef+"[tailport=e, headport=w];");
     }
 
     /**
