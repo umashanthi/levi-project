@@ -9,7 +9,7 @@ public interface StorageService {
     Deployment createDeployment(String larPath) throws IOException;
     public boolean start();
     public boolean stop() throws IOException;
-    public List<String> getDeployedProcessList();
+    public List<String> getDeploymentIds();
     public void showDeployedProcessList();
     public boolean deploy(Deployment d);
     public void undeploy(Deployment d) throws IOException;

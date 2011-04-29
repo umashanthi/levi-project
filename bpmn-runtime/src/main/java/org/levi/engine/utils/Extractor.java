@@ -1,5 +1,6 @@
 package org.levi.engine.utils;
 
+import org.levi.engine.Constants;
 import org.levi.engine.impl.StorageServiceImpl;
 
 import java.io.*;
@@ -53,7 +54,7 @@ public final class Extractor {
             int count;
             byte data[] = new byte[BUFSIZE];
             file = destDir + entry.getName();
-            if (file.endsWith(StorageServiceImpl.BPMN_FILE_EXTENSION)) {
+            if (file.endsWith(Constants.BPMN_FILE_EXTENSION)) {
                 exData.addBPMNFile(file);
             } else {
                 exData.addOtherFile(file);
@@ -77,7 +78,7 @@ public final class Extractor {
         if (larPath == null) {
             throw new IllegalArgumentException("Lar path is null");
         }
-        if (larPath.endsWith(StorageServiceImpl.LAR_EXTENSION)) {
+        if (larPath.endsWith(Constants.LAR_EXTENSION)) {
             return;
         }
         throw new RuntimeException("Cannot deploy the archive " + larPath + ". Not a Levi archive(lar)");
@@ -90,6 +91,6 @@ public final class Extractor {
         path = dateFormat.format(date);
         String name = entryName.replaceAll("/", "");
         name = name.replaceAll(" ", "_");
-        return StorageServiceImpl.LAR_EXTRACT_PATH + name + "_" + path + "/";
+        return Constants.LAR_EXTRACT_PATH + name + "_" + path + "/";
     }
 }
