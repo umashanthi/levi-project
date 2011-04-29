@@ -322,6 +322,7 @@ public class GraphViz
         while(itrAgain.hasNext())
         {
             TFlowElement e =(TFlowElement)itrAgain.next();
+            if(!(e instanceof TEndEvent)){
             SequenceFlowSet sfs = om.getSourceSequenceFlowSet(e.getId());
             Iterator itrSfs = sfs.iterator();
             while(itrSfs.hasNext())
@@ -330,7 +331,7 @@ public class GraphViz
                 sf.sequenceFlow(e.getId(),s.getTargetRef());
             }
 
-
+            }
         }
 
       sf.end_BPMN_graph();
