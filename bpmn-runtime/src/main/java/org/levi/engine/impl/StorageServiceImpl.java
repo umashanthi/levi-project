@@ -15,9 +15,6 @@ import java.util.List;
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
 
-<<<<<<< HEAD
-
-
     public final static String HOME = "HOME";
     public final static String BPMN_FILE_EXTENSION = ".bpmn";
     public final static String LAR_EXTENSION = ".lar";
@@ -27,9 +24,7 @@ public class StorageServiceImpl implements StorageService {
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
     public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
-=======
     // todo: make the dirs of serial, extract if not exsisting
->>>>>>> 93804bdb5f9c8290b4ee5531c7b6a77934744149
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     

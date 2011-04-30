@@ -1,5 +1,7 @@
 package org.levi.engine.impl.identity;
 
+/* Need to remove? */
+
 public class Role {
     private String roleId;
     private String roleName;

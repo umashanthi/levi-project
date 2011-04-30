@@ -1,5 +1,7 @@
 package org.levi.engine.impl.identity;
 
+/* to remove? */
+
 public class Permission {
     private String permissionId;
     private String permissionName;

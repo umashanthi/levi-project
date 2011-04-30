@@ -15,8 +15,4 @@ public interface Group {
 
     void setGroupDescription(String description);
 
-    Role[] getGroupRoles();
-
-    void setGroupRoles(Role[] roles);
-
 }

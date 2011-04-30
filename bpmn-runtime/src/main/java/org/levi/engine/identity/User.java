@@ -1,5 +1,7 @@
 package org.levi.engine.identity;
 
+import java.util.HashMap;
+
 public interface User {
 
     String getUserId();
@@ -18,9 +20,9 @@ public interface User {
 
     void setLastName(String lastName);
 
-    Group[] getUserGroups();
+    HashMap<Group,String> getUserGroups();
 
-    void setUserGroups(Group[] groups);
+    void setUserGroups(HashMap<Group,String> groups);
 
     String getUserEmail();
 
