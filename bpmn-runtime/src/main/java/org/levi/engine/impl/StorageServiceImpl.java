@@ -1,23 +1,21 @@
 package org.levi.engine.impl;
 
-import org.levi.engine.Deployment;
-import org.levi.engine.EngineData;
-import org.levi.engine.LeviException;
-import org.levi.engine.StorageService;
+import org.levi.engine.*;
 import org.levi.engine.impl.bpmn.parser.ObjectModel;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.ObjectSaver;
+import org.levi.visualize.api.GraphViz;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
 
+<<<<<<< HEAD
 
 
     public final static String HOME = "HOME";
@@ -29,6 +27,9 @@ public class StorageServiceImpl implements StorageService {
     public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
     public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
     public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
+=======
+    // todo: make the dirs of serial, extract if not exsisting
+>>>>>>> 93804bdb5f9c8290b4ee5531c7b6a77934744149
 
     private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
     
@@ -40,13 +41,13 @@ public class StorageServiceImpl implements StorageService {
     /**
      * Get the list of deployed processes
      */
-    public List<String> getDeployedProcessList() {
-         return engineData.getDeploymentPIds();
+    public List<String> getDeploymentIds() {
+         return engineData.getDeploymentIds();
     }
 
     public void showDeployedProcessList() {
         System.out.println("Deployed processes:\n\t");
-        System.out.println(engineData.getDeploymentPIds().toString());
+        System.out.println(engineData.getDeploymentIds().toString());
     }
 
     public boolean deploy(Deployment d) {
@@ -67,7 +68,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public void undeployAll() throws IOException {
-        for (String id : engineData.getDeploymentPIds()) {
+        for (String id : engineData.getDeploymentIds()) {
             undeploy(id);
         }
     }
@@ -94,7 +95,7 @@ public class StorageServiceImpl implements StorageService {
         delete(d.getExtractPath(), true);
         // delete other stuff: om, pic
         delete(d.getOmPath(), false);
-        if (!EMPTY.equals(d.getDiagramPath())) {
+        if (!Constants.EMPTY.equals(d.getDiagramPath())) {
             delete(d.getDiagramPath(), false);
         }
     }
@@ -124,14 +125,16 @@ public class StorageServiceImpl implements StorageService {
             throw new LeviException("Process already deployed : " + definitionsName);
         }
         // serialize it and get the path
-        String omPath = LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
+        String omPath = Constants.LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
         ObjectSaver saver = new ObjectSaver(omPath);
         saver.saveObject(om);
         // create the BPMN diagram
+        GraphViz diagram = new GraphViz();
+        String diagramPath = diagram.getGraph(om,
+                exData.getExtractPath() + definitionsName.replace(" ", "_").replace("-", "_"));
         // save it and get the path
-        AtomicReference<String> diagramPath = new AtomicReference<String>(EMPTY);
         // make a deployment
-        Deployment d = new Deployment(definitionsName, omPath, diagramPath.get(), exData.getExtractPath());
+        Deployment d = new Deployment(definitionsName, omPath, diagramPath, exData.getExtractPath());
         createdDeployments.add(d);
         return d;
     }

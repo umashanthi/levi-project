@@ -25,22 +25,10 @@ package org.levi.visualize.api;
  ******************************************************************************
  */
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Stack;
-
 import org.levi.engine.impl.bpmn.parser.ObjectModel;
-import org.levi.engine.impl.bpmn.TaskNode;
-import org.levi.engine.impl.bpmn.EndEvent;
-import org.levi.engine.impl.bpmn.SequenceFlowSet;
 import org.omg.spec.bpmn.x20100524.model.*;
+
+import java.io.*;
 
 /**
  * <dl>
@@ -189,41 +177,39 @@ public class GraphViz
     */
    private byte[] get_img_stream(File dot, String type)
    {
-      File img;
-      byte[] img_stream = null;
+       File img;
+       byte[] img_stream = null;
 
-      try {
-         img = File.createTempFile("graph_", "."+type, new File(GraphViz.TEMP_DIR));
-         Runtime rt = Runtime.getRuntime();
+       try {
+           img = File.createTempFile("graph_", "." + type, new File(GraphViz.TEMP_DIR));
+           Runtime rt = Runtime.getRuntime();
 
 //         String cmd = DOT + " -Tgif "+dot.getAbsolutePath()+" -o"+img.getAbsolutePath();
 //         Process p = rt.exec(cmd);
-         // patch by Mike Chenault
-         String[] args = {DOT, "-T"+type, dot.getAbsolutePath(), "-o", img.getAbsolutePath()};
-         Process p = rt.exec(args);
+           // patch by Mike Chenault
+           String[] args = {DOT, "-T" + type, dot.getAbsolutePath(), "-o", img.getAbsolutePath()};
+           Process p = rt.exec(args);
 
-         p.waitFor();
+           p.waitFor();
 
-         FileInputStream in = new FileInputStream(img.getAbsolutePath());
-         img_stream = new byte[in.available()];
-         in.read(img_stream);
-         // Close it if we need to
-         if( in != null ) in.close();
+           FileInputStream in = new FileInputStream(img.getAbsolutePath());
+           img_stream = new byte[in.available()];
+           in.read(img_stream);
+           // Close it if we need to
+           if (in != null) in.close();
 
-         if (img.delete() == false)
-            System.err.println("Warning: " + img.getAbsolutePath() + " could not be deleted!");
-      }
-      catch (java.io.IOException ioe) {
-         System.err.println("Error:    in I/O processing of tempfile in dir " + GraphViz.TEMP_DIR+"\n");
-         System.err.println("       or in calling external command");
-         ioe.printStackTrace();
-      }
-      catch (java.lang.InterruptedException ie) {
-         System.err.println("Error: the execution of the external program was interrupted");
-         ie.printStackTrace();
-      }
+           if (img.delete() == false)
+               System.err.println("Warning: " + img.getAbsolutePath() + " could not be deleted!");
+       } catch (java.io.IOException ioe) {
+           System.err.println("Error:    in I/O processing of tempfile in dir " + GraphViz.TEMP_DIR + "\n");
+           System.err.println("       or in calling external command");
+           ioe.printStackTrace();
+       } catch (java.lang.InterruptedException ie) {
+           System.err.println("Error: the execution of the external program was interrupted");
+           ie.printStackTrace();
+       }
 
-      return img_stream;
+       return img_stream;
    }
 
    /**
@@ -234,18 +220,18 @@ public class GraphViz
     */
    private File writeDotSourceToFile(String str) throws java.io.IOException
    {
-      File temp;
-      try {
-         temp = File.createTempFile("graph_", ".dot.tmp", new File(GraphViz.TEMP_DIR));
-         FileWriter fout = new FileWriter(temp);
-         fout.write(str);
-         fout.close();
-      }
-      catch (Exception e) {
-         System.err.println("Error: I/O error while writing the dot source to temp file!");
-         return null;
-      }
-      return temp;
+       File temp;
+       try {
+           temp = File.createTempFile("graph_", ".dot.tmp", new File(GraphViz.TEMP_DIR));
+           FileWriter fout = new FileWriter(temp);
+           fout.write(str);
+           fout.close();
+       }
+       catch (Exception e) {
+           System.err.println("Error: I/O error while writing the dot source to temp file!");
+           return null;
+       }
+       return temp;
    }
 
    /**
@@ -272,76 +258,58 @@ public class GraphViz
     */
    public void readSource(String input)
    {
-	   StringBuilder sb = new StringBuilder();
+       StringBuilder sb = new StringBuilder();
 
-	   try
-	   {
-		   FileInputStream fis = new FileInputStream(input);
-		   DataInputStream dis = new DataInputStream(fis);
-		   BufferedReader br = new BufferedReader(new InputStreamReader(dis));
-		   String line;
-		   while ((line = br.readLine()) != null) {
-			   sb.append(line);
-		   }
-		   dis.close();
-	   }
-	   catch (Exception e) {
-		   System.err.println("Error: " + e.getMessage());
-	   }
+       try {
+           FileInputStream fis = new FileInputStream(input);
+           DataInputStream dis = new DataInputStream(fis);
+           BufferedReader br = new BufferedReader(new InputStreamReader(dis));
+           String line;
+           while ((line = br.readLine()) != null) {
+               sb.append(line);
+           }
+           dis.close();
+       }
+       catch (Exception e) {
+           System.err.println("Error: " + e.getMessage());
+       }
 
-	   this.graph = sb;
+       this.graph = sb;
    }
 
-   public File getGraph(ObjectModel om)
-   {
-      //GraphViz gv = new GraphViz();
-      BPMNSymbolFactory sf = new BPMNSymbolFactory(this);
+    public String getGraph(ObjectModel om, String diagramPath) {
+        BPMNSymbolFactory sf = new BPMNSymbolFactory(this);
 
-      sf.start_BPMN_graph();
-      Collection c = om.getFlowElementList();
-      Collection d = om.gettargetBasedSeqFlowMapList();
-
-       Iterator itr = c.iterator();
-        while(itr.hasNext())
-        {
-            TFlowElement e =(TFlowElement)itr.next();
+        sf.start_BPMN_graph();
+        sf.startEvent(om.getModifiedName(om.getStartEvent()), om.getModifiedId(om.getStartEvent()));
+        for (TFlowElement e : om.getFlowElementList()) {
             if (e instanceof TTask) {
-                sf.normalTask(e.getName(),e.getId());
+                sf.normalTask(om.getModifiedName(e), om.getModifiedId(e));
             } else if (e instanceof TGateway) {
-                sf.gateway(e.getName(),e.getId());
+                sf.gateway(om.getModifiedName(e), om.getModifiedId(e));
             } else if (e instanceof TEndEvent) {
-                sf.endEvent(e.getName(),e.getId());
+                sf.endEvent(om.getModifiedName(e), om.getModifiedId(e));
             } else {
-                // TODO stuff here. e.g intermediate events, message flows, etc.
-               sf.normalTask(e.getName(),e.getId());
+                sf.normalTask(om.getModifiedName(e), om.getModifiedId(e));
             }
-
         }
-
-        Iterator itrAgain = c.iterator();
-        while(itrAgain.hasNext())
-        {
-            TFlowElement e =(TFlowElement)itrAgain.next();
-            SequenceFlowSet sfs = om.getSourceSequenceFlowSet(e.getId());
-            Iterator itrSfs = sfs.iterator();
-            while(itrSfs.hasNext())
-            {
-                TSequenceFlow s = (TSequenceFlow)itrSfs.next();
-                sf.sequenceFlow(e.getId(),s.getTargetRef());
+        for (TSequenceFlow seqFlow : om.getSourceSequenceFlowSet(om.getStartEvent().getId())) {
+                sf.sequenceFlow(om.getModifiedId(om.getStartEvent()), om.modify(seqFlow.getTargetRef()));
+        }
+        for (TFlowElement e : om.getFlowElementList()) {
+            if (e instanceof TEndEvent) {
+                continue;
             }
-
-
+            for (TSequenceFlow seqFlow : om.getSourceSequenceFlowSet(e.getId())) {
+                sf.sequenceFlow(om.getModifiedId(e), om.modify(seqFlow.getTargetRef()));
+            }
         }
-
-      sf.end_BPMN_graph();
-
-      System.out.println(this.getDotSource());
-
-      File out = new File("/home/keheliya/Projects/bpmnViz/new/bpmn1.svg");
-      this.writeGraphToFile(this.getGraph(this.getDotSource(),"svg"), out);
-
-       return out;
-   }
+        sf.end_BPMN_graph();
+        String finalPath = diagramPath + ".svg";
+        File out = new File(finalPath);
+        writeGraphToFile(getGraph(getDotSource(), "svg"), out);
+        return finalPath;
+    }
 
 } // end of class GraphViz
 

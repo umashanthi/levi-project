@@ -1,8 +1,6 @@
 package org.levi.web;
 
 import org.levi.engine.ProcessEngine;
-import org.levi.engine.impl.ProcessEngineImpl;
-import org.levi.engine.impl.StorageServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +25,7 @@ public class ListProcessesServlet extends HttpServlet {
         try {
             assert   request.getSession().getAttribute("processEngine")!=null;
             ProcessEngine engine = (ProcessEngine)request.getSession().getAttribute("processEngine");
-            List processesList = engine.getStorageService().getDeployedProcessList();
+            List processesList = engine.getDeploymentIds();
             request.getSession().setAttribute("processList", processesList);
             response.sendRedirect("processes.jsp");
         }

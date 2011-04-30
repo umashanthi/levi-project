@@ -55,7 +55,7 @@ public class EngineData implements Serializable {
         this.deploymentPIds = deploymentPIds;
     }
 
-    public List<String> getDeploymentPIds() {
+    public List<String> getDeploymentIds() {
         return deploymentPIds;
     }
 

@@ -126,6 +126,18 @@ public class ObjectModel implements Serializable {
         return startEvent;
     }
 
+    public String getModifiedName(TFlowElement e) {
+        return modify(e.getName());
+    }
+
+    public String getModifiedId(TFlowElement e) {
+        return modify(e.getId());
+    }
+
+    public String modify(String s) {
+        return s == null ? "" : s.replaceAll("-", "__");
+    }
+
     public TFlowElement getFlowElement(String id) {
         return flowElementMap.get(id);
     }
