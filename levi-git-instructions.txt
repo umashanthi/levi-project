@@ -1,0 +1,48 @@
+checkout source
+===============
+git clone git@github.com:keheliya/levi.git
+
+see the working branch
+======================
+git branch
+
+chechout the correct branch
+===========================
+git checkout -b APACHE_ODE_1.3.4.X --track origin/APACHE_ODE_1.3.4.X
+git branch
+
+git status
+
+add the files to the stage
+==========================
+git add .
+
+commit
+======
+git commit -m "commit message"
+
+push
+====
+git push origin APACHE_ODE_1.4.3.X (for the first time)
+git push
+And_I_give_up_forever_to_touch_you
+And_I_give_up_forever_to_touch_you
+
+pull
+====
+git pull (origin XXX?)
+
+git remote show origin
+
+
+Build with maven
+================
+And_I_give_up_forever_to_touch_you
+$ git clone git@github.com:umashanthi/levi-project.git
+go inside 'levi-project' directory and issue
+$ mvn -Dmaven.test.skip=true clean install | tee ode_build.txt
+
+$ mvn idea:idea
+
+
+
