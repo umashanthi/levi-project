@@ -1,9 +1,13 @@
 package org.levi.engine;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class Constants {
     private final static String HOME = "HOME";
     public final static String BPMN_FILE_EXTENSION = ".bpmn";
     public final static String LAR_EXTENSION = ".lar";
+    public final static String LOM_EXTENSION = ".lom";
     public final static String EMPTY = "__EMPTY__";
     public static final String SYSTEM_HOME = System.getenv().get(HOME);
     public static final String LOM_PATH  = SYSTEM_HOME + "/devel/levi/serial/"; 

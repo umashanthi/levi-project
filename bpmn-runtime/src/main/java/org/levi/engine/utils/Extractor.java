@@ -4,12 +4,12 @@ import org.levi.engine.Constants;
 import org.levi.engine.impl.StorageServiceImpl;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class Extractor {
     private final static int BUFSIZE = 2048;
 
@@ -30,13 +30,11 @@ public final class Extractor {
             //TODO in the storage service, after checking for duplicates, these dirs must be deleted
             boolean result = (new File(destDir)).mkdir();
             if (!result) {
-                //System.err.println("Could not extract " + larPath);
                 return null;
             }
             String topLevelDir = destDir + entry.getName();
             result = (new File(topLevelDir)).mkdir();
             if (!result) {
-                //System.err.println("Could not extract " + larPath);
                 return null;
             }
             exData.setExtractPath(topLevelDir);
@@ -46,7 +44,6 @@ public final class Extractor {
             if (entry.isDirectory()) {
                 boolean result = (new File(destDir + entry.getName())).mkdir();
                 if (!result) {
-                    //System.err.println("Could not extract " + larPath);
                     return null;
                 }
                 continue;
@@ -86,11 +83,10 @@ public final class Extractor {
 
     private static String makePath(String entryName) {
         String path;
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date date = new Date();
-        path = dateFormat.format(date);
-        String name = entryName.replaceAll("/", "");
-        name = name.replaceAll(" ", "_");
+        path = LeviUtils.getyyyyMMddHHmmss();
+        String name = LeviUtils.trimAndReplace(entryName);
         return Constants.LAR_EXTRACT_PATH + name + "_" + path + "/";
     }
+
+
 }

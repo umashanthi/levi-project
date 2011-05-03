@@ -1,18 +1,35 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.Event;
+import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class StartEvent extends Event {
-    FlowNodeFactory flowNodeFac;
-    TStartEvent startEvent;
+    private final ProcessInstance processInstance;
+    private final TStartEvent startEvent;
 
-    public StartEvent(TStartEvent startEvent, FlowNodeFactory flowNodeFac) {
-        super();
-        assert startEvent != null;
-        assert flowNodeFac != null;
-        this.startEvent = startEvent;
-        this.flowNodeFac = flowNodeFac;
+    public static class Builder {
+        private ProcessInstance process;
+        private TStartEvent se;
+
+        public Builder(TStartEvent startEvent) {
+            this.se = startEvent;
+        }
+
+        public Builder processInstance(ProcessInstance process) {
+            this.process = process;
+            return this;
+        }
+        public StartEvent build() {
+            return new StartEvent(this);    
+        }
+    }
+    private StartEvent(Builder builder) {
+        this.startEvent = builder.se;
+        this.processInstance = builder.process;
     }
 
     public String getId() {
@@ -20,14 +37,11 @@ public class StartEvent extends Event {
     }
     
     public void run() {
-        System.out.println(this.getClassName());
-
-        instance(flowNodeFac.getNextNode(this));
+        instance(processInstance.executeNext(this));
     }
 
     public String toString() {
         String out = "{";
-        out += "flowNodeFactory: " + flowNodeFac + ", ";
         out += "startEvent: " + startEvent;
         out += "}";
         return out;

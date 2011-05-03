@@ -85,7 +85,17 @@ Released : 20090303
         List<String> processesList = (List<String>) session.getAttribute("processList");
 
     %>
+
     <table>
+        <tr>
+    <td>
+        <input type="button"
+               value="Undeploy all" <% if (processesList.isEmpty()) {%>
+               disabled="true" <%}%>
+               onclick="">
+
+    </td>
+    </tr>
         <%for (String process : processesList) { %>
         <tr>
             <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">

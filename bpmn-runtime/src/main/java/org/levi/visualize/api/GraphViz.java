@@ -25,7 +25,7 @@ package org.levi.visualize.api;
  ******************************************************************************
  */
 
-import org.levi.engine.impl.bpmn.parser.ObjectModel;
+import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.omg.spec.bpmn.x20100524.model.*;
 
 import java.io.*;
@@ -129,15 +129,16 @@ public class GraphViz
 
       try {
          dot = writeDotSourceToFile(dot_source);
-         if (dot != null)
-         {
+         if (dot != null) {
             img_stream = get_img_stream(dot,type);
             if (dot.delete() == false)
                System.err.println("Warning: " + dot.getAbsolutePath() + " could not be deleted!");
             return img_stream;
          }
          return null;
-      } catch (java.io.IOException ioe) { return null; }
+      } catch (java.io.IOException ioe) {
+          return null;
+      }
    }
 
    /**
@@ -164,7 +165,9 @@ public class GraphViz
          FileOutputStream fos = new FileOutputStream(to);
          fos.write(img);
          fos.close();
-      } catch (java.io.IOException ioe) { return -1; }
+      } catch (java.io.IOException ioe) {
+          return -1;
+      }
       return 1;
    }
 
@@ -183,23 +186,22 @@ public class GraphViz
        try {
            img = File.createTempFile("graph_", "." + type, new File(GraphViz.TEMP_DIR));
            Runtime rt = Runtime.getRuntime();
-
-//         String cmd = DOT + " -Tgif "+dot.getAbsolutePath()+" -o"+img.getAbsolutePath();
-//         Process p = rt.exec(cmd);
+           //String cmd = DOT + " -Tgif "+dot.getAbsolutePath()+" -o"+img.getAbsolutePath();
+           //Process p = rt.exec(cmd);
            // patch by Mike Chenault
            String[] args = {DOT, "-T" + type, dot.getAbsolutePath(), "-o", img.getAbsolutePath()};
            Process p = rt.exec(args);
-
            p.waitFor();
-
            FileInputStream in = new FileInputStream(img.getAbsolutePath());
            img_stream = new byte[in.available()];
            in.read(img_stream);
            // Close it if we need to
-           if (in != null) in.close();
-
-           if (img.delete() == false)
+           if (in != null) {
+               in.close();
+           }
+           if (img.delete() == false) {
                System.err.println("Warning: " + img.getAbsolutePath() + " could not be deleted!");
+           }
        } catch (java.io.IOException ioe) {
            System.err.println("Error:    in I/O processing of tempfile in dir " + GraphViz.TEMP_DIR + "\n");
            System.err.println("       or in calling external command");
@@ -208,7 +210,6 @@ public class GraphViz
            System.err.println("Error: the execution of the external program was interrupted");
            ie.printStackTrace();
        }
-
        return img_stream;
    }
 
@@ -226,8 +227,7 @@ public class GraphViz
            FileWriter fout = new FileWriter(temp);
            fout.write(str);
            fout.close();
-       }
-       catch (Exception e) {
+       } catch (Exception e) {
            System.err.println("Error: I/O error while writing the dot source to temp file!");
            return null;
        }
@@ -269,39 +269,37 @@ public class GraphViz
                sb.append(line);
            }
            dis.close();
-       }
-       catch (Exception e) {
+       } catch (Exception e) {
            System.err.println("Error: " + e.getMessage());
        }
-
        this.graph = sb;
    }
 
-    public String getGraph(ObjectModel om, String diagramPath) {
+    public String getGraph(ProcessDefinition processDefinition, String diagramPath) {
         BPMNSymbolFactory sf = new BPMNSymbolFactory(this);
 
         sf.start_BPMN_graph();
-        sf.startEvent(om.getModifiedName(om.getStartEvent()), om.getModifiedId(om.getStartEvent()));
-        for (TFlowElement e : om.getFlowElementList()) {
+        sf.startEvent(processDefinition.getModifiedName(processDefinition.getStartEvent()), processDefinition.getModifiedId(processDefinition.getStartEvent()));
+        for (TFlowElement e : processDefinition.getFlowElementList()) {
             if (e instanceof TTask) {
-                sf.normalTask(om.getModifiedName(e), om.getModifiedId(e));
+                sf.normalTask(processDefinition.getModifiedName(e), processDefinition.getModifiedId(e));
             } else if (e instanceof TGateway) {
-                sf.gateway(om.getModifiedName(e), om.getModifiedId(e));
+                sf.gateway(processDefinition.getModifiedName(e), processDefinition.getModifiedId(e));
             } else if (e instanceof TEndEvent) {
-                sf.endEvent(om.getModifiedName(e), om.getModifiedId(e));
+                sf.endEvent(processDefinition.getModifiedName(e), processDefinition.getModifiedId(e));
             } else {
-                sf.normalTask(om.getModifiedName(e), om.getModifiedId(e));
+                sf.normalTask(processDefinition.getModifiedName(e), processDefinition.getModifiedId(e));
             }
         }
-        for (TSequenceFlow seqFlow : om.getSourceSequenceFlowSet(om.getStartEvent().getId())) {
-                sf.sequenceFlow(om.getModifiedId(om.getStartEvent()), om.modify(seqFlow.getTargetRef()));
+        for (TSequenceFlow seqFlow : processDefinition.getSourceSequenceFlowSet(processDefinition.getStartEvent().getId())) {
+                sf.sequenceFlow(processDefinition.getModifiedId(processDefinition.getStartEvent()), processDefinition.modify(seqFlow.getTargetRef()));
         }
-        for (TFlowElement e : om.getFlowElementList()) {
+        for (TFlowElement e : processDefinition.getFlowElementList()) {
             if (e instanceof TEndEvent) {
                 continue;
             }
-            for (TSequenceFlow seqFlow : om.getSourceSequenceFlowSet(e.getId())) {
-                sf.sequenceFlow(om.getModifiedId(e), om.modify(seqFlow.getTargetRef()));
+            for (TSequenceFlow seqFlow : processDefinition.getSourceSequenceFlowSet(e.getId())) {
+                sf.sequenceFlow(processDefinition.getModifiedId(e), processDefinition.modify(seqFlow.getTargetRef()));
             }
         }
         sf.end_BPMN_graph();
@@ -310,6 +308,5 @@ public class GraphViz
         writeGraphToFile(getGraph(getDotSource(), "svg"), out);
         return finalPath;
     }
-
 } // end of class GraphViz
 

@@ -2,15 +2,19 @@ package org.levi.engine.impl;
 
 import org.levi.engine.*;
 import org.levi.engine.identity.IdentityService;
+import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 import org.levi.engine.utils.ObjectSaver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class ProcessEngineImpl implements ProcessEngine {
     private EngineData engineData;
     private StorageService storageService;
@@ -19,12 +23,11 @@ public class ProcessEngineImpl implements ProcessEngine {
     private IdentityService identityService = new IdentityServiceImpl();
     
     private static final ProcessEngine processEngine = new ProcessEngineImpl();
-
+    //private static Logger log = Logger.getLogger(ProcessEngineImpl.class);
 
     private ProcessEngineImpl() {    // todo <== process engine configuration
         try {
             start();
-            System.out.println("[info] Running Levi " + Constants.LEVI_VERSION + ".");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -56,19 +59,11 @@ public class ProcessEngineImpl implements ProcessEngine {
     }
 
     public synchronized List<String> getDeploymentIds() {
-        return giveList(engineData.getDeploymentIds());
+        return LeviUtils.giveList(engineData.getDeploymentIds());
     }
 
     public synchronized List<String> getRunningProcessIds() {
-        return giveList(engineData.getRunningProcessIds());
-    }
-
-    private static synchronized <E> List<E> giveList(List<E> list) {
-        if (list.isEmpty()) {
-            return Collections.emptyList();
-        }
-        //return new ArrayList<E>(list);
-        return Collections.unmodifiableList(list);
+        return LeviUtils.giveList(engineData.getRunningProcessIds());
     }
 
     public synchronized void stop()
@@ -83,12 +78,16 @@ public class ProcessEngineImpl implements ProcessEngine {
         runtimeService.stop();
     }
 
-    public synchronized void deploy(String larPath) throws IOException {
+    public synchronized String deploy(String larPath) throws IOException {
         if (larPath == null) {
             throw new LeviException("Lar path is null.");
         }
-        Deployment d = storageService.createDeployment(larPath);
-        storageService.deploy(d);
+        Deployment d = storageService.createDeployment(larPath).deploy();
+        return d.getDefinitionsId();
+    }
+
+    public void undeployAll() throws IOException {
+        storageService.undeployAll();
     }
 
     public synchronized void undeploy(String id) throws IOException {
@@ -98,12 +97,22 @@ public class ProcessEngineImpl implements ProcessEngine {
         storageService.undeploy(id);
     }
 
-    public synchronized void startProcess(String id)
+    public void cleanup() throws IOException {
+        storageService.cleanup();
+    }
+
+    public synchronized void startProcess(String id, Map<String, Object> variables)
             throws IOException, ClassNotFoundException {
         if (id == null) {
             throw new LeviException("Process ID is null.");
         }
-        runtimeService.startProcess(id);
+        try {
+            runtimeService.startProcess(id, variables);
+        } catch (Exception e) {
+            // cleanup
+            cleanup();
+            throw new LeviException(e);
+        }
     }
 
     public synchronized void stopProcess(String id)

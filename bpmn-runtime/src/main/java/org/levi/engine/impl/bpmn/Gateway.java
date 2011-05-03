@@ -1,30 +1,35 @@
 package org.levi.engine.impl.bpmn;
 
+import org.levi.engine.LeviException;
 import org.levi.engine.bpmn.RunnableFlowNode;
+import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TGateway;
 import org.omg.spec.bpmn.x20100524.model.TGatewayDirection;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public abstract class Gateway extends RunnableFlowNode {
     private final TGateway gateway;
-    protected final FlowNodeFactory flowNodeFactory;
+    protected final ProcessInstance processInstance;
     protected final SequenceFlowSet incomingSeqFlowSet;
     protected final SequenceFlowSet outgoingSeqFlowSet;
     protected final List<String> incomingTokens;
     protected final int gatewayDirection;
     
-    public Gateway(TGateway gateway, FlowNodeFactory flowNodeFactory) {
-        assert gateway != null;
-        assert flowNodeFactory !=  null;
-        
-        this.flowNodeFactory = flowNodeFactory;
+    public Gateway(TGateway gateway, ProcessInstance processInstance) {
+        if (gateway == null) {
+            throw new LeviException("Gateway is null.");
+        }
+        this.processInstance = processInstance;
         this.gateway = gateway;
-        this.incomingSeqFlowSet = this.flowNodeFactory.getTargetSequenceFlowSet(this.gateway.getId());
-        this.outgoingSeqFlowSet = this.flowNodeFactory.getSourceSequenceFlowSet(this.gateway.getId());
-        incomingTokens = new ArrayList<String>(incomingSeqFlowSet.size());
+        this.incomingSeqFlowSet = processInstance.getObjectModel().getTargetSequenceFlowSet(this.gateway.getId());
+        this.outgoingSeqFlowSet = processInstance.getObjectModel().getSourceSequenceFlowSet(this.gateway.getId());
+        incomingTokens = LeviUtils.newArrayList(incomingSeqFlowSet.size());
         gatewayDirection = this.gateway.getGatewayDirection().intValue();
     }
 
@@ -50,7 +55,7 @@ public abstract class Gateway extends RunnableFlowNode {
     public void run() {
         List<TSequenceFlow> output = evaluate();
         for (TSequenceFlow result : output) {
-            instance(flowNodeFactory.getNextNode(result));
+            instance(processInstance.executeNext(result));
         }
     }
     

@@ -4,7 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-
+/**
+ * @author Ishan Jayawardena
+ */
 public class ObjectSaver {
     FileOutputStream out;
     ObjectOutputStream objectOs;

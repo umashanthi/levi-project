@@ -21,26 +21,27 @@
         <sequenceFlow sourceRef="t_4" targetRef="pg_4" id="sf_7" />
 
         <exclusiveGateway name="EG 1" gatewayDirection="Diverging" id="eg_1" default="sf_23"/>
-        <sequenceFlow sourceRef="eg_1" targetRef="t_2" id="sf_5">
+        <sequenceFlow sourceRef="eg_1" targetRef="t_2" id="sf_5" xsi:type="tFormalExpression">
         <conditionExpression>
-                price1 = 20
+        <![CDATA[
                 price2 = 10
                 if(price1 == price2){
                     return true
                 } else {
                     return false
-                }
+                }]]>
             </conditionExpression>
         </sequenceFlow>
-        <sequenceFlow sourceRef="eg_1" targetRef="t_3" id="sf_6">
+        <sequenceFlow sourceRef="eg_1" targetRef="t_3" id="sf_6"  xsi:type="tFormalExpression">
         <conditionExpression>
+        <![CDATA[
                 price1 = 10
                 price2 = 20
                 if(price1 == price2){
                     return true
                 } else {
                     return false
-                }
+                }]]>
         </conditionExpression>
         </sequenceFlow>
         <sequenceFlow sourceRef="eg_1" targetRef="t_3" id="sf_23" />
@@ -49,30 +50,32 @@
         <sequenceFlow sourceRef="t_2" targetRef="eg_2" id="sf_8" />
 
         <exclusiveGateway name="EG 2" gatewayDirection="Diverging" id="eg_2" />
-        <sequenceFlow sourceRef="eg_2" targetRef="t_5" id="sf_10">
+        <sequenceFlow sourceRef="eg_2" targetRef="t_5" id="sf_10" xsi:type="tFormalExpression">
         <conditionExpression>
+        <![CDATA[
                 price1 = 20
                 price2 = 10
                 if(price1 == price2){
                     return true
                 } else {
                     return false
-                }
+                }]]>
             </conditionExpression>
         </sequenceFlow>
 
 
         <userTask name="User Task 5" id="t_5"/>
         <sequenceFlow sourceRef="t_5" targetRef="eg_3" id="sf_14" />
-        <sequenceFlow sourceRef="eg_2" targetRef="t_6" id="sf_11">
+        <sequenceFlow sourceRef="eg_2" targetRef="t_6" id="sf_11"  xsi:type="tFormalExpression">
         <conditionExpression>
+        <![CDATA[
                 price1 = 10
                 price2 = 10
                 if(price1 == price2){
                     return true
                 } else {
                     return false
-                }
+                }]]>
             </conditionExpression>
         </sequenceFlow>
         <userTask name="User Task 6" id="t_6"/>
@@ -101,13 +104,5 @@
         <parallelGateway gatewayDirection="Unspecified" name="PG 4" id="pg_4"/>
         <sequenceFlow sourceRef="pg_4" targetRef="ee_1" id="sf_22" />
         <endEvent name="EE 1" id="ee_1" />
-        <!--
-        <startEvent name="SE " id="se_">
-        <userTask name="User Task " id="t_"/>
-        <sequenceFlow sourceRef="" targetRef="" id="sf_" />
-        <parallelGateway gatewayDirection="Unspecified" name="PG " id="pg_"/>
-        <exclusiveGateway name="EG " gatewayDirection="Diverging" id="eg_" />
-        <endEvent name="EE " id="ee_" />
-        -->
     </process>
 </definitions>

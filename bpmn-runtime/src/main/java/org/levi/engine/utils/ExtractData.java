@@ -1,12 +1,14 @@
 package org.levi.engine.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class ExtractData {
     private String extractPath;
-    private List<String> bpmnFiles = new ArrayList<String>();
-    private List<String> otherFiles = new ArrayList<String>();
+    private List<String> bpmnFiles = LeviUtils.newArrayList();
+    private List<String> otherFiles = LeviUtils.newArrayList();
 
     public boolean validate() {
         if (extractPath == null) {

@@ -1,14 +1,14 @@
 package org.levi.engine;
 
 /**
- * Created by IntelliJ IDEA.
- * User: ishan
- * Date: Dec 30, 2010
- * Time: 12:32:32 PM
- * To change this template use File | Settings | File Templates.
+ * @author Ishan Jayawardena
  */
 public class LeviException extends RuntimeException {
     public LeviException(String s) {
         super(s);
+    }
+
+    public LeviException(Exception e) {
+        super(e);
     }
 }

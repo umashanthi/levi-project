@@ -1,23 +1,24 @@
 package org.levi.engine.impl;
 
 import org.levi.engine.*;
-import org.levi.engine.impl.bpmn.parser.ObjectModel;
+import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
+import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectSaver;
 import org.levi.visualize.api.GraphViz;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
-
     // todo: make the dirs of serial, extract if not exsisting
-
-    private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
+    private List<Deployment> createdDeployments = LeviUtils.newArrayList(50);
     
     public boolean start() {
         System.out.println("[Info] Storage Service started");
@@ -45,8 +46,18 @@ public class StorageServiceImpl implements StorageService {
             throw new LeviException("Attempt to deploy a non created deployment.");
         }
         engineData.addDeployment(d);
-        System.out.println("[Info] Deployed : " + d.getDefinitionsName());
+        System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return true;
+    }
+
+    public Deployment deploy() {
+        Deployment d = createdDeployments.remove(0);
+        if (d == null) {
+            throw new LeviException("Null Deployment. Deployment failed.");
+        }
+        engineData.addDeployment(d);
+        System.out.println("[Info] Deployed : " + d.getDefinitionsId());
+        return d;
     }
 
     public void undeploy(String id) throws IOException {
@@ -64,26 +75,32 @@ public class StorageServiceImpl implements StorageService {
         if (engineData.hasDeployment(d)) {
             engineData.removeDeployment(d);
             deleteDeploymentData(d);
+        } else {
+            throw new LeviException("Attempt to undeploy an untracked deployment : " + d.getDefinitionsId());
         }
-        throw new LeviException("Attempt to undeploy an untracked deployment : " + d.getDefinitionsName());
     }
 
     public boolean stop() throws IOException {
+        cleanup();
+        System.out.println("[Info] Storage Service stopped.");
+        return true;
+    }
+    public void cleanup() throws IOException {
         for (Deployment d : createdDeployments) {
             deleteDeploymentData(d);
         }
-        System.out.println("[Info] Storage Service stopped.");
-        return true;
     }
 
     private static void deleteDeploymentData(Deployment d)
             throws IOException {
-        delete(d.getExtractPath(), true);
-        // delete other stuff: om, pic
-        delete(d.getOmPath(), false);
+        //delete(Constants.ENGINEDATA_PATH, false);
         if (!Constants.EMPTY.equals(d.getDiagramPath())) {
             delete(d.getDiagramPath(), false);
         }
+        delete(d.getExtractPath(), true);
+        // delete other stuff: processdef, pic
+        delete(d.getProcessDefinitionPath(), false);
+
     }
 
     public StorageServiceImpl(EngineData engineData) {
@@ -91,38 +108,35 @@ public class StorageServiceImpl implements StorageService {
         this.engineData = engineData;
     }
     
-    public Deployment createDeployment(String larPath)
+    public StorageService createDeployment(String larPath)
             throws IOException {
         ExtractData exData = Extractor.extract(larPath);
         if (exData == null) {
             throw new LeviException("Could not extract Levi archive: " + larPath);
         }
         String processURI  = exData.getBPMNFiles().get(0);
-        // create the om
-        ObjectModel om = new ObjectModel(new File(processURI));
-        // get the process name
-        //String processId = om.getProcessName();
-        String definitionsName = om.getDefinitionsName();
-        if ("".equals(definitionsName)) { // processId
-            throw new LeviException("Cannot deploy a process with no name.");
-        }
-        if (engineData.hasDeployment(definitionsName)) { // processId
+        try {
+            ProcessDefinition processDefinition = new ProcessDefinition(new File(processURI));
+
+            String definitionsId = processDefinition.getDefinitionsId();
+            if (engineData.hasDeployment(definitionsId)) {
+                delete(exData.getExtractPath(), true);
+                throw new LeviException("Process already deployed : " + definitionsId);
+            }
+            String omPath = Constants.LOM_PATH + definitionsId + Constants.LOM_EXTENSION;
+            ObjectSaver saver = new ObjectSaver(omPath);
+            saver.saveObject(processDefinition);
+            GraphViz diagram = new GraphViz();
+            String diagramPath = diagram.getGraph(processDefinition, exData.getExtractPath() + definitionsId);
+            // TODO we must save the details of exData aswell
+            Deployment d = new Deployment(definitionsId, omPath, diagramPath, exData.getExtractPath());
+            createdDeployments.add(d);
+        } catch (LeviException e) {
             delete(exData.getExtractPath(), true);
-            throw new LeviException("Process already deployed : " + definitionsName);
+            throw e;
+
         }
-        // serialize it and get the path
-        String omPath = Constants.LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
-        ObjectSaver saver = new ObjectSaver(omPath);
-        saver.saveObject(om);
-        // create the BPMN diagram
-        GraphViz diagram = new GraphViz();
-        String diagramPath = diagram.getGraph(om,
-                exData.getExtractPath() + definitionsName.replace(" ", "_").replace("-", "_"));
-        // save it and get the path
-        // make a deployment
-        Deployment d = new Deployment(definitionsName, omPath, diagramPath, exData.getExtractPath());
-        createdDeployments.add(d);
-        return d;
+        return this;
     }
 
     /**
