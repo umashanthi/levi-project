@@ -10,6 +10,8 @@ import java.util.*;
  * @author Ishan Jayawardena
  */
 public class LeviUtils {
+    private LeviUtils() {
+    }
     public static String trimAndReplace(String str) {
         return str == null ? "" : str
                 .trim()

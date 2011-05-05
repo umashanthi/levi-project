@@ -41,8 +41,20 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     private void start()
             throws IOException, ClassNotFoundException {
-        File inF = new File(Constants.ENGINEDATA_PATH);
-        if (inF.exists()) {
+        File leviHome = new File(Constants.LEVI_HOME);
+        if (!leviHome.exists()) {
+            leviHome.mkdir();
+        }
+        File lomPath = new File(Constants.LOM_PATH);
+        if (!lomPath.exists()) {
+            lomPath.mkdir();    
+        }
+        File extractPath = new File(Constants.LAR_EXTRACT_PATH);
+        if (!extractPath.exists()) {
+            extractPath.mkdir();
+        }
+        File engineDataFile = new File(Constants.ENGINEDATA_PATH);
+        if (engineDataFile.exists()) {
             ObjectLoader loader = new ObjectLoader(Constants.ENGINEDATA_PATH);
             EngineData engineData = (EngineData) loader.readNextObject();
             if (engineData == null) {
