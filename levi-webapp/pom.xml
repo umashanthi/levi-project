@@ -17,7 +17,7 @@
             <groupId>org.levi.bpmn.bpmn-rutime</groupId>
             <artifactId>bpmn-runtime</artifactId>
             <version>0.0.1</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -37,4 +37,5 @@
         </dependency>
 
     </dependencies>
+
 </project>
