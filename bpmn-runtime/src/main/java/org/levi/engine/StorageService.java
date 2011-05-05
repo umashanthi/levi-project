@@ -20,5 +20,6 @@ public interface StorageService {
     public void undeploy(Deployment d) throws IOException;
     public void undeployAll() throws IOException;
     public void undeploy(String id) throws IOException;
+    public String getDiagramPath(String id);
 
 }

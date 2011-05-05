@@ -16,6 +16,7 @@ import java.util.Map;
  * @author Ishan Jayawardena
  */
 public class ProcessEngineImpl implements ProcessEngine {
+
     private EngineData engineData;
     private StorageService storageService;
     private RuntimeService runtimeService;
@@ -135,4 +136,10 @@ public class ProcessEngineImpl implements ProcessEngine {
         runtimeService.stopProcess(id);
     }
 
+    public String getDiagramPath(String id) {
+        if (id == null) {
+            throw new LeviException("Process definitions id is null");
+        }
+        return storageService.getDiagramPath(id);
+    }
 }

@@ -64,6 +64,14 @@ public class StorageServiceImpl implements StorageService {
         undeploy(engineData.getDeployment(id));
     }
 
+    public String getDiagramPath(String id) {
+        String path = engineData.getDeployment(id).getDiagramPath();
+        if (path == null | path == Constants.EMPTY) {
+            throw new LeviException("No diagram found for definitions id " + id);
+        }
+        return path;
+    }
+
     public void undeployAll() throws IOException {
         for (String id : engineData.getDeploymentIds()) {
             undeploy(id);

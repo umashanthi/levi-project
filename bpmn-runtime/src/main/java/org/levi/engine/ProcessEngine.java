@@ -17,6 +17,7 @@ public interface ProcessEngine {
     public void cleanup() throws IOException;
     public void startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
     public void stopProcess(String id) throws IOException, ClassNotFoundException;
+    public String getDiagramPath(String id);
     public List<String> getDeploymentIds();
     public List<String> getRunningProcessIds();
 }
