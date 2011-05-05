@@ -26,7 +26,7 @@ public class ProcessActionServlet extends HttpServlet {
         ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
         try {
             if (action.equals("Start")) {
-                engine.startProcess(processId);
+                engine.startProcess(processId, null);
                 response.sendRedirect("processes.jsp?isProcessStarted=true&processId=" + processId);
             } else if (action.equals("Stop")) {
                 engine.stopProcess(processId);
