@@ -118,6 +118,7 @@ public class StorageServiceImpl implements StorageService {
     
     public StorageService createDeployment(String larPath)
             throws IOException {
+        // todo delete this lar after this
         ExtractData exData = Extractor.extract(larPath);
         if (exData == null) {
             throw new LeviException("Could not extract Levi archive: " + larPath);
@@ -136,8 +137,10 @@ public class StorageServiceImpl implements StorageService {
             saver.saveObject(processDefinition);
             GraphViz diagram = new GraphViz();
             String diagramPath = diagram.getGraph(processDefinition, exData.getExtractPath() + definitionsId);
+            int start = diagramPath.indexOf(Constants.LEVI_HOME);
+            int end = diagramPath.length();
             // TODO we must save the details of exData aswell
-            Deployment d = new Deployment(definitionsId, omPath, diagramPath, exData.getExtractPath());
+            Deployment d = new Deployment(definitionsId, omPath, diagramPath.substring(start, end), exData.getExtractPath());
             createdDeployments.add(d);
         } catch (LeviException e) {
             delete(exData.getExtractPath(), true);
