@@ -14,7 +14,7 @@
     <packaging>war</packaging>
     <dependencies>
         <dependency>
-            <groupId>org.levi.bpmn.bpmn-rutime</groupId>
+            <groupId>org.levi.bpmn.bpmn-runtime</groupId>
             <artifactId>bpmn-runtime</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>
