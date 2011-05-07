@@ -8,7 +8,6 @@ public class GroupImpl implements Group, Serializable {
     private String groupId;
     private String groupName;
     private String description;
-    private Role[] roles;
 
     public String getGroupId() {
         return groupId;
@@ -34,11 +33,4 @@ public class GroupImpl implements Group, Serializable {
         this.description = description;
     }
 
-    public Role[] getGroupRoles() {
-        return this.roles;
-    }
-
-    public void setGroupRoles(Role[] roles) {
-        this.roles = roles;
-    }
 }

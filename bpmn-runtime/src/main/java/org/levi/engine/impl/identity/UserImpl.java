@@ -4,6 +4,7 @@ import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class UserImpl implements User, Serializable {
 
@@ -12,7 +13,7 @@ public class UserImpl implements User, Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private Group[] groups;
+    private HashMap<Group,String> groups;
 
     public String getUserId() {
         return this.userId;
@@ -46,13 +47,14 @@ public class UserImpl implements User, Serializable {
         this.lastName = lastName;
     }
 
-    public Group[] getUserGroups() {
+    public HashMap<Group, String> getUserGroups() {
         return this.groups;
     }
 
-    public void setUserGroups(Group[] groups) {
-        this.groups = groups;
+    public void setUserGroups(HashMap<Group, String> groups) {
+        this.groups=groups;
     }
+
 
     public String getUserEmail() {
         return this.email;

@@ -5,6 +5,9 @@ import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class SequenceFlowMap {
     private final Map<String, TSequenceFlow> seqFlows;
     private final int initialCapacity;

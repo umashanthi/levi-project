@@ -1,60 +1,75 @@
 package org.levi.engine.impl.bpmn;
 
-import org.levi.engine.scripting.impl.ExpressionEvaluator;
-import org.levi.engine.scripting.impl.ScriptHandler;
+import org.levi.engine.LeviException;
+import org.levi.engine.bpmn.ConditionExpression;
+import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TExclusiveGateway;
-import org.omg.spec.bpmn.x20100524.model.TExpression;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class ExclusiveGateway extends Gateway {
     private final List<TSequenceFlow> output;
-    private final String defaultSequenceFlowName;
+    private final String defaultSequenceFlowId;
 
-    public ExclusiveGateway(TExclusiveGateway gateway, FlowNodeFactory factory) {
-        super(gateway, factory);
-        defaultSequenceFlowName = gateway.getDefault();
-        output = new ArrayList<TSequenceFlow>(1); // because it can have only a single result
+
+    public static class Builder {
+        private TExclusiveGateway eg;
+        private ProcessInstance process;
+
+        public Builder(TExclusiveGateway eg) {
+            this.eg = eg;
+        }
+        public Builder processInstance(ProcessInstance process) {
+            this.process = process;
+            return this;
+        }
+        public ExclusiveGateway build() {
+            return new ExclusiveGateway(this);
+        }
+    }
+
+    private ExclusiveGateway(Builder builder) {
+        super(builder.eg, builder.process);
+        defaultSequenceFlowId = builder.eg.getDefault();
+        output = LeviUtils.newArrayList(1); // because it can have only a single result
     }
 
     public List<TSequenceFlow> evaluate() {
-        System.out.println("<Exclusive Gateway " + getName() + " Evaluating>");
+        System.out.println("Evaluating Exclusive Gateway: " + getName());
         output.clear();
         compare();
-
         //Ignore the multiple input and multiple output Gateways since they are not recommended.
         TSequenceFlow defaultSequenceFlow = null;
         if (isDiverging() || (incomingSeqFlowSet.size() == 1)) {
             for (TSequenceFlow sf : outgoingSeqFlowSet) {
-                TExpression expression = sf.getConditionExpression();
-                if (expression != null) {
-                    //expression evaluated by scripting package
-                    ScriptHandler handler = new ScriptHandler();
-                    ExpressionEvaluator evaluator = new ExpressionEvaluator(expression, "groovy"); //TODO variable languages
-                    handler.setEvaluator(evaluator);
-                    if ((Boolean) handler.execute()) {
-                        output.add(sf);
-                        break;
-                    }
-
-                } else if (sf.getId().equals(defaultSequenceFlowName)) {
+                if (defaultSequenceFlowId != null && defaultSequenceFlowId.equals(sf.getId())) {
                     defaultSequenceFlow = sf;
+                    continue;
+                }
+                ConditionExpression condition
+                        = ConditionExpressionBuilder.buildNewExpression(sf.getConditionExpression());
+                if (condition.evaluate(processInstance)) {
+                    output.add(sf);
+                    break;
+                }
+            }
+            if (output.isEmpty()) {
+                if (defaultSequenceFlow != null) {
+                    System.out.println("Set default SequenceFlow");
+                    output.add(defaultSequenceFlow);
                 } else {
-                    throw new IllegalArgumentException("No conditional expression found: Exclusive Gateway");
+                    throw new LeviException("None of the conditions were satisfied.");
                 }
             }
         } else if (isConverging() || (outgoingSeqFlowSet.size() == 1)) {
             output.add(outgoingSeqFlowSet.get(0));
         } else {
-            throw new IllegalArgumentException("Invalid gateway direction: Exclusive Gateway");  //TODO create new exception for this.
-        }
-
-        //set the default sequence flow if others are false
-        if (output.isEmpty() && defaultSequenceFlow != null) {
-            System.out.println("Set default SequenceFlow");
-            output.add(defaultSequenceFlow);
+            throw new LeviException("Invalid gateway direction: Exclusive Gateway");
         }
         return output;
     }
@@ -69,11 +84,15 @@ public final class ExclusiveGateway extends Gateway {
                 }
             }
         }
-        throw new RuntimeException("incoming sequence flows unmatched");
+        throw new LeviException("incoming sequence flows unmatched");
     }
 
     @Override
     public String toString() {
-        return "{ExclusiveGateway: " + getId() + "}";
+        return "{id: " + getId()
+                + ", Incoming: "+ incomingSeqFlowSet
+                + ", Outgoing: " + outgoingSeqFlowSet
+                + ", Default: " + outgoingSeqFlowSet.toStringSf(defaultSequenceFlowId)
+                + "}";
     }
 }

@@ -10,9 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -47,13 +45,20 @@ public class FileUploadServlet extends HttpServlet {
 
                             if (fileItem.getSize() > 0) { //uploaded file item
                                 String fileName = fileItem.getName();
-                                String dirName = "LeviEngine/";
+                                String dirName = "../webapps/levi/LeviEngine/";
+                                File leviDir = new File(dirName);
+                                if (!leviDir.exists()) {
+                                    leviDir.mkdir();
+                                }
                                 File saveTo = new File(dirName + fileName);
+                                File dir = new File(dirName);
+                                String dirPath = dir.getAbsolutePath();
                                 try {
                                     fileItem.write(saveTo);   // stores the uploaded business archive (lar) to a location inside the server
                                     ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
                                     String larPath = dirName + fileName;
                                     engine.deploy(larPath);   // deploys the stored business archive (lar)
+
                                     response.sendRedirect("index.jsp?isUploadSuccess=true");
                                 } catch (Exception e) {
                                     response.sendRedirect("index.jsp?isUploadSuccess=false");

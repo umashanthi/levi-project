@@ -1,44 +1,47 @@
 package org.levi.engine;
 
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class EngineData implements Serializable {
     //TODO should this class be a singleton?
-    private transient Map<String, Deployment> deployments;// <processId, deployment>
+    private transient Map<String, Deployment> deployments;
     private int nDeployments;
     private transient List<String> deploymentPIds;
     private int nDeploymentPIds;
-    //private transient Map<String, String> deployedLarPaths; // <processId, larPath>
-    //private int nDeploymentURIs;
     private transient Map<String, ProcessInstance>  runningProcesses;
     private int nRunningProcesses;
     private transient Map<String, ProcessInstance> stoppedProcesses;
     private transient Map<String, ProcessInstance> pausedProcesses;
     private transient List<String> runningProcessIds;
+    private static final int DEFAULT_SIZE = 25;
 
     public EngineData() {
         nDeployments = 0;
         nDeploymentPIds = 0;
         nRunningProcesses = 0;
-        init(25);
+        init(DEFAULT_SIZE);
     }
 
     private void init(int n) {
-        assert n > 0;
-        deployments = new HashMap<String, Deployment>(n);
-        deploymentPIds = new ArrayList<String>(n);
+        if (n <= 0) {
+            n = DEFAULT_SIZE; // this is not necessarily an error
+        }
+        deployments = LeviUtils.newHashMap(n);
+        deploymentPIds = LeviUtils.newArrayList(n);
         // TODO: handle this later on
-        runningProcesses = new HashMap<String, ProcessInstance>(n);
-        runningProcessIds = new ArrayList<String>(n);
+        runningProcesses = LeviUtils.newHashMap(n);
+        runningProcessIds = LeviUtils.newArrayList(n);
     }
 
     public void setDeployments(Map<String, Deployment> deployments) {
@@ -55,13 +58,13 @@ public class EngineData implements Serializable {
         this.deploymentPIds = deploymentPIds;
     }
 
-    public List<String> getDeploymentPIds() {
+    public List<String> getDeploymentIds() {
         return deploymentPIds;
     }
 
     public boolean removeDeployment(Deployment d) {
         assert d != null;
-        return removeDeployment(d.getDefinitionsName());
+        return removeDeployment(d.getDefinitionsId());
     }
 
     public boolean removeDeployment(String id) {
@@ -74,17 +77,7 @@ public class EngineData implements Serializable {
         }
         return false;
     }
-    /*
-    public void setDeployedLarPaths(Map<String, String> deploymentsURIs) {
-        assert deploymentsURIs != null;
-        this.deployedLarPaths = deploymentsURIs;
-    } */
-
-    /*
-    public Map<String, String> getDeployedLarPaths() {
-        return deployedLarPaths;
-    }*/
-
+    
     public void setRunningProcesses(Map<String, ProcessInstance>  runningProcesses) {
         assert runningProcesses != null;
         this.runningProcesses = runningProcesses;
@@ -115,8 +108,8 @@ public class EngineData implements Serializable {
         assert nDeploymentPIds == nDeployments;
         for (int i = 0; i < nDeploymentPIds; ++i) {
             Deployment d = deployments.get(deploymentPIds.get(i));
-            s.writeObject(d.getDefinitionsName());
-            s.writeObject(d.getOmPath());
+            s.writeObject(d.getDefinitionsId());
+            s.writeObject(d.getProcessDefinitionPath());
             s.writeObject(d.getDiagramPath());
             s.writeObject(d.getExtractPath());
         }
@@ -139,18 +132,13 @@ public class EngineData implements Serializable {
 
     public void addDeployment(Deployment dep) {
         assert dep != null;
-        deployments.put(dep.getDefinitionsName(), dep);
-        deploymentPIds.add(dep.getDefinitionsName());
+        deployments.put(dep.getDefinitionsId(), dep);
+        deploymentPIds.add(dep.getDefinitionsId());
     }
 
-    /*
-    public boolean hasLarPath(String larPath) {
-        assert larPath != null;
-        return deployedLarPaths.containsKey(larPath);
-    }*/
     public boolean hasDeployment(Deployment d) {
         assert d != null;
-        return hasDeployment(d.getDefinitionsName());
+        return hasDeployment(d.getDefinitionsId());
     }
 
     public boolean hasDeployment(String processId) {
@@ -166,5 +154,9 @@ public class EngineData implements Serializable {
     public boolean isRunning(String processId) {
         assert processId != null;
         return runningProcesses.containsKey(processId);
+    }
+
+    public String toString() {
+        return "["+"{"+deploymentPIds +"}," +"]";
     }
 }

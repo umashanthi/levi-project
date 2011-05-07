@@ -1,13 +1,17 @@
 package org.levi.engine.impl.bpmn;
 
+import org.levi.engine.LeviException;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 // TODO boolean to check source-based or target-based
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSequenceFlow> {
     private TSequenceFlow firstItem;
     private List<TSequenceFlow> seqFlowList = null;
@@ -28,7 +32,7 @@ public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSeque
             throw new NullPointerException();
         }
         if (seqFlowList == null) {
-            seqFlowList = new ArrayList<TSequenceFlow>(3);
+            seqFlowList = LeviUtils.newArrayList(3);
         }
         if (!seqFlowList.contains(seqFlow) && seqFlow != firstItem) {
             seqFlowList.add(seqFlow);
@@ -59,6 +63,21 @@ public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSeque
         return (seqFlowList != null);
     }
 
+    private TSequenceFlow getSeqFlowById(String sfId) {
+        if (sfId == null) {
+            throw new LeviException("sequence flow id is null.");
+        }
+        if (sfId.equals(firstItem.getId())) {
+            return firstItem;
+        }
+        for (TSequenceFlow sf : seqFlowList) {
+            if (sfId.equals(sf.getId())) {
+                return sf;
+            }
+        }
+        return null;
+    }
+
     public String toString() {
         String s = "";
         s += "{(";
@@ -67,7 +86,7 @@ public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSeque
         s += firstItem.getTargetRef();
         s += ")";
         if (seqFlowList != null) {
-            for (int i = 1; i < seqFlowList.size(); ++i) {
+            for (int i = 0; i < seqFlowList.size(); ++i) {
                 TSequenceFlow sf = seqFlowList.get(i);
                 s += ", (";
                 s += sf.getSourceRef()+ ":";
@@ -78,6 +97,20 @@ public class SequenceFlowSet implements Iterable<TSequenceFlow>, Iterator<TSeque
         return s;
     }
 
+    public String toStringSf(String sfId) {
+        TSequenceFlow sf = getSeqFlowById(sfId);
+        if (sf == null) {
+            return null;
+        }
+        String s = "";
+        s += "{(";
+        s += sf.getSourceRef();
+        s += ":";
+        s += sf.getTargetRef();
+        s += ")}";
+        return s;
+    }
+    
     public Iterator<TSequenceFlow> iterator() {
         return this;
     }

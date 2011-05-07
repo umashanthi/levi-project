@@ -1,34 +1,24 @@
 package org.levi.engine.impl;
 
-import org.levi.engine.Deployment;
-import org.levi.engine.EngineData;
-import org.levi.engine.LeviException;
-import org.levi.engine.StorageService;
-import org.levi.engine.impl.bpmn.parser.ObjectModel;
+import org.levi.engine.*;
+import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
+import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectSaver;
 import org.levi.visualize.api.GraphViz;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
-
-    public final static String HOME = "HOME";
-    public final static String BPMN_FILE_EXTENSION = ".bpmn";
-    public final static String LAR_EXTENSION = ".lar";
-    public final static String EMPTY = "__EMPTY__".intern();
-    public static final String SYSTEM_HOME = System.getenv().get(HOME);
-    public static final String LOM_PATH  = SYSTEM_HOME + "/devel/levi/serial/";
-    public static final String BPMN_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/";
-    public static final String LAR_PATH = "bpmn-runtime/src/main/java/org/levi/samples/data/lars/";
-    public final static String LAR_EXTRACT_PATH = SYSTEM_HOME + "/devel/levi/extract/";
-  //TODO Create Directory if not existing  
-    private List<Deployment> createdDeployments = new ArrayList<Deployment>(50);
+    // todo: make the dirs of serial, extract if not exsisting
+    private List<Deployment> createdDeployments = LeviUtils.newArrayList(50);
     
     public boolean start() {
         System.out.println("[Info] Storage Service started");
@@ -38,13 +28,13 @@ public class StorageServiceImpl implements StorageService {
     /**
      * Get the list of deployed processes
      */
-    public List<String> getDeployedProcessList() {
-         return engineData.getDeploymentPIds();
+    public List<String> getDeploymentIds() {
+         return engineData.getDeploymentIds();
     }
 
     public void showDeployedProcessList() {
         System.out.println("Deployed processes:\n\t");
-        System.out.println(engineData.getDeploymentPIds().toString());
+        System.out.println(engineData.getDeploymentIds().toString());
     }
 
     public boolean deploy(Deployment d) {
@@ -56,16 +46,34 @@ public class StorageServiceImpl implements StorageService {
             throw new LeviException("Attempt to deploy a non created deployment.");
         }
         engineData.addDeployment(d);
-        System.out.println("[Info] Deployed : " + d.getDefinitionsName());
+        System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return true;
+    }
+
+    public Deployment deploy() {
+        Deployment d = createdDeployments.remove(0);
+        if (d == null) {
+            throw new LeviException("Null Deployment. Deployment failed.");
+        }
+        engineData.addDeployment(d);
+        System.out.println("[Info] Deployed : " + d.getDefinitionsId());
+        return d;
     }
 
     public void undeploy(String id) throws IOException {
         undeploy(engineData.getDeployment(id));
     }
 
+    public String getDiagramPath(String id) {
+        String path = engineData.getDeployment(id).getDiagramPath();
+        if (path == null | path == Constants.EMPTY) {
+            throw new LeviException("No diagram found for definitions id " + id);
+        }
+        return path;
+    }
+
     public void undeployAll() throws IOException {
-        for (String id : engineData.getDeploymentPIds()) {
+        for (String id : engineData.getDeploymentIds()) {
             undeploy(id);
         }
     }
@@ -75,26 +83,32 @@ public class StorageServiceImpl implements StorageService {
         if (engineData.hasDeployment(d)) {
             engineData.removeDeployment(d);
             deleteDeploymentData(d);
+        } else {
+            throw new LeviException("Attempt to undeploy an untracked deployment : " + d.getDefinitionsId());
         }
-        throw new LeviException("Attempt to undeploy an untracked deployment : " + d.getDefinitionsName());
     }
 
     public boolean stop() throws IOException {
+        cleanup();
+        System.out.println("[Info] Storage Service stopped.");
+        return true;
+    }
+    public void cleanup() throws IOException {
         for (Deployment d : createdDeployments) {
             deleteDeploymentData(d);
         }
-        System.out.println("[Info] Storage Service stopped.");
-        return true;
     }
 
     private static void deleteDeploymentData(Deployment d)
             throws IOException {
-        delete(d.getExtractPath(), true);
-        // delete other stuff: om, pic
-        delete(d.getOmPath(), false);
-        if (!EMPTY.equals(d.getDiagramPath())) {
+        //delete(Constants.ENGINEDATA_PATH, false);
+        if (!Constants.EMPTY.equals(d.getDiagramPath())) {
             delete(d.getDiagramPath(), false);
         }
+        delete(d.getExtractPath(), true);
+        // delete other stuff: processdef, pic
+        delete(d.getProcessDefinitionPath(), false);
+
     }
 
     public StorageServiceImpl(EngineData engineData) {
@@ -102,37 +116,38 @@ public class StorageServiceImpl implements StorageService {
         this.engineData = engineData;
     }
     
-    public Deployment createDeployment(String larPath)
+    public StorageService createDeployment(String larPath)
             throws IOException {
+        // todo delete this lar after this
         ExtractData exData = Extractor.extract(larPath);
         if (exData == null) {
             throw new LeviException("Could not extract Levi archive: " + larPath);
         }
         String processURI  = exData.getBPMNFiles().get(0);
-        // create the om
-        ObjectModel om = new ObjectModel(new File(processURI));
-        // get the process name
-        //String processId = om.getProcessName();
-        String definitionsName = om.getDefinitionsName();
-        if ("".equals(definitionsName)) { // processId
-            throw new LeviException("Cannot deploy a process with no name.");
-        }
-        if (engineData.hasDeployment(definitionsName)) { // processId
+        try {
+            ProcessDefinition processDefinition = new ProcessDefinition(new File(processURI));
+
+            String definitionsId = processDefinition.getDefinitionsId();
+            if (engineData.hasDeployment(definitionsId)) {
+                delete(exData.getExtractPath(), true);
+                throw new LeviException("Process already deployed : " + definitionsId);
+            }
+            String omPath = Constants.LOM_PATH + definitionsId + Constants.LOM_EXTENSION;
+            ObjectSaver saver = new ObjectSaver(omPath);
+            saver.saveObject(processDefinition);
+            GraphViz diagram = new GraphViz();
+            String diagramPath = diagram.getGraph(processDefinition, exData.getExtractPath() + definitionsId);
+            int start = diagramPath.indexOf(Constants.LEVI_HOME);
+            int end = diagramPath.length();
+            // TODO we must save the details of exData aswell
+            Deployment d = new Deployment(definitionsId, omPath, diagramPath.substring(start, end), exData.getExtractPath());
+            createdDeployments.add(d);
+        } catch (LeviException e) {
             delete(exData.getExtractPath(), true);
-            throw new LeviException("Process already deployed : " + definitionsName);
+            throw e;
+
         }
-        // serialize it and get the path
-        String omPath = LOM_PATH + definitionsName.replaceAll(" ", "_") + "-" + om.hashCode()+ ".lom"; // processId
-        ObjectSaver saver = new ObjectSaver(omPath);
-        saver.saveObject(om);
-        // create the BPMN diagram
-        GraphViz diagram = new GraphViz();
-        String diagramPath = diagram.getGraph(om, exData.getExtractPath());
-        // save it and get the path
-        // make a deployment
-        Deployment d = new Deployment(definitionsName, omPath, diagramPath, exData.getExtractPath());
-        createdDeployments.add(d);
-        return d;
+        return this;
     }
 
     /**

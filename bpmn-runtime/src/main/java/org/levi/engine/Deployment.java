@@ -1,9 +1,12 @@
 package org.levi.engine;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class Deployment {
-    private String definitionsName;
+    private String definitionsId;
     private String extractPath;
-    private String oMPath;
+    private String processDefinitionPath;
     private String diagramPath;
 
     public Deployment(String pid, String op, String dp, String extractPath) {
@@ -11,18 +14,18 @@ public final class Deployment {
         assert op != null;
         assert dp != null;
         assert extractPath != null;
-        definitionsName = pid;
-        oMPath = op;
+        definitionsId = pid;
+        processDefinitionPath = op;
         diagramPath = dp;
         this.extractPath = extractPath;
     }
 
-    public String getDefinitionsName() {
-        return definitionsName;
+    public String getDefinitionsId() {
+        return definitionsId;
     }
 
-    public String getOmPath() {
-        return oMPath;
+    public String getProcessDefinitionPath() {
+        return processDefinitionPath;
     }
 
     public String getDiagramPath() {
@@ -35,8 +38,8 @@ public final class Deployment {
 
     public String toString() {
         String s;
-        s = "{" + definitionsName + ", "
-                + oMPath + ", "
+        s = "{" + definitionsId + ", "
+                + processDefinitionPath + ", "
                 + diagramPath + ", "
                 + extractPath
                 +"}";

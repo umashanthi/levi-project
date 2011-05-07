@@ -2,12 +2,15 @@ package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public class SequenceFlow {
-    private RunnableFlowNode _parent;
-    private RunnableFlowNode _child;
+    private RunnableFlowNode parent;
+    private RunnableFlowNode child;
 
     public SequenceFlow(RunnableFlowNode parent, RunnableFlowNode child) {
-        _parent = parent;
-        _child = child;
+        this.parent = parent;
+        this.child = child;
     }
 }

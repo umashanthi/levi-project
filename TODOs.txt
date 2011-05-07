@@ -1,0 +1,14 @@
+bsf, saxon, xalan
+
+exceptions
+dont swollow
+log
+
+1. script + evaluating expressions
+3. web services invocation
+2. email
+4. human task
+
+model
+- graph
+- token

@@ -1,17 +1,37 @@
 package org.levi.engine.impl.bpmn;
 
+import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TParallelGateway;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ishan Jayawardena
+ */
 public final class ParallelGateway extends Gateway {
     private final List<TSequenceFlow> output;
 
-    public ParallelGateway(TParallelGateway gateway, FlowNodeFactory factory) {
-        super(gateway, factory);
-        output = new ArrayList<TSequenceFlow>(super.outgoingSeqFlowSet.size());
+    public static class Builder {
+        private TParallelGateway pg;
+        private ProcessInstance process;
+
+        public Builder(TParallelGateway pg) {
+            this.pg = pg;
+        }
+        public Builder processInstance(ProcessInstance process) {
+            this.process = process;
+            return this;
+        }
+        public ParallelGateway build() {
+            return new ParallelGateway(this);
+        }
+    }
+
+    private ParallelGateway(Builder builder) {
+        super(builder.pg, builder.process);
+        output = LeviUtils.newArrayList(super.outgoingSeqFlowSet.size());
     }
 
     public List<TSequenceFlow> evaluate() {

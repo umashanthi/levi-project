@@ -26,6 +26,9 @@ public class ExpressionEvaluator implements Evaluable {
     public boolean evaluate() {
         String script = expression.newXMLStreamReader().getText();
         BSFManager manager = new BSFManager();
+        //System.out.println("......" + manager.lookupBean("price1"));
+        manager.registerBean("price1", "10");
+        //manager.
         try {
             BSFEngine engine = manager.loadScriptingEngine(language);
             return ((Boolean) engine.eval("myScript", 0, 0, script));
