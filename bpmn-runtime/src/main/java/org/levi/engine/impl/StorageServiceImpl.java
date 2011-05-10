@@ -19,7 +19,7 @@ public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
     // todo: make the dirs of serial, extract if not exsisting
     private List<Deployment> createdDeployments = LeviUtils.newArrayList(50);
-    
+
     public boolean start() {
         System.out.println("[Info] Storage Service started");
         return true;
@@ -29,7 +29,7 @@ public class StorageServiceImpl implements StorageService {
      * Get the list of deployed processes
      */
     public List<String> getDeploymentIds() {
-         return engineData.getDeploymentIds();
+        return engineData.getDeploymentIds();
     }
 
     public void showDeployedProcessList() {
@@ -77,7 +77,7 @@ public class StorageServiceImpl implements StorageService {
             undeploy(id);
         }
     }
-    
+
     public void undeploy(Deployment d)
             throws IOException {
         if (engineData.hasDeployment(d)) {
@@ -93,6 +93,7 @@ public class StorageServiceImpl implements StorageService {
         System.out.println("[Info] Storage Service stopped.");
         return true;
     }
+
     public void cleanup() throws IOException {
         for (Deployment d : createdDeployments) {
             deleteDeploymentData(d);
@@ -115,7 +116,7 @@ public class StorageServiceImpl implements StorageService {
         assert engineData != null;
         this.engineData = engineData;
     }
-    
+
     public StorageService createDeployment(String larPath)
             throws IOException {
         // todo delete this lar after this
@@ -123,7 +124,7 @@ public class StorageServiceImpl implements StorageService {
         if (exData == null) {
             throw new LeviException("Could not extract Levi archive: " + larPath);
         }
-        String processURI  = exData.getBPMNFiles().get(0);
+        String processURI = exData.getBPMNFiles().get(0);
         try {
             ProcessDefinition processDefinition = new ProcessDefinition(new File(processURI));
 
@@ -137,7 +138,7 @@ public class StorageServiceImpl implements StorageService {
             saver.saveObject(processDefinition);
             GraphViz diagram = new GraphViz();
             String diagramPath = diagram.getGraph(processDefinition, exData.getExtractPath() + definitionsId);
-            int start = diagramPath.indexOf(Constants.LEVI_HOME);
+            int start = diagramPath.indexOf(Constants.LEVI_ENGINE);
             int end = diagramPath.length();
             // TODO we must save the details of exData aswell
             Deployment d = new Deployment(definitionsId, omPath, diagramPath.substring(start, end), exData.getExtractPath());
@@ -152,6 +153,7 @@ public class StorageServiceImpl implements StorageService {
 
     /**
      * deletes the content at path
+     *
      * @param path
      * @param deleteParent
      * @return
@@ -171,9 +173,9 @@ public class StorageServiceImpl implements StorageService {
     private static boolean delete(File path)
             throws IOException {
         if (path.isDirectory()) {
-           for (File child : path.listFiles()) {
-               delete(child);
-           }
+            for (File child : path.listFiles()) {
+                delete(child);
+            }
         }
         if (!path.delete()) {
             throw new LeviException("Could not delete : " + path);
