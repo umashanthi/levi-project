@@ -3,18 +3,23 @@ package org.levi.engine.impl.identity;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
+@Entity
 public class UserImpl implements User, Serializable {
 
     private String userId;
     private String password;
     private String firstName;
     private String lastName;
-    private String email;
-    private HashMap<Group,String> groups;
+    private String userEmail;
+    private List<Group> userGroups;
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.TABLE, generator="id")
     public String getUserId() {
         return this.userId;
     }
@@ -47,20 +52,21 @@ public class UserImpl implements User, Serializable {
         this.lastName = lastName;
     }
 
-    public HashMap<Group, String> getUserGroups() {
-        return this.groups;
+    @Transient
+    public List<Group> getUserGroups() {
+        return this.userGroups;
     }
 
-    public void setUserGroups(HashMap<Group, String> groups) {
-        this.groups=groups;
+    public void setUserGroups(List<Group> groups) {
+        this.userGroups =groups;
     }
 
 
     public String getUserEmail() {
-        return this.email;
+        return this.userEmail;
     }
 
     public void setUserEmail(String email) {
-        this.email = email;
+        this.userEmail = email;
     }
 }
