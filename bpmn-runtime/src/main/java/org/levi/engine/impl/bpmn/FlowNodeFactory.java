@@ -56,13 +56,10 @@ public class FlowNodeFactory {
         if (sfs.isMultiSet()) {// TODO this method name is funny! i know :P
             // TODO we do not support this yet.
             throw new RuntimeException("sequence flow set size is greater than 1");
-        } else {
-            // get the target ref
-            RunnableFlowNode flowNode = makeNode(sfs.getTargetRef());
-            insertToken(flowNode, sfs.getId());
-            return flowNode;
         }
-        //return null;
+        RunnableFlowNode flowNode = makeNode(sfs.getTargetRef());
+        insertToken(flowNode, sfs.getId());
+        return flowNode;
     }
 
     // this method is used to insert a
