@@ -1,4 +1,4 @@
-package org.levi.persist.hibernate.test;
+package org.levi.persistance;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
