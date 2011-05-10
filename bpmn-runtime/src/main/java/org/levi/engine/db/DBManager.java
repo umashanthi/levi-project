@@ -2,7 +2,8 @@ package org.levi.engine.db;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
-import org.levi.engine.impl.identity.Permission;
+
+import java.util.List;
 
 /**
  * This is the interface to classes which handles the back end database management of Levi Engine
@@ -32,22 +33,31 @@ public interface DBManager {
     void removeUserFromGroup(String userId,
                              String groupId); //?? User& Group objects or simple the ids?
 
-    /* methods to be added
-        saveTask()
-        deleteTask()
-        saveProcess()
-        deleteProcess()
-        updateProcess()
-        updateTask()
-        getUserTaskList(String userId)
-        getGroupTaskList(String groupId)
-        getRunningProcessesList()
-        getAssigneeForTask(String taskId)
-        getActiveTasks()
-        getActiveTasks(String processId)
+    void saveTask(TaskBean task);
 
+    void deleteTask(String taskId);
 
-     */
+    void updateTask(TaskBean task);
+
+    void saveProcess(ProcessBean process);
+
+    void deleteProcess(String processId);
+
+    void updateProcess(ProcessBean process);
+
+    List<TaskBean> getUserTaskList(String userId);
+
+    List<TaskBean> getGroupTaskList(String groupId);
+
+    List<ProcessBean> getRunningProcessesList();
+
+    User getAssigneeForTask(String taskId);
+
+    List<TaskBean> getActiveTasks();
+
+    List<TaskBean> getUnassignedTasks();
+
+    List<TaskBean> getActiveTasks(String processId);
 
 
 }
