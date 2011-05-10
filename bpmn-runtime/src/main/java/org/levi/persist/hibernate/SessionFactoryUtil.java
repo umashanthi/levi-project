@@ -2,7 +2,7 @@ package org.levi.persist.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+//import org.hibernate.cfg.AnnotationConfiguration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +25,7 @@ public class SessionFactoryUtil {
     }
 
     static {
-        sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        //sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
     }
 
     public static SessionFactory getInstance() {
