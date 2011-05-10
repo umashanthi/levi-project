@@ -10,6 +10,7 @@ import org.levi.visualize.api.GraphViz;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -141,7 +142,9 @@ public class StorageServiceImpl implements StorageService {
             int start = diagramPath.indexOf(Constants.LEVI_ENGINE);
             int end = diagramPath.length();
             // TODO we must save the details of exData aswell
-            Deployment d = new Deployment(definitionsId, omPath, diagramPath.substring(start, end), exData.getExtractPath());
+            Deployment d = new Deployment(definitionsId,
+                    omPath, diagramPath.substring(start, end),
+                    exData.getExtractPath(), new Date());
             createdDeployments.add(d);
         } catch (LeviException e) {
             delete(exData.getExtractPath(), true);
