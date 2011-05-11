@@ -1,5 +1,7 @@
 package org.levi.engine;
 
+import java.util.Date;
+
 /**
  * @author Ishan Jayawardena
  */
@@ -8,16 +10,19 @@ public final class Deployment {
     private String extractPath;
     private String processDefinitionPath;
     private String diagramPath;
+    private Date deploymentTime;
 
-    public Deployment(String pid, String op, String dp, String extractPath) {
+    public Deployment(String pid, String op, String dp, String extractPath, Date depTime) {
         assert pid != null;
         assert op != null;
         assert dp != null;
         assert extractPath != null;
+        assert depTime != null;
         definitionsId = pid;
         processDefinitionPath = op;
         diagramPath = dp;
         this.extractPath = extractPath;
+        deploymentTime = depTime;
     }
 
     public String getDefinitionsId() {
@@ -36,6 +41,9 @@ public final class Deployment {
         return extractPath;
     }
 
+    public Date getDate() {
+        return deploymentTime;
+    }
     public String toString() {
         String s;
         s = "{" + definitionsId + ", "

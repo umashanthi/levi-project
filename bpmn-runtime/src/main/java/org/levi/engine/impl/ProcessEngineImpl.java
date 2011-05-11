@@ -9,6 +9,7 @@ import org.levi.engine.utils.ObjectSaver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -114,6 +115,11 @@ public class ProcessEngineImpl implements ProcessEngine {
         storageService.cleanup();
     }
 
+    public synchronized void startProcess(String id)
+            throws IOException, ClassNotFoundException {
+        startProcess(id, Collections.<String, Object>emptyMap());
+    }
+
     public synchronized void startProcess(String id, Map<String, Object> variables)
             throws IOException, ClassNotFoundException {
         if (id == null) {
@@ -122,7 +128,6 @@ public class ProcessEngineImpl implements ProcessEngine {
         try {
             runtimeService.startProcess(id, variables);
         } catch (Exception e) {
-            // cleanup
             cleanup();
             throw new LeviException(e);
         }

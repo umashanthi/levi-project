@@ -15,6 +15,7 @@ public interface ProcessEngine {
     public void undeployAll() throws IOException;
     public void undeploy(String id) throws IOException;
     public void cleanup() throws IOException;
+    public void startProcess(String id) throws IOException, ClassNotFoundException;
     public void startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
     public void stopProcess(String id) throws IOException, ClassNotFoundException;
     public String getDiagramPath(String id);

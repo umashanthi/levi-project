@@ -12,5 +12,13 @@
         <artifactId>levi-project</artifactId>
         <version>0.0.1</version>
     </parent>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.omg.spec.bpmn.x20100524.model</groupId>
+            <artifactId>BPMN20</artifactId>
+            <version>0.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

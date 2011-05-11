@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="org.levi.engine.ProcessEngine" %>
 <%--
   Created by IntelliJ IDEA.
   User: umashanthi
@@ -30,6 +31,47 @@ Released : 20090303
 </head>
 <body>
 <script type="text/javascript">
+    // JK Pop up image viewer script- By JavaScriptKit.com
+    // Visit JavaScript Kit (http://javascriptkit.com)
+    // for free JavaScript tutorials and scripts
+    // This notice must stay intact for use
+
+    var popbackground = "lightskyblue" //specify backcolor or background image for pop window
+    var windowtitle = "Process Diagram"  //pop window title
+
+    function detectexist(obj) {
+        return (typeof obj != "undefined")
+    }
+
+    function jkpopimage(imgpath, popwidth, popheight, textdescription) {
+        popwidth = document.body.clientWidth
+        function getpos() {
+            leftpos = (detectexist(window.screenLeft)) ? screenLeft + document.body.clientWidth / 2 - popwidth / 2 : detectexist(window.screenX) ? screenX + innerWidth / 2 - popwidth / 2 : 0
+            toppos = (detectexist(window.screenTop)) ? screenTop + document.body.clientHeight / 2 - popheight / 2 : detectexist(window.screenY) ? screenY + innerHeight / 2 - popheight / 2 : 0
+            if (window.opera) {
+                leftpos -= screenLeft
+                toppos -= screenTop
+            }
+        }
+
+        getpos()
+        var winattributes = 'width=' + popwidth + ',height=' + popheight + ',resizable=yes,left=' + leftpos + ',top=' + toppos
+        var bodyattribute = (popbackground.indexOf(".") != -1) ? 'background="' + popbackground + '"' : 'bgcolor="' + popbackground + '"'
+        if (typeof jkpopwin == "undefined" || jkpopwin.closed)
+            jkpopwin = window.open("", "", winattributes)
+        else {
+//getpos() //uncomment these 2 lines if you wish subsequent popups to be centered too
+//jkpopwin.moveTo(leftpos, toppos)
+            jkpopwin.resizeTo(popwidth, popheight + 30)
+            jkpopwin.scrolling = true
+        }
+        jkpopwin.document.open()
+        jkpopwin.document.write('<html><title>' + windowtitle + '</title><body ' + bodyattribute + '> <div align="center"> <img  align="middle" src="' + imgpath + '" style="margin-bottom: 0.5em"></div><br />' + textdescription + '</body></html>')
+        jkpopwin.document.close()
+        jkpopwin.focus()
+    }
+
+
     function startProcess(id) {
         var processForm = document.createElement("form");
         processForm.method = "post";
@@ -42,6 +84,7 @@ Released : 20090303
         processForm.action = "startProcess?id=" + id + "&action=Stop";
         processForm.submit();
     }
+
 </script>
 <!-- start header -->
 <div id="header">
@@ -88,14 +131,14 @@ Released : 20090303
 
     <table>
         <tr>
-    <td>
-        <input type="button"
-               value="Undeploy all" <% if (processesList.isEmpty()) {%>
-               disabled="true" <%}%>
-               onclick="">
+            <td>
+                <input type="button"
+                       value="Undeploy all" <% if (processesList.isEmpty()) {%>
+                       disabled="true" <%}%>
+                       onclick="">
 
-    </td>
-    </tr>
+            </td>
+        </tr>
         <%for (String process : processesList) { %>
         <tr>
             <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">
@@ -137,6 +180,15 @@ Released : 20090303
                                                                     value="Stop" <%if(!isStopBtnActive){%>
                                                                     disabled="true" <%} %>
                                                                     onclick="stopProcess('<%=process.toString()%>')">
+
+                </td>
+                <td>
+                    <% ProcessEngine engine = (ProcessEngine) session.getAttribute("processEngine");
+                        String diagramPath = engine.getDiagramPath(process.toString());
+                    %>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
+                                                                    value="Show Process Diagram"
+                                                                    onclick="jkpopimage('<%=diagramPath%>', 800, 500, ''); return false">
 
                 </td>
                 <%--
