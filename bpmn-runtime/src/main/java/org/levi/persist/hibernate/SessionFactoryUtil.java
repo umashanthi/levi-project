@@ -2,11 +2,14 @@ package org.levi.persist.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
+import org.levi.persist.hibernate.users.hobj.UserDaoImpl;
 //import org.hibernate.cfg.AnnotationConfiguration;
 
 /**
  * Created by IntelliJ IDEA.
- * User: eranda
+ * UserDaoImpl: eranda
  * Date: May 3, 2011
  * Time: 11:53:32 AM
  * To change this template use File | Settings | File Templates.
@@ -25,7 +28,9 @@ public class SessionFactoryUtil {
     }
 
     static {
-        //sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        Configuration config = new AnnotationConfiguration().configure();
+        config.addClass(UserDaoImpl.class);
+        sessionFactory = config.buildSessionFactory();
     }
 
     public static SessionFactory getInstance() {
