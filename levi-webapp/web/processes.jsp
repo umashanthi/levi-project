@@ -1,6 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="org.levi.engine.ProcessEngine" %>
+<%@ page import="java.io.File" %>
+<%@ page import="org.apache.commons.io.FileUtils" %>
 <%--
   Created by IntelliJ IDEA.
   User: umashanthi
@@ -85,6 +87,35 @@ Released : 20090303
         processForm.submit();
     }
 
+    function showForm(formTemplate) {
+        popwidth = 600
+        popheight = 600
+        function getpos() {
+            leftpos = (detectexist(window.screenLeft)) ? screenLeft + document.body.clientWidth / 2 - popwidth / 2 : detectexist(window.screenX) ? screenX + innerWidth / 2 - popwidth / 2 : 0
+            toppos = (detectexist(window.screenTop)) ? screenTop + document.body.clientHeight / 2 - popheight / 2 : detectexist(window.screenY) ? screenY + innerHeight / 2 - popheight / 2 : 0
+            if (window.opera) {
+                leftpos -= screenLeft
+                toppos -= screenTop
+            }
+        }
+
+        getpos()
+        var winattributes = 'width=' + popwidth + ',height=' + popheight + ',resizable=yes,left=' + leftpos + ',top=' + toppos
+        var bodyattribute = (popbackground.indexOf(".") != -1) ? 'background="' + popbackground + '"' : 'bgcolor="' + popbackground + '"'
+        if (typeof jkpopwin == "undefined" || jkpopwin.closed)
+            jkpopwin = window.open("", "", winattributes)
+        else {
+            jkpopwin.resizeTo(popwidth, popheight + 30)
+            jkpopwin.scrolling = true
+        }
+        jkpopwin.border = 0
+        jkpopwin.frameBorder = 0
+        jkpopwin.document.open()
+        jkpopwin.document.write(formTemplate.replace("&quot;", "\""))
+        jkpopwin.document.close()
+        jkpopwin.focus()
+    }
+
 </script>
 <!-- start header -->
 <div id="header">
@@ -151,15 +182,15 @@ Released : 20090303
                         boolean isStopBtnActive = false; // by default it is false;
                         //show whether the process is started
                         if (request.getParameter("isProcessStarted") != null
-                                && request.getParameter("processId") != null
+                                && request.getParameter("processInstanceId") != null
                                 && request.getParameter("isProcessStarted").equals("true")
-                                && request.getParameter("processId").equals(process.toString())) {
+                                && request.getParameter("processInstanceId").equals(process.toString())) {
                             isStartBtnActive = false;
                             isStopBtnActive = true;
                         } else if (request.getParameter("isProcessStopped") != null
-                                && request.getParameter("processId") != null
+                                && request.getParameter("processInstanceId") != null
                                 && request.getParameter("isProcessStopped").equals("true")
-                                && request.getParameter("processId").equals(process.toString())) {
+                                && request.getParameter("processInstanceId").equals(process.toString())) {
                             isStartBtnActive = true;
                             isStopBtnActive = false;
                         } else {
@@ -191,15 +222,29 @@ Released : 20090303
                                                                     onclick="jkpopimage('<%=diagramPath%>', 800, 500, ''); return false">
 
                 </td>
+                <td>
+                    <!-- test - rendering forms  -->
+                    <%
+
+                        File formFile = new File(application.getRealPath("/") + "requestForm.txt");
+                        String formTemplate = FileUtils.readFileToString(formFile, null);
+                        formTemplate = formTemplate.replace("\n", "");
+                        formTemplate = formTemplate.replace("\"", "&quot;");
+                        //formTemplate=formTemplate.replace("<", "&lt;");
+                        //formTemplate=formTemplate.replace(">", "&gt;");
+                    %>
+                    <input type="button" value="Show Form" onclick="showForm('<%=formTemplate%>'); return false">
+
+                </td>
                 <%--
                 <td>
                     <% //show whether the process is started
-                        if (request.getParameter("isProcessStarted") != null && request.getParameter("processId") != null) {
+                        if (request.getParameter("isProcessStarted") != null && request.getParameter("processInstanceId") != null) {
                             String result = request.getParameter("isProcessStarted");
-                            String processId = request.getParameter("processId");
-                            if (result.equals("true") && processId.equals(process.toString())) { %>
+                            String processInstanceId = request.getParameter("processInstanceId");
+                            if (result.equals("true") && processInstanceId.equals(process.toString())) { %>
                     <h3>&nbsp; &nbsp; &nbsp; &nbsp;Process started successfully</h3>
-                    <% } else if (result.equals("false") && processId.equals(process.toString())) { // provide suitable error message %>
+                    <% } else if (result.equals("false") && processInstanceId.equals(process.toString())) { // provide suitable error message %>
                     <h3>Failed to start process. Try again</h3>
                     <%
                             }
@@ -229,5 +274,6 @@ Released : 20090303
     <p class="link"><a href="#">Privacy Policy</a>&nbsp;&#8226;&nbsp;<a href="#">Terms of Use</a>
     </p>
 </div>
+
 </body>
 </html>
