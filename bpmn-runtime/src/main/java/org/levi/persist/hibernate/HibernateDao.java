@@ -14,29 +14,34 @@ import org.levi.persist.hibernate.users.hobj.HObject;
  */
 public class HibernateDao {
 
-    private HObject _hobj;
-    private Session session;
-    private Transaction tx;
+    Session session;
 
-
-    public HibernateDao(HObject hobj){
-        this._hobj=hobj;
+    public HibernateDao(){
         session = SessionFactoryUtil.getSession();
     }
 
-    public HObject getHibernateObj(){
-        return _hobj;
+    public Session getSession(){
+        return session;
     }
 
-    public void update(){
+    public void save(HObject hobj){
         try{
-            tx = session.beginTransaction();
-            session.save(_hobj);
+            Transaction tx = session.beginTransaction();
+            session.save(hobj);
             tx.commit();
-            session.flush();
-            session.close();
         } catch(ConstraintViolationException e){
             System.out.println("Constraint violated"); //TODO need to handle this exception
         }
     }
+
+    public void update(){
+        //TODO update data
+    }
+
+    public void close(){
+        session.flush();
+        session.close();
+    }
+
+
 }
