@@ -1,8 +1,8 @@
 package org.levi.persistance;
 
-import org.levi.persist.hibernate.HibernateDao;
-import org.levi.persist.hibernate.users.hobj.GroupDaoImpl;
-import org.levi.persist.hibernate.users.hobj.UserDaoImpl;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupDaoImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.UserDaoImpl;
 
 /**
  * Created by IntelliJ IDEA.

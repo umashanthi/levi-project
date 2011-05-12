@@ -1,12 +1,11 @@
-package org.levi.persist.hibernate;
+package org.levi.engine.persistence.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.levi.persist.hibernate.users.hobj.GroupDaoImpl;
-import org.levi.persist.hibernate.users.hobj.UserDaoImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupDaoImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.UserDaoImpl;
 
 /**
  * Created by IntelliJ IDEA.

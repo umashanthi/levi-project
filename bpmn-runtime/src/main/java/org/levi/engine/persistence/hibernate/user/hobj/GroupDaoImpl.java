@@ -1,8 +1,6 @@
-package org.levi.persist.hibernate.users.hobj;
+package org.levi.engine.persistence.hibernate.user.hobj;
 
 import org.levi.engine.identity.Group;
-import org.levi.engine.identity.User;
-import org.levi.engine.impl.identity.UserImpl;
 
 import javax.persistence.*;
 import java.util.ArrayList;

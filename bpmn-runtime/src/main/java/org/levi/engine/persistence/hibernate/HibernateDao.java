@@ -1,9 +1,9 @@
-package org.levi.persist.hibernate;
+package org.levi.engine.persistence.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
-import org.levi.persist.hibernate.users.hobj.HObject;
+import org.levi.engine.persistence.hibernate.user.hobj.HObject;
 
 /**
  * Created by IntelliJ IDEA.
