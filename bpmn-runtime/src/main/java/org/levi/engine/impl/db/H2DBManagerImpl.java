@@ -1,8 +1,9 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
-import org.levi.engine.db.ProcessBean;
-import org.levi.engine.db.TaskBean;
+import org.levi.engine.persistence.hibernate.process.ProcessBean;
+import org.levi.engine.persistence.hibernate.process.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.TaskBean;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
 import org.levi.engine.impl.identity.Permission;
@@ -17,15 +18,13 @@ public class H2DBManagerImpl implements DBManager {
      *
      * @param user The user
      */
+
+
     public void saveUser(User user) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void saveGroup(Group group) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void savePermission(Permission permission) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -77,6 +76,18 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public void saveProcessInstance(ProcessInstanceBean process) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void deleteProcessInstance(String processId) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void updateProcessInstance(ProcessInstanceBean process) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public List<TaskBean> getUserTaskList(String userId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -85,7 +96,11 @@ public class H2DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<ProcessBean> getRunningProcessesList() {
+    public List<ProcessInstanceBean> getRunningProcessesInstancesList() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<ProcessBean> getDeployedProcessList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -104,5 +119,4 @@ public class H2DBManagerImpl implements DBManager {
     public List<TaskBean> getActiveTasks(String processId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
-
 }

@@ -1,10 +1,11 @@
-package org.levi.engine.db;
+package org.levi.engine.persistence.hibernate.process;
 
 import org.levi.engine.identity.User;
 
 import java.util.Date;
 
 
+/* This class represents a single task in the process (including usertask) */
 public class TaskBean {
     private String id;// primary key
     private String taskId;
@@ -16,7 +17,7 @@ public class TaskBean {
     private User assignee;
     private Date startTime;
     private Date endTime;
-    private boolean isAlive;
+    private boolean isActive;
     private boolean isAssigned;
 
     public String getId() {
@@ -99,12 +100,12 @@ public class TaskBean {
         this.processDefName = processDefName;
     }
 
-    public boolean isAlive() {
-        return isAlive;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setAlive(boolean alive) {
-        isAlive = alive;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public boolean isAssigned() {
