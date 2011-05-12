@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.levi.persist.hibernate.users.hobj.GroupDaoImpl;
 import org.levi.persist.hibernate.users.hobj.UserDaoImpl;
 //import org.hibernate.cfg.AnnotationConfiguration;
 
@@ -27,14 +29,20 @@ public class SessionFactoryUtil {
     private SessionFactoryUtil() {
     }
 
-    static {
-        Configuration config = new AnnotationConfiguration().configure();
-        config.addClass(UserDaoImpl.class);
-        sessionFactory = config.buildSessionFactory();
-    }
+   /**
+     * Opens a session configured with the default settings. 
+     *
+     * @return the session
+     */
+    public static Session getSession() {
 
-    public static SessionFactory getInstance() {
-        return sessionFactory;
+        AnnotationConfiguration config = new AnnotationConfiguration();
+        config.addAnnotatedClass(UserDaoImpl.class);
+        config.addAnnotatedClass(GroupDaoImpl.class);  //TODO need to transfer this to a default add 
+    	config.configure("persistance.xml");
+        //new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
+        sessionFactory = config.buildSessionFactory();
+        return sessionFactory.openSession();
     }
 
     /**

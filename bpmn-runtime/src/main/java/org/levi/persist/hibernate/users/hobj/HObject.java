@@ -1,9 +1,6 @@
 package org.levi.persist.hibernate.users.hobj;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.TableGenerator;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -13,26 +10,22 @@ import java.util.Date;
  * Time: 7:40:44 AM
  * To change this template use File | Settings | File Templates.
  */
+
+@MappedSuperclass
 public class HObject {
-    private Long _id;
-    private Date _dataCreated;
+    private int _id;
+    private Date _dateCreated;
 
-    @Id
-	@TableGenerator(name="id", table="pktble", pkColumnName="pkkey", pkColumnValue="pkval", allocationSize=1)
-	@GeneratedValue(strategy= GenerationType.TABLE, generator="id")
-    public Long get_id() {
-        return _id;
+
+    //TODO autogenerate the date
+    //@Basic(optional = false)
+    @Temporal(TemporalType.DATE)
+    @Column(name = "created", insertable = false, updatable = false)
+    public Date get_dateCreated() {
+        return _dateCreated;
     }
 
-    public void set_id(Long _id) {
-        this._id = _id;
-    }
-
-    public Date get_dataCreated() {
-        return _dataCreated;
-    }
-
-    public void set_dataCreated(Date _dataCreated) {
-        this._dataCreated = _dataCreated;
+    public void set_dateCreated(Date _dateCreated) {
+        this._dateCreated = _dateCreated;
     }
 }

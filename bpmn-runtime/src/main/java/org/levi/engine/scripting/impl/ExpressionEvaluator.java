@@ -8,7 +8,7 @@ import org.omg.spec.bpmn.x20100524.model.TExpression;
 
 /**
  * Created by IntelliJ IDEA.
- * User: eranda
+ * UserDaoImpl: eranda
  * Date: Feb 1, 2011
  * Time: 12:10:01 PM
  * To change this template use File | Settings | File Templates.
