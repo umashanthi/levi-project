@@ -39,8 +39,8 @@ public class SessionFactoryUtil {
         AnnotationConfiguration config = new AnnotationConfiguration();
         config.addAnnotatedClass(UserDaoImpl.class);
         config.addAnnotatedClass(GroupDaoImpl.class);  //TODO need to transfer this to a default add 
-    	config.configure("persistance.xml");
-        //new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
+    	config.configure("persistence.xml");
+        new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();
     }
