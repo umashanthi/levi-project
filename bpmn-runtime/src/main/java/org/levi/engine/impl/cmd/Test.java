@@ -80,9 +80,9 @@ class IS implements IdentityService {
     }
 
     /**
-     * Adds a membership of a User in a Group
+     * Adds a membership of a UserDaoImpl in a Group
      *
-     * @param userId  id of the User whose membership is created
+     * @param userId  id of the UserDaoImpl whose membership is created
      * @param groupId id of the Group to which the membership is created
      */
     public void addUserToGroup(String userId, String groupId) {
@@ -90,9 +90,9 @@ class IS implements IdentityService {
     }
 
     /**
-     * Removes a User form a Group
+     * Removes a UserDaoImpl form a Group
      *
-     * @param userId  id of the User whose membership to be removed
+     * @param userId  id of the UserDaoImpl whose membership to be removed
      * @param groupId the id of the group which's membership to be removed
      */
     public void removeUserFromGroup(String userId, String groupId) {

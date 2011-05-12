@@ -18,9 +18,9 @@ public class IdentityServiceImpl implements IdentityService {
     }
 
     /**
-     * Persists a User; if the user already exists, updates the attributes
+     * Persists a UserDaoImpl; if the user already exists, updates the attributes
      *
-     * @param user the User object to persist
+     * @param user the UserDaoImpl object to persist
      */
     public void saveUser(User user) {
         //To change body of implemented methods use File | Settings | File Templates.
@@ -72,9 +72,9 @@ public class IdentityServiceImpl implements IdentityService {
     }
 
     /**
-     * Adds a membership of a User in a Group
+     * Adds a membership of a UserDaoImpl in a Group
      *
-     * @param userId  id of the User whose membership is created
+     * @param userId  id of the UserDaoImpl whose membership is created
      * @param groupId id of the Group to which the membership is created
      */
     public void addUserToGroup(String userId, String groupId) {
@@ -82,9 +82,9 @@ public class IdentityServiceImpl implements IdentityService {
     }
 
     /**
-     * Removes a User form a Group
+     * Removes a UserDaoImpl form a Group
      *
-     * @param userId  id of the User whose membership to be removed
+     * @param userId  id of the UserDaoImpl whose membership to be removed
      * @param groupId the id of the group which's membership to be removed
      */
     public void removeUserFromGroup(String userId, String groupId) {

@@ -1,7 +1,8 @@
 package org.levi.persist.hibernate;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.levi.persist.hibernate.users.hobj.HObject;
 
 /**
@@ -14,17 +15,13 @@ import org.levi.persist.hibernate.users.hobj.HObject;
 public class HibernateDao {
 
     private HObject _hobj;
-    private SessionFactory sessionFactory;
+    private Session session;
+    private Transaction tx;
 
 
     public HibernateDao(HObject hobj){
         this._hobj=hobj;
-        sessionFactory = SessionFactoryUtil.getInstance();
-    }
-
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
+        session = SessionFactoryUtil.getSession();
     }
 
     public HObject getHibernateObj(){
@@ -32,6 +29,14 @@ public class HibernateDao {
     }
 
     public void update(){
-        sessionFactory.getCurrentSession().update(_hobj);
+        try{
+            tx = session.beginTransaction();
+            session.save(_hobj);
+            tx.commit();
+            session.flush();
+            session.close();
+        } catch(ConstraintViolationException e){
+            System.out.println("Constraint violated"); //TODO need to handle this exception
+        }
     }
 }

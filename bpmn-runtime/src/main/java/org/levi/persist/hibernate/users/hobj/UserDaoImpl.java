@@ -2,8 +2,11 @@ package org.levi.persist.hibernate.users.hobj;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.impl.identity.GroupImpl;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,14 +18,16 @@ import java.util.List;
  */
 
 @Entity
-public class UserDaoImpl extends HObject implements User{
+public class UserDaoImpl extends HObject implements User, Serializable{
     private String userId;
     private String password;
     private String firstName;
     private String lastName;
     private String userEmail;
-    private List<Group> userGroups;
+    private List<GroupDaoImpl> userGroups = new ArrayList<GroupDaoImpl>();
+    
 
+    @Id
     public String getUserId() {
         return this.userId;
     }
@@ -63,12 +68,13 @@ public class UserDaoImpl extends HObject implements User{
         this.userEmail = userEmail;
     }
 
-    @Transient
-    public List<Group> getUserGroups() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
+    public List<GroupDaoImpl> getUserGroups() {
         return this.userGroups;
     }
 
-    public void setUserGroups(List<Group> groups) {
+    public void setUserGroups(List<GroupDaoImpl> groups) {
         this.userGroups =groups;
     }
 }
