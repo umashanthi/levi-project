@@ -78,4 +78,16 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public ProcessDefinition getObjectModel() {
         return processDefinition;
     }
+
+    @Override
+    public String toString() {
+        return "ProcessInstance{" +
+                "processDefinition=" + processDefinition +
+                ", soup=" + soup +
+                ", vpu=" + vpu +
+                ", flowNodeFac=" + flowNodeFac +
+                ", variables=" + variables +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }

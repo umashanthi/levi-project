@@ -4,6 +4,7 @@ import org.levi.engine.identity.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,7 +17,6 @@ import java.util.List;
 /* This class represents a deployed business process  */
 
 public class ProcessBean {
-
     private String id; //primary key
     private String processDefName;
     private String businessArchiveName;
@@ -27,7 +27,10 @@ public class ProcessBean {
     private Date deployedTime;
     private boolean isDeleted; // i.e. undeployed
     private Date undeployedTime;
-
+    private boolean isRunning;
+    private Map<String, Object> variables;
+    private List<String> runningTaskIds;
+    private List<String> completedTaskIds;
 
     public String getId() {
         return id;
@@ -107,5 +110,57 @@ public class ProcessBean {
 
     public void setUndeployedTime(Date undeployedTime) {
         this.undeployedTime = undeployedTime;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
+    public Map<String, Object> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(Map<String, Object> variables) {
+        this.variables = variables;
+    }
+
+    public List<String> getRunningTaskIds() {
+        return runningTaskIds;
+    }
+
+    public void setRunningTaskIds(List<String> runningTaskIds) {
+        this.runningTaskIds = runningTaskIds;
+    }
+
+    public List<String> getCompletedTaskIds() {
+        return completedTaskIds;
+    }
+
+    public void setCompletedTaskIds(List<String> completedTaskIds) {
+        this.completedTaskIds = completedTaskIds;
+    }
+
+    @Override
+    public String toString() {
+        return "ProcessBean{" +
+                "id='" + id + '\'' +
+                ", processDefName='" + processDefName + '\'' +
+                ", businessArchiveName='" + businessArchiveName + '\'' +
+                ", businessArchiveLocation='" + businessArchiveLocation + '\'' +
+                ", businessArchiveContents=" + businessArchiveContents +
+                ", deployedUser=" + deployedUser +
+                ", undeployedUser=" + undeployedUser +
+                ", deployedTime=" + deployedTime +
+                ", isDeleted=" + isDeleted +
+                ", undeployedTime=" + undeployedTime +
+                ", isRunning=" + isRunning +
+                ", variables=" + variables +
+                ", runningTaskIds=" + runningTaskIds +
+                ", completedTaskIds=" + completedTaskIds +
+                '}';
     }
 }

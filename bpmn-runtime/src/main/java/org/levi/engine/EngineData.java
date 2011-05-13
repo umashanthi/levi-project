@@ -167,7 +167,20 @@ public class EngineData implements Serializable {
         return runningProcesses.containsKey(processId);
     }
 
+    @Override
     public String toString() {
-        return "["+"{"+deploymentPIds +"}," +"]";
+        return "EngineData{" +
+                "deployments=" + deployments +
+                ", nDeployments=" + nDeployments +
+                ", deploymentPIds=" + deploymentPIds +
+                ", nDeploymentPIds=" + nDeploymentPIds +
+                ", runningProcesses=" + runningProcesses +
+                ", nRunningProcesses=" + nRunningProcesses +
+                ", stoppedProcesses=" + stoppedProcesses +
+                ", pausedProcesses=" + pausedProcesses +
+                ", runningProcessIds=" + runningProcessIds +
+                '}';
     }
+
+
 }
