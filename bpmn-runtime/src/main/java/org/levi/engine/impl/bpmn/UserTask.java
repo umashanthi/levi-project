@@ -3,6 +3,9 @@ package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.runtime.ProcessInstance;
+import org.omg.spec.bpmn.x20100524.model.THumanPerformer;
+import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
+import org.omg.spec.bpmn.x20100524.model.TResourceRole;
 import org.omg.spec.bpmn.x20100524.model.TTask;
 
 /**
@@ -31,6 +34,13 @@ public class UserTask extends RunnableFlowNode {
     private UserTask(Builder builder) {
         this.task = builder.task;
         this.processInstance = builder.process;
+        TResourceRole[] resourceRoles = task.getResourceRoleArray();
+        if (resourceRoles[0] instanceof TPotentialOwner) {
+            TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
+            potentialOwner.getResourceAssignmentExpression().getExpression();
+        }
+        THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
+        humanPerformer.getResourceAssignmentExpression().getExpression();
     }
 
     public void run() {
