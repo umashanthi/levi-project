@@ -4,8 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.levi.persist.hibernate.users.hobj.UserDaoImpl;
-//import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,7 +18,7 @@ public class SessionFactoryUtil {
     /**
      * The single instance of hibernate SessionFactory
      */
-    private static SessionFactory sessionFactory;
+    //private static SessionFactory sessionFactory;
 
     /**
      * disable constructor to guaranty a single instance
