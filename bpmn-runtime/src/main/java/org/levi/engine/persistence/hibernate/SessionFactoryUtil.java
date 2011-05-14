@@ -1,10 +1,11 @@
-package org.levi.persist.hibernate;
+package org.levi.engine.persistence.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.AnnotationConfiguration;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,14 +27,19 @@ public class SessionFactoryUtil {
     private SessionFactoryUtil() {
     }
 
-    static {
-        Configuration config = new AnnotationConfiguration().configure();
-        config.addClass(UserDaoImpl.class);
+   /**
+     * Opens a session configured with the default settings. 
+     *
+     * @return the session
+     */
+    public static Session getSession() {
+        AnnotationConfiguration config = new AnnotationConfiguration();
+        config.addAnnotatedClass(UserDaoImpl.class);
+        config.addAnnotatedClass(GroupDaoImpl.class);  //TODO need to transfer this to a default add
+    	config.configure("persistence.xml");
+        new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();
-    }
-
-    public static SessionFactory getInstance() {
-        return sessionFactory;
+        return sessionFactory.openSession();
     }
 
     /**

@@ -2,6 +2,9 @@ package org.levi.engine.db;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.process.ProcessBean;
+import org.levi.engine.persistence.hibernate.process.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.TaskBean;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ import java.util.List;
 public interface DBManager {
 
     /**
-     * This method saves a User to the database; if the User already exists, it updates the attributes
+     * This method saves a UserDaoImpl to the database; if the UserDaoImpl already exists, it updates the attributes
      *
      * @param user The user
      */
@@ -26,12 +29,12 @@ public interface DBManager {
 
     void addUserToGroup(String userId, String groupId);
 
-    void deleteUser(String userId);        //?? Only ids or the User object?
+    void deleteUser(String userId);        //?? Only ids or the UserDaoImpl object?
 
     void deleteGroup(String groupId);
 
     void removeUserFromGroup(String userId,
-                             String groupId); //?? User& Group objects or simple the ids?
+                             String groupId); //?? UserDaoImpl& Group objects or simple the ids?
 
     void saveTask(TaskBean task);
 
@@ -45,11 +48,19 @@ public interface DBManager {
 
     void updateProcess(ProcessBean process);
 
+    void saveProcessInstance(ProcessInstanceBean process);
+
+    void deleteProcessInstance(String processId);
+
+    void updateProcessInstance(ProcessInstanceBean process);
+
     List<TaskBean> getUserTaskList(String userId);
 
     List<TaskBean> getGroupTaskList(String groupId);
 
-    List<ProcessBean> getRunningProcessesList();
+    List<ProcessInstanceBean> getRunningProcessesInstancesList();
+
+    List<ProcessBean> getDeployedProcessList();
 
     User getAssigneeForTask(String taskId);
 

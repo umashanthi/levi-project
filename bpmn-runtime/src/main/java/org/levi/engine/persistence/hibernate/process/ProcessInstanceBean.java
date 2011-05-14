@@ -1,11 +1,13 @@
-package org.levi.engine.db;
+package org.levi.engine.persistence.hibernate.process;
 
 
 import org.levi.engine.identity.User;
 
 import java.util.Date;
 
-public class ProcessBean {
+/* This class represents a Process instance  */
+
+public class ProcessInstanceBean {
     private String id; // primary key
     private String processInstanceId;
     private String processDefName;
@@ -78,4 +80,5 @@ public class ProcessBean {
     public void setActive(boolean active) {
         isActive = active;
     }
+
 }

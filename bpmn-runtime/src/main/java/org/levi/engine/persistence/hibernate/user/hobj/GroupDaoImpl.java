@@ -1,9 +1,9 @@
-package org.levi.persist.hibernate.users.hobj;
+package org.levi.engine.persistence.hibernate.user.hobj;
 
 import org.levi.engine.identity.Group;
-import org.levi.engine.identity.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +18,9 @@ public class GroupDaoImpl extends HObject implements Group{
     private String groupId;
     private String groupName;
     private String groupDescription;
-    private List<User> members;
+    private List<UserDaoImpl> members = new ArrayList<UserDaoImpl>();
 
+    @Id
     public String getGroupId() {
         return groupId;
     }
@@ -44,12 +45,13 @@ public class GroupDaoImpl extends HObject implements Group{
         this.groupDescription = description;
     }
 
-    @Transient
-    public List<User> getMembers() {
+    @ManyToMany
+    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
+    public List<UserDaoImpl> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(List<UserDaoImpl> members) {
         this.members = members;
     }
 }

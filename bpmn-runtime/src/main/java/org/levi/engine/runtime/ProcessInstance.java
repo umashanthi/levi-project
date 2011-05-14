@@ -157,7 +157,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public ProcessDefinition getObjectModel() {
         return processDefinition;
     }
-
     // TODO
     public void continueUserTask(String userTaskId, Map<String, Object> variables) {
         if (userTaskId == null) {
@@ -247,6 +246,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     private synchronized void setIsRunning(boolean value) {
-        isRunning = value;  
+        isRunning = value;
     }
 }
