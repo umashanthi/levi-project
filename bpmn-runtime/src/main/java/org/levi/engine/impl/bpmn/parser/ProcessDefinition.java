@@ -49,7 +49,7 @@ public class ProcessDefinition implements Serializable {
         createMaps();
         String defName = getDefinitionsName();
         id = LeviUtils.trimAndReplace(defName);
-        id = String.valueOf(id.hashCode());
+        //id = id + String.valueOf(id.hashCode());
     }
 
     private TProcess[] getProcessArray() {

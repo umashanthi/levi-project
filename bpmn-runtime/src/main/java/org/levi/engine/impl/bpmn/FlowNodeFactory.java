@@ -22,7 +22,7 @@ public class FlowNodeFactory {
 
     public FlowNodeFactory(ProcessDefinition processDefinition, ProcessInstance process) {
         if (processDefinition == null) {
-            throw new IllegalArgumentException("Attempt to create FlowNodeFactory from a null OM");
+            throw new IllegalArgumentException("Attempt to create FlowNodeFactory from a null Process definition.");
         }
         this.processDefinition = processDefinition;
         this.variables = process.getVariables();
@@ -38,6 +38,12 @@ public class FlowNodeFactory {
             registerNode(startEvent);
         }
         return startEvent;
+    }
+
+    public synchronized RunnableFlowNode getNextNode(String id) {
+        RunnableFlowNode flowNode = makeNode(id);
+        insertToken(flowNode, id);
+        return flowNode;
     }
 
     // this method will be invoked by Gateway objects.
@@ -81,8 +87,8 @@ public class FlowNodeFactory {
                 flowNode = new ScriptTask.Builder((TScriptTask)e)
                         .processInstance(process)
                         .build();
-            } else if (e instanceof TTask) {
-                flowNode = new UserTask.Builder((TTask)e)
+            } else if (e instanceof TUserTask) {
+                flowNode = new UserTask.Builder((TUserTask)e)
                         .processInstance(process)
                         .build();
             } else if (e instanceof TGateway) {
@@ -136,9 +142,9 @@ public class FlowNodeFactory {
                     .processInstance(process)
                     .build();
         } else if (g instanceof TInclusiveGateway) {
-            throw new LeviException("Unsupported Gateway type");
+            throw new LeviException("Unsupported Gateway type InclusiveGateway");
         } else if (g instanceof TComplexGateway) {
-            throw new LeviException("Unsupported Gateway type");
+            throw new LeviException("Unsupported Gateway type ComplexGateway");
         } else {
             throw new LeviException("Unsupported Gateway type");
         }

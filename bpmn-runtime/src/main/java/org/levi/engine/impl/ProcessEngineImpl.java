@@ -9,7 +9,6 @@ import org.levi.engine.utils.ObjectSaver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +44,10 @@ public class ProcessEngineImpl implements ProcessEngine {
             throws IOException, ClassNotFoundException {
         File leviHome = new File(Constants.LEVI_HOME);
         if (!leviHome.exists()) {
-            leviHome.mkdir();
+            if (!leviHome.mkdirs()) {
+                throw new LeviException("Could not create Levi home at " + Constants.LEVI_HOME);
+            }
+            System.out.println("Created Levi home at " + Constants.LEVI_HOME);
         }
         File lomPath = new File(Constants.LOM_PATH);
         if (!lomPath.exists()) {
@@ -78,6 +80,10 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized List<String> getRunningProcessIds() {
         return LeviUtils.giveList(engineData.getRunningProcessIds());
+    }
+
+    public void resumeProcessInstance(String processId) {
+        runtimeService.resumeProcessInstance(processId);
     }
 
     public synchronized void stop()
@@ -117,7 +123,7 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized void startProcess(String id)
             throws IOException, ClassNotFoundException {
-        startProcess(id, Collections.<String, Object>emptyMap());
+        startProcess(id, LeviUtils.<String, Object>newHashMap());   // Collections.<String, Object>emptyMap()
     }
 
     public synchronized void startProcess(String id, Map<String, Object> variables)
@@ -139,6 +145,10 @@ public class ProcessEngineImpl implements ProcessEngine {
             throw new LeviException("Process ID is null.");
         }
         runtimeService.stopProcess(id);
+    }
+
+    public void claimUserTask(String pid, String userTaskId, Map<String, Object> variables) {
+        runtimeService.claimUserTask(pid, userTaskId, variables);
     }
 
     public String getDiagramPath(String id) {

@@ -7,4 +7,5 @@ import org.apache.ode.jacob.JacobRunnable;
  */
 public abstract class RunnableFlowNode extends JacobRunnable implements FlowNode {
     protected StringBuffer buffer = new StringBuffer();
+
 }

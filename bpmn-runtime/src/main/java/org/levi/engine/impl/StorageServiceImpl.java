@@ -104,9 +104,9 @@ public class StorageServiceImpl implements StorageService {
     private static void deleteDeploymentData(Deployment d)
             throws IOException {
         //delete(Constants.ENGINEDATA_PATH, false);
-        if (!Constants.EMPTY.equals(d.getDiagramPath())) {
-            delete(d.getDiagramPath(), false);
-        }
+        //if (!Constants.EMPTY.equals(d.getDiagramPath())) {
+        //    delete(d.getDiagramPath(), false);
+        //}
         delete(d.getExtractPath(), true);
         // delete other stuff: processdef, pic
         delete(d.getProcessDefinitionPath(), false);

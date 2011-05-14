@@ -9,16 +9,17 @@ import java.util.Map;
  * @author Ishan Jayawardena
  */
 public interface ProcessEngine {
-    //public void start() throws IOException, ClassNotFoundException;
-    public void stop() throws FileNotFoundException, IOException;
-    public String deploy(String larPath) throws IOException;
-    public void undeployAll() throws IOException;
-    public void undeploy(String id) throws IOException;
-    public void cleanup() throws IOException;
-    public void startProcess(String id) throws IOException, ClassNotFoundException;
-    public void startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
-    public void stopProcess(String id) throws IOException, ClassNotFoundException;
-    public String getDiagramPath(String id);
-    public List<String> getDeploymentIds();
-    public List<String> getRunningProcessIds();
+    void stop() throws FileNotFoundException, IOException;
+    String deploy(String larPath) throws IOException;
+    void undeployAll() throws IOException;
+    void undeploy(String id) throws IOException;
+    void cleanup() throws IOException;
+    void startProcess(String id) throws IOException, ClassNotFoundException;
+    void startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
+    void stopProcess(String id) throws IOException, ClassNotFoundException;
+    void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);
+    String getDiagramPath(String id);
+    List<String> getDeploymentIds();
+    List<String> getRunningProcessIds();
+    void resumeProcessInstance(String processId);
 }

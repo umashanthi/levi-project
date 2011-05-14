@@ -35,9 +35,17 @@ public class StartEvent extends Event {
     public String getId() {
         return startEvent.getId();
     }
-    
+
     public void run() {
+        // todo see if a form is present and pause accordingly
+        processInstance.addRunning(getId());
+        resumeTask();
+    }
+
+    @Override
+    public void resumeTask() {
         instance(processInstance.executeNext(this));
+        processInstance.addCompleted(getId());
     }
 
     public String toString() {

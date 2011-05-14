@@ -27,7 +27,7 @@ public class EngineData implements Serializable {
     private transient List<String> runningProcessIds;
     private static final int DEFAULT_SIZE = 25;
 
-    public EngineData() {
+    public EngineData() {   
         nDeployments = 0;
         nDeploymentPIds = 0;
         nRunningProcesses = 0;
@@ -163,10 +163,18 @@ public class EngineData implements Serializable {
     }
 
     public boolean isRunning(String processId) {
-        assert processId != null;
+        if (processId == null) {
+            throw new NullPointerException("ProcessId is null.");
+        }
         return runningProcesses.containsKey(processId);
     }
 
+    public ProcessInstance getProcessInstance(String id) {
+        if (id == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+        return runningProcesses.get(id);
+    }
     public String toString() {
         return "["+"{"+deploymentPIds +"}," +"]";
     }

@@ -13,6 +13,11 @@ import java.util.List;
 public final class ParallelGateway extends Gateway {
     private final List<TSequenceFlow> output;
 
+    @Override
+    public void resumeTask() {
+        throw new AssertionError("resumeTask() is not intended to be called.");
+    }
+
     public static class Builder {
         private TParallelGateway pg;
         private ProcessInstance process;
