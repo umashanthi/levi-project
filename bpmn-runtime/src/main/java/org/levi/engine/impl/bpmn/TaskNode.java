@@ -28,4 +28,8 @@ public class TaskNode extends Activity {
     public String getId() {
         return task.getId();
     }
+
+    public void resumeTask(){
+        
+    }
 }
