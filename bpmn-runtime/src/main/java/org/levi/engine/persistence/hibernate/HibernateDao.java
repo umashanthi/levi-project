@@ -3,7 +3,6 @@ package org.levi.engine.persistence.hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
-import org.levi.engine.persistence.hibernate.user.hobj.HObject;
 
 /**
  * Created by IntelliJ IDEA.

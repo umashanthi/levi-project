@@ -1,13 +1,16 @@
-package org.levi.engine.persistence.hibernate.process;
+package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.levi.engine.identity.User;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author Ishan Jayawardena.
  */
+@Entity
 public class DeploymentBean {
     private String definitionsId;
     private String extractPath;
@@ -22,6 +25,7 @@ public class DeploymentBean {
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
 
+    @Id
     public String getDefinitionsId() {
         return definitionsId;
     }

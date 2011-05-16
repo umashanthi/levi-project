@@ -1,4 +1,4 @@
-package org.levi.engine.persistence.hibernate.user.hobj;
+package org.levi.engine.persistence.hibernate;
 
 import javax.persistence.*;
 import java.util.Date;

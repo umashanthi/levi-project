@@ -1,12 +1,11 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
-import org.levi.engine.persistence.hibernate.process.ProcessBean;
-import org.levi.engine.persistence.hibernate.process.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.process.TaskBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
-import org.levi.engine.impl.identity.Permission;
 
 import java.util.List;
 
