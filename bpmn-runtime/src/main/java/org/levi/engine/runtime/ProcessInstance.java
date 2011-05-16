@@ -28,6 +28,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     String processId;
     String processDefId;
     private List<String> pauseSignals;
+    private List<String> resumeSignals;
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
@@ -43,6 +44,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         runningTaskIds = LeviUtils.newArrayList();
         completedTaskIds = LeviUtils.newArrayList();
         pauseSignals = LeviUtils.newArrayList();
+        resumeSignals = LeviUtils.newArrayList();
         setIsRunning(false);
     }
     // this is used by the ProcessInstanceManager class
@@ -93,6 +95,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         processDefId = processDefinition.getDefinitionsId();
         processId = builder.processId;
         pauseSignals = LeviUtils.newArrayList();
+        resumeSignals = LeviUtils.newArrayList();
     }
 
     public String getProcessId() {
@@ -113,13 +116,17 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 RunnableFlowNode startEvent = flowNodeFac.getStartEvent();
                 instance(startEvent);
             } else {
-                for (String id : (ArrayList<String>) runningTaskIds.clone()) {
-                    flowNodeFac.getNextNode(id).resumeTask();
+                // todo check if all the
+                //for (String id : (ArrayList<String>) runningTaskIds.clone()) {
+                if (resumeSignals.size() > 1) {
+                    throw new RuntimeException("More than one resume signals found.");
+                }
+                    flowNodeFac.getNextNode(resumeSignals.get(0)).resumeTask();
                     //instance(node);
                     //soup.enqueueReaction(new Continuation(node, m, null));
                     //vpu.addReaction(node, m, null, "description");
                     //node.resumeTask();
-                }
+                //}
             }
         }
         setIsRunning(true);
@@ -222,6 +229,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     private boolean checkPauseSignal(String taskId) {
+        if (taskId == null) {
+            throw new NullPointerException("TaskId is null.");
+        }
         synchronized (pauseSignals) {
             if (!pauseSignals.contains(taskId)) {
                 pauseSignals.add(taskId);
@@ -235,10 +245,37 @@ public class ProcessInstance extends BPMNJacobRunnable {
         return false;
     }
 
+    private boolean checkResumeSignal(String taskId) {
+        if (taskId == null) {
+            throw new NullPointerException("TaskId is null.");
+        }
+        synchronized (resumeSignals) {
+            if (!resumeSignals.contains(taskId)) {
+                resumeSignals.add(taskId);
+            }
+            synchronized (runningTaskIds) {
+                if (runningTaskIds.contains(taskId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void resume() {
         System.out.println("Retrieved process data from the database.");
         execute();
-        setIsRunning(true);
+        //setIsRunning(true);
+    }
+    public void resume(String taskId) {
+        System.out.println("Retrieved process data from the database.");
+        if (checkResumeSignal(taskId)) {
+            if (isRunning()) {
+                flowNodeFac.getNextNode(taskId).resumeTask();
+            } else {
+                execute();
+            }
+        }
+        //setIsRunning(true);
     }
 
     private synchronized  boolean isRunning() {

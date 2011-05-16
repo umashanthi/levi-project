@@ -14,19 +14,19 @@ import java.util.Map;
 /* This class represents a deployed business process  */
 
 public class ProcessBean {
-    private String id; //primary key
+    private String processId; //primary key
     private String processDefId;
     private boolean isRunning;
     private Map<String, Object> variables;
     private List<String> runningTaskIds;
     private List<String> completedTaskIds;
 
-    public String getId() {
-        return id;
+    public String getProcessId() {
+        return processId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
     public String getProcessDefId() {

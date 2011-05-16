@@ -16,7 +16,6 @@ public final class ExclusiveGateway extends Gateway {
     private final List<TSequenceFlow> output;
     private final String defaultSequenceFlowId;
 
-    @Override
     public void resumeTask() {
         throw new AssertionError("resumeTask() is not intended to be called.");
     }
