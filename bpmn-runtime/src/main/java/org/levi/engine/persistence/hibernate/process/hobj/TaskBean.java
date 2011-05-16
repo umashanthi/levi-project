@@ -1,11 +1,14 @@
-package org.levi.engine.persistence.hibernate.process;
+package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.levi.engine.identity.User;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
 
 /* This class represents a single task in the process (including usertask) */
+@Entity
 public class TaskBean {
     private String id;// primary key
     private String taskId;
@@ -20,6 +23,7 @@ public class TaskBean {
     private boolean isActive;
     private boolean isAssigned;
 
+    @Id
     public String getId() {
         return id;
     }

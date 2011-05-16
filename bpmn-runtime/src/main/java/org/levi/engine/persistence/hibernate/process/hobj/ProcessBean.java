@@ -1,5 +1,8 @@
-package org.levi.engine.persistence.hibernate.process;
+package org.levi.engine.persistence.hibernate.process.hobj;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +16,7 @@ import java.util.Map;
 
 /* This class represents a deployed business process  */
 
+@Entity
 public class ProcessBean {
     private String processId; //primary key
     private String processDefId;
@@ -21,6 +25,7 @@ public class ProcessBean {
     private List<String> runningTaskIds;
     private List<String> completedTaskIds;
 
+    @Id
     public String getProcessId() {
         return processId;
     }
@@ -45,6 +50,7 @@ public class ProcessBean {
         isRunning = running;
     }
 
+    @Transient //TODO the objects use OneToMany with a list
     public Map<String, Object> getVariables() {
         return variables;
     }
@@ -53,6 +59,7 @@ public class ProcessBean {
         this.variables = variables;
     }
 
+    @Transient //TODO map with TaskBean with OneToMany
     public List<String> getRunningTaskIds() {
         return runningTaskIds;
     }
@@ -61,6 +68,7 @@ public class ProcessBean {
         this.runningTaskIds = runningTaskIds;
     }
 
+    @Transient //TODO map with TaskBean with OneToMany 
     public List<String> getCompletedTaskIds() {
         return completedTaskIds;
     }

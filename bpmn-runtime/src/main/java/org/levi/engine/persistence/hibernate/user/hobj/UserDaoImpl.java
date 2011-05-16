@@ -1,6 +1,7 @@
 package org.levi.engine.persistence.hibernate.user.hobj;
 
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,12 +1,15 @@
-package org.levi.engine.persistence.hibernate.process;
+package org.levi.engine.persistence.hibernate.process.hobj;
 
 
 import org.levi.engine.identity.User;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Date;
 
 /* This class represents a Process instance  */
 
+@Entity
 public class ProcessInstanceBean {
     private String id; // primary key
     private String processInstanceId;
@@ -17,6 +20,7 @@ public class ProcessInstanceBean {
     private String endEventId;
     private boolean isActive;
 
+    @Id
     public String getId() {
         return id;
     }
