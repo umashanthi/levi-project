@@ -5,6 +5,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupDaoImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.UserDaoImpl;
 
 
 /**
@@ -27,6 +30,9 @@ public class SessionFactoryUtil {
     private SessionFactoryUtil() {
     }
 
+
+
+    private static SessionFactory sessionFactory;
    /**
      * Opens a session configured with the default settings. 
      *
