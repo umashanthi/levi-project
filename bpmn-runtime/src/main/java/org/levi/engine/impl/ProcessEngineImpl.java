@@ -51,11 +51,17 @@ public class ProcessEngineImpl implements ProcessEngine {
         }
         File lomPath = new File(Constants.LOM_PATH);
         if (!lomPath.exists()) {
-            lomPath.mkdir();    
+            if (!lomPath.mkdirs()) {
+                throw new LeviException("Could not create LOM_PATH at " + Constants.LOM_PATH);
+            }
+            System.out.println("Created Lom directory at " + Constants.LOM_PATH);
         }
         File extractPath = new File(Constants.LAR_EXTRACT_PATH);
         if (!extractPath.exists()) {
-            extractPath.mkdir();
+            if (!extractPath.mkdirs()) {
+                throw new LeviException("Could not create LAR_EXTRACT_PATH at " + Constants.LAR_EXTRACT_PATH);
+            }
+            System.out.println("Created Lar extract path at " + Constants.LAR_EXTRACT_PATH);
         }
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);
         if (engineDataFile.exists()) {
