@@ -28,11 +28,13 @@ public class ConditionExpressionTest {
 
     public void exclusiveGatewayWithDefaultSeqFlow() throws IOException, ClassNotFoundException {
         ProcessEngine processEngine = ProcessEngineImpl.getProcessEngine();
-        processEngine.deploy(Constants.LAR_PATH + "ExclusiveGatewayTest2.lar");
-        Map<String, Object> variables = LeviUtils.newHashMap(1);
-        variables.put("input", 3);
-        processEngine.startProcess(processEngine.getDeploymentIds().get(0), variables);
-        processEngine.undeploy(processEngine.getDeploymentIds().get(0));
+        //processEngine.deploy(Constants.LAR_PATH + "ExclusiveGatewayTest2.lar");
+        //Map<String, Object> variables = LeviUtils.newHashMap(1);
+        //variables.put("input", 3);
+        //processEngine.startProcess(processEngine.getDeploymentIds().get(0), variables);
+        processEngine.resumeProcessInstance("202077946");
+        //processEngine.undeploy(processEngine.getDeploymentIds().get(0));
+        //processEngine.undeployAll();
         processEngine.stop();
     }
 }
