@@ -5,44 +5,72 @@ import org.levi.engine.identity.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 /* This class represents a Process instance  */
 
 @Entity
 public class ProcessInstanceBean {
-    private String id; // primary key
-    private String processInstanceId;
-    private String processDefName;
+    private String processId;; // primary key
+    private String processDefId;
+    private Map<String, Object> variables;
+    private ArrayList<String> runningTaskIds;
+    private ArrayList<String> completedTaskIds;
+    private Boolean isRunning;
     private User startUser;
     private Date startTime;
     private String startEventId;
     private String endEventId;
-    private boolean isActive;
 
     @Id
-    public String getId() {
-        return id;
+    public String getProcessId() {
+        return processId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
-    public String getProcessInstanceId() {
-        return processInstanceId;
+    public String getProcessDefId() {
+        return processDefId;
     }
 
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
+    public void setProcessDefId(String processDefId) {
+        this.processDefId = processDefId;
     }
 
-    public String getProcessDefName() {
-        return processDefName;
+    public Map<String, Object> getVariables() {
+        return variables;
     }
 
-    public void setProcessDefName(String processDefName) {
-        this.processDefName = processDefName;
+    public void setVariables(Map<String, Object> variables) {
+        this.variables = variables;
+    }
+
+    public ArrayList<String> getRunningTaskIds() {
+        return runningTaskIds;
+    }
+
+    public void setRunningTaskIds(ArrayList<String> runningTaskIds) {
+        this.runningTaskIds = runningTaskIds;
+    }
+
+    public ArrayList<String> getCompletedTaskIds() {
+        return completedTaskIds;
+    }
+
+    public void setCompletedTaskIds(ArrayList<String> completedTaskIds) {
+        this.completedTaskIds = completedTaskIds;
+    }
+
+    public Boolean getRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(Boolean running) {
+        isRunning = running;
     }
 
     public User getStartUser() {
@@ -75,14 +103,6 @@ public class ProcessInstanceBean {
 
     public void setEndEventId(String endEventId) {
         this.endEventId = endEventId;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
 }
