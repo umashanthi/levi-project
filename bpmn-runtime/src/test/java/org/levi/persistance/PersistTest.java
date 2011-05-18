@@ -1,12 +1,12 @@
 package org.levi.persistance;
 
 import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.user.hobj.GroupDaoImpl;
-import org.levi.engine.persistence.hibernate.user.hobj.UserDaoImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: eranda
+ * UserBean: eranda
  * Date: May 10, 2011
  * Time: 10:48:43 AM
  * To change this template use File | Settings | File Templates.
@@ -23,21 +23,21 @@ public class PersistTest {
 
         HibernateDao dao = new HibernateDao();
 
-        UserDaoImpl user1 = new UserDaoImpl();
+        UserBean user1 = new UserBean();
         user1.setUserId("1");
         user1.setFirstName("eranda");
         user1.setLastName("sooriyabandara");
         user1.setPassword("password");
         user1.setUserEmail("emahesh143@gmail.com");
 
-        UserDaoImpl user2 = new UserDaoImpl();
+        UserBean user2 = new UserBean();
         user2.setUserId("2");
         user2.setFirstName("eranda");
         user2.setLastName("sooriyabandara");
         user2.setPassword("password");
         user2.setUserEmail("emahesh143@gmail.com");
 
-        UserDaoImpl user3 = new UserDaoImpl();
+        UserBean user3 = new UserBean();
         user3.setUserId("3");
         user3.setFirstName("eranda");
         user3.setLastName("sooriyabandara");
@@ -48,7 +48,7 @@ public class PersistTest {
         dao.save(user2);
         dao.save(user3);
 
-        GroupDaoImpl group = new GroupDaoImpl();
+        GroupBean group = new GroupBean();
         group.setGroupId("2");
         group.setGroupName("Mora");
         group.setGroupDescription("fun group");

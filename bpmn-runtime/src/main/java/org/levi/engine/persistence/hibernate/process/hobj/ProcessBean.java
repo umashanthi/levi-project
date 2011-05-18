@@ -1,5 +1,7 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
+import org.levi.engine.persistence.hibernate.HObject;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -17,7 +19,7 @@ import java.util.Map;
 /* This class represents a deployed business process  */
 
 @Entity
-public class ProcessBean {
+public class ProcessBean extends HObject {
     private String processId; //primary key
     private String processDefId;
     private boolean isRunning;

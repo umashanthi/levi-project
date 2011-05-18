@@ -1,27 +1,37 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
+import java.util.Map;
 
 
 /* This class represents a single task in the process (including usertask) */
 @Entity
-public class TaskBean {
+public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
     private String processInstanceId;
     private String processDefName;
     private String taskName;
     private String taskDescription;
-    private User owner;
-    private User assignee;
+    private UserBean owner;
+    private UserBean assignee;
     private Date startTime;
     private Date endTime;
     private boolean isActive;
     private boolean isAssigned;
+    private Map<String,String> properties;
+    private boolean hasUserForm;
+    private String formName;
+    private String fromPath;
+    private boolean isStartEvent;
+    private boolean isEndEvent;
 
     @Id
     public String getId() {
@@ -64,19 +74,21 @@ public class TaskBean {
         this.taskDescription = taskDescription;
     }
 
-    public User getOwner() {
+    @Transient //TODO OneToOne mapping with the User
+    public UserBean getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(UserBean owner) {
         this.owner = owner;
     }
 
-    public User getAssignee() {
+    @Transient //TODO OneToOne mapping with the User
+    public UserBean getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(User assignee) {
+    public void setAssignee(UserBean assignee) {
         this.assignee = assignee;
     }
 
@@ -118,5 +130,54 @@ public class TaskBean {
 
     public void setAssigned(boolean assigned) {
         isAssigned = assigned;
+    }
+
+    @Transient //TODO Map the map
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
+    }
+
+    public boolean isHasUserForm() {
+        return hasUserForm;
+    }
+
+    public void setHasUserForm(boolean hasUserForm) {
+        this.hasUserForm = hasUserForm;
+    }
+
+    public String getFormName() {
+        return formName;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
+
+    public String getFromPath() {
+        return fromPath;
+    }
+
+    public void setFromPath(String fromPath) {
+        this.fromPath = fromPath;
+    }
+
+    public boolean isStartEvent() {
+        return isStartEvent;
+    }
+
+    public void setStartEvent(boolean startEvent) {
+        isStartEvent = startEvent;
+    }
+
+    public boolean isEndEvent() {
+        return isEndEvent;
+    }
+
+    public void setEndEvent(boolean endEvent) {
+        isEndEvent = endEvent;
     }
 }

@@ -13,7 +13,7 @@ public class H2DBManagerImpl implements DBManager {
 
 
     /**
-     * This method saves a UserDaoImpl to the database; if the UserDaoImpl already exists, it updates the attributes
+     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
      * @param user The user
      */

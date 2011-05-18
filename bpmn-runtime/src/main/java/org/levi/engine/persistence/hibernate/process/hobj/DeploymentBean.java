@@ -1,9 +1,10 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -11,17 +12,17 @@ import java.util.List;
  * @author Ishan Jayawardena.
  */
 @Entity
-public class DeploymentBean {
+public class DeploymentBean extends HObject {
     private String definitionsId;
     private String extractPath;
     private String processDefinitionPath;
     private String diagramPath;
-    private User deployedUser;
+    private UserBean deployedUser;
     private Date deploymentTime;
     private String businessArchiveName;
     private String businessArchiveLocation;
     private List<String> businessArchiveContents;// should list all the contents eg:forms etc
-    private User undeployedUser;
+    private UserBean undeployedUser;
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
 
@@ -58,11 +59,12 @@ public class DeploymentBean {
         this.diagramPath = diagramPath;
     }
 
-    public User getDeployedUser() {
+    @Transient
+    public UserBean getDeployedUser() {
         return deployedUser;
     }
 
-    public void setDeployedUser(User deployedUser) {
+    public void setDeployedUser(UserBean deployedUser) {
         this.deployedUser = deployedUser;
     }
 
@@ -90,6 +92,7 @@ public class DeploymentBean {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
+    @Transient //TODO map a list-OneToMany
     public List<String> getBusinessArchiveContents() {
         return businessArchiveContents;
     }
@@ -98,11 +101,12 @@ public class DeploymentBean {
         this.businessArchiveContents = businessArchiveContents;
     }
 
-    public User getUndeployedUser() {
+    @Transient
+    public UserBean getUndeployedUser() {
         return undeployedUser;
     }
 
-    public void setUndeployedUser(User undeployedUser) {
+    public void setUndeployedUser(UserBean undeployedUser) {
         this.undeployedUser = undeployedUser;
     }
 
