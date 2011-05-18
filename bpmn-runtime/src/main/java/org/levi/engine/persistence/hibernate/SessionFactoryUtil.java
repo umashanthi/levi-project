@@ -3,16 +3,17 @@ package org.levi.engine.persistence.hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.levi.engine.persistence.hibernate.user.hobj.GroupDaoImpl;
-import org.levi.engine.persistence.hibernate.user.hobj.UserDaoImpl;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: eranda
+ * UserBean: eranda
  * Date: May 3, 2011
  * Time: 11:53:32 AM
  * To change this template use File | Settings | File Templates.
@@ -40,9 +41,13 @@ public class SessionFactoryUtil {
      */
     public static Session getSession() {
         AnnotationConfiguration config = new AnnotationConfiguration();
-        config.addAnnotatedClass(UserDaoImpl.class);
-        config.addAnnotatedClass(GroupDaoImpl.class);  //TODO need to transfer this to a default add
-    	config.configure("persistence.xml");
+        config.addAnnotatedClass(UserBean.class);
+        config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
+        config.addAnnotatedClass(DeploymentBean.class);
+        config.addAnnotatedClass(ProcessBean.class);
+        config.addAnnotatedClass(ProcessInstanceBean.class);
+        config.addAnnotatedClass(TaskBean.class);
+    	config.configure("persistance_derby.xml");
         new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();

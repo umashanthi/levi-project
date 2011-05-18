@@ -2,7 +2,6 @@ package org.levi.engine.db;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 
@@ -15,7 +14,7 @@ import java.util.List;
 public interface DBManager {
 
     /**
-     * This method saves a UserDaoImpl to the database; if the UserDaoImpl already exists, it updates the attributes
+     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
      * @param user The user
      */
@@ -29,12 +28,12 @@ public interface DBManager {
 
     void addUserToGroup(String userId, String groupId);
 
-    void deleteUser(String userId);        //?? Only ids or the UserDaoImpl object?
+    void deleteUser(String userId);        //?? Only ids or the UserBean object?
 
     void deleteGroup(String groupId);
 
     void removeUserFromGroup(String userId,
-                             String groupId); //?? UserDaoImpl& Group objects or simple the ids?
+                             String groupId); //?? UserBean& Group objects or simple the ids?
 
     void saveTask(TaskBean task);
 

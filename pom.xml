@@ -141,6 +141,11 @@
             <artifactId>hibernate-annotations</artifactId>
             <version>3.4.0.GA</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.154</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -6,7 +6,7 @@ import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: eranda
+ * UserBean: eranda
  * Date: May 10, 2011
  * Time: 8:31:12 AM
  * To change this template use File | Settings | File Templates.

@@ -1,7 +1,6 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.identity.Group;
@@ -13,7 +12,7 @@ public class H2DBManagerImpl implements DBManager {
 
 
     /**
-     * This method saves a UserDaoImpl to the database; if the UserDaoImpl already exists, it updates the attributes
+     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
      * @param user The user
      */

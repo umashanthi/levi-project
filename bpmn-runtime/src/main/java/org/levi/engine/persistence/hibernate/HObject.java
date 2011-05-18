@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: eranda
+ * UserBean: eranda
  * Date: May 11, 2011
  * Time: 7:40:44 AM
  * To change this template use File | Settings | File Templates.
