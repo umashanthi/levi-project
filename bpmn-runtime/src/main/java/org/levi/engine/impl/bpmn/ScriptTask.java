@@ -83,7 +83,6 @@ public class ScriptTask extends RunnableFlowNode {
         return id;
     }
 
-    @Override
     public void resumeTask() {
         instance(processInstance.executeNext(this));
     }
