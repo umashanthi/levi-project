@@ -25,7 +25,7 @@ public class ListProcessesServlet extends HttpServlet {
         try {
             assert   request.getSession().getAttribute("processEngine")!=null;
             ProcessEngine engine = (ProcessEngine)request.getSession().getAttribute("processEngine");
-            List processesList = engine.getDeploymentIds();
+            List<String> processesList = engine.getDeploymentIds();
             request.getSession().setAttribute("processList", processesList);
             response.sendRedirect("processes.jsp");
         }
