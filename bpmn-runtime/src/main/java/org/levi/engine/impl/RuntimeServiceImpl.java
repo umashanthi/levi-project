@@ -41,7 +41,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     // TODO path != uri, Path.toUri()
-    public void startProcess(String definitionsId, Map<String, Object> variables)
+    public String startProcess(String definitionsId, Map<String, Object> variables)
             throws IOException, ClassNotFoundException {
         assert definitionsId != null;
         if (engineData.isRunning(definitionsId)) {
@@ -72,6 +72,8 @@ public class RuntimeServiceImpl implements RuntimeService {
         // record this as a running process
         engineData.addProcessInstance(processInstance.getProcessId(), processInstance);
         System.out.println("Started process  " + processInstance.getProcessId() + " " + definitionsId);
+
+        return processInstance.getProcessId();
     }
 
     public void stopProcess(String processId) {

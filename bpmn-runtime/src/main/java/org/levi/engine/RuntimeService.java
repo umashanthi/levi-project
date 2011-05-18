@@ -9,7 +9,7 @@ import java.util.Map;
 public interface RuntimeService {
     boolean start();
     boolean stop();
-    void startProcess(String processId, Map<String, Object> variables) throws IOException, ClassNotFoundException;
+    String startProcess(String processId, Map<String, Object> variables) throws IOException, ClassNotFoundException;
     void stopProcess(String processId);
     void showRunningProcess();
     void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);

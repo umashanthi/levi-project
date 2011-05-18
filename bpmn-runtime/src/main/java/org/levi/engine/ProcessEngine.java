@@ -14,8 +14,8 @@ public interface ProcessEngine {
     void undeployAll() throws IOException;
     void undeploy(String id) throws IOException;
     void cleanup() throws IOException;
-    void startProcess(String id) throws IOException, ClassNotFoundException;
-    void startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
+    String startProcess(String id) throws IOException, ClassNotFoundException;
+    String startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
     void stopProcess(String id) throws IOException, ClassNotFoundException;
     void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);
     String getDiagramPath(String id);
