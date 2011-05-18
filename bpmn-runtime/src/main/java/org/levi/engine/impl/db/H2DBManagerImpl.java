@@ -62,7 +62,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void saveProcess(ProcessBean process) {
+    public void saveProcess(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -70,7 +70,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void updateProcess(ProcessBean process) {
+    public void updateProcess(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -98,7 +98,7 @@ public class H2DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<ProcessBean> getDeployedProcessList() {
+    public List<ProcessInstanceBean> getDeployedProcessList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

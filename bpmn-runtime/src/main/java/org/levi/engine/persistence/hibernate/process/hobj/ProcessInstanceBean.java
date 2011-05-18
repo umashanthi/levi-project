@@ -43,6 +43,7 @@ public class ProcessInstanceBean extends HObject {
         this.processDefId = processDefId;
     }
 
+    @Transient //TODO
     public Map<String, Object> getVariables() {
         return variables;
     }

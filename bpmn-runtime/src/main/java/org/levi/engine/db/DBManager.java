@@ -41,11 +41,11 @@ public interface DBManager {
 
     void updateTask(TaskBean task);
 
-    void saveProcess(ProcessBean process);
+    void saveProcess(ProcessInstanceBean process);
 
     void deleteProcess(String processId);
 
-    void updateProcess(ProcessBean process);
+    void updateProcess(ProcessInstanceBean process);
 
     void saveProcessInstance(ProcessInstanceBean process);
 
@@ -59,7 +59,7 @@ public interface DBManager {
 
     List<ProcessInstanceBean> getRunningProcessesInstancesList();
 
-    List<ProcessBean> getDeployedProcessList();
+    List<ProcessInstanceBean> getDeployedProcessList();
 
     User getAssigneeForTask(String taskId);
 
