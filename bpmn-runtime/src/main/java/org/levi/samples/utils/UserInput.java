@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: ishan
+ * UserBean: ishan
  * Date: Dec 26, 2010
  * Time: 11:35:23 PM
  * To change this template use File | Settings | File Templates.

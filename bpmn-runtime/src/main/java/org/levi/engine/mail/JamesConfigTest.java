@@ -2,7 +2,7 @@ package org.levi.engine.mail;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: keheliya
+ * UserBean: keheliya
  * Date: Apr 18, 2011
  * Time: 7:58:46 PM
  * For Levi - The Native BPMN 2.0 Execution Engine

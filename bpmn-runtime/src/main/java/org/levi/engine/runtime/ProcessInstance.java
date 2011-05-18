@@ -93,6 +93,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
         runningTaskIds = builder.runningElemIds;
         completedTaskIds = builder.completedElemIds;
         processDefId = processDefinition.getDefinitionsId();
+        if (builder.processId == null) {
+            throw new IllegalArgumentException("Process Instance ID is null.");
+        }
         processId = builder.processId;
         pauseSignals = LeviUtils.newArrayList();
         resumeSignals = LeviUtils.newArrayList();
@@ -121,11 +124,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 if (resumeSignals.size() > 1) {
                     throw new RuntimeException("More than one resume signals found.");
                 }
-                    flowNodeFac.getNextNode(resumeSignals.get(0)).resumeTask();
-                    //instance(node);
-                    //soup.enqueueReaction(new Continuation(node, m, null));
-                    //vpu.addReaction(node, m, null, "description");
-                    //node.resumeTask();
+                flowNodeFac.getNextNode(resumeSignals.get(0)).resumeTask();
+                //instance(node);
+                //soup.enqueueReaction(new Continuation(node, m, null));
+                //vpu.addReaction(node, m, null, "description");
+                //node.resumeTask();
                 //}
             }
         }
@@ -212,7 +215,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         // todo check for the # runningTaskIds before actually pausing.
         if (checkPauseSignal(taskId)) {
             setIsRunning(false);
-            System.out.println("Running: " + runningTaskIds.toString());
+            System.out.println("Running:   " + runningTaskIds.toString());
             System.out.println("Completed: " + completedTaskIds.toString());
             System.out.println("variables: " + variables.toString());
             //resume();

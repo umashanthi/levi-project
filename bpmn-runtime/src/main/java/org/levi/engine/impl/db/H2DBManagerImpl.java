@@ -1,7 +1,6 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.identity.Group;
@@ -13,7 +12,7 @@ public class H2DBManagerImpl implements DBManager {
 
 
     /**
-     * This method saves a UserDaoImpl to the database; if the UserDaoImpl already exists, it updates the attributes
+     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
      * @param user The user
      */
@@ -63,7 +62,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void saveProcess(ProcessBean process) {
+    public void saveProcess(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -71,7 +70,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void updateProcess(ProcessBean process) {
+    public void updateProcess(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -99,7 +98,7 @@ public class H2DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<ProcessBean> getDeployedProcessList() {
+    public List<ProcessInstanceBean> getDeployedProcessList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

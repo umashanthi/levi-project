@@ -15,11 +15,11 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-public class GroupDaoImpl extends HObject implements Group{
+public class GroupBean extends HObject{
     private String groupId;
     private String groupName;
     private String groupDescription;
-    private List<UserDaoImpl> members = new ArrayList<UserDaoImpl>();
+    private List<UserBean> members = new ArrayList<UserBean>();
 
     @Id
     public String getGroupId() {
@@ -48,11 +48,11 @@ public class GroupDaoImpl extends HObject implements Group{
 
     @ManyToMany
     @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
-    public List<UserDaoImpl> getMembers() {
+    public List<UserBean> getMembers() {
         return members;
     }
 
-    public void setMembers(List<UserDaoImpl> members) {
+    public void setMembers(List<UserBean> members) {
         this.members = members;
     }
 }

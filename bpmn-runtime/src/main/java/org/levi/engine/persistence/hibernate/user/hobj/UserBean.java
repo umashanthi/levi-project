@@ -10,20 +10,20 @@ import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
- * UserDaoImpl: eranda
+ * UserBean: eranda
  * Date: May 11, 2011
  * Time: 7:52:29 AM
  * To change this template use File | Settings | File Templates.
  */
 
 @Entity
-public class UserDaoImpl extends HObject implements User, Serializable{
+public class UserBean extends HObject implements Serializable{
     private String userId;
     private String password;
     private String firstName;
     private String lastName;
     private String userEmail;
-    private List<GroupDaoImpl> userGroups = new ArrayList<GroupDaoImpl>();
+    private List<GroupBean> userGroups = new ArrayList<GroupBean>();
     
 
     @Id
@@ -69,11 +69,11 @@ public class UserDaoImpl extends HObject implements User, Serializable{
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
-    public List<GroupDaoImpl> getUserGroups() {
+    public List<GroupBean> getUserGroups() {
         return this.userGroups;
     }
 
-    public void setUserGroups(List<GroupDaoImpl> groups) {
+    public void setUserGroups(List<GroupBean> groups) {
         this.userGroups =groups;
     }
 }
