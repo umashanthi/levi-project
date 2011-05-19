@@ -165,4 +165,32 @@ public class ProcessEngineImpl implements ProcessEngine {
         }
         return storageService.getDiagramPath(id);
     }
+
+    public void setVariable(String processId, String name, Object value) {
+        if (processId == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+        runtimeService.setVariable(processId, name, value);
+    }
+
+    public void setVariables(String processId, Map<String, Object> values) {
+        if (processId == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+       runtimeService.setVariables(processId, values);
+    }
+
+    public Object getVariable(String processId, String name) {
+        if (processId == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+        return runtimeService.getVariable(processId, name);
+    }
+
+    public Map<String, Object> getVariables(String processId) {
+        if (processId == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+        return runtimeService.getVariables(processId);
+    }
 }

@@ -22,4 +22,8 @@ public interface ProcessEngine {
     List<String> getDeploymentIds();
     List<String> getRunningProcessIds();
     void resumeProcessInstance(String processId);
+    void setVariable(String processId, String name, Object value);
+    void setVariables(String processId, Map<String, Object> values);
+    Object getVariable(String processId, String name);
+    Map<String, Object> getVariables(String processId);
 }

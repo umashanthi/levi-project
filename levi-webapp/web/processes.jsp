@@ -3,6 +3,8 @@
 <%@ page import="org.levi.engine.ProcessEngine" %>
 <%@ page import="java.io.File" %>
 <%@ page import="org.apache.commons.io.FileUtils" %>
+
+
 <%--
   Created by IntelliJ IDEA.
   UserBean: umashanthi
@@ -30,8 +32,11 @@ Released : 20090303
     <meta name="keywords" content=""/>
     <meta name="Premium Series" content=""/>
     <link href="default.css" rel="stylesheet" type="text/css" media="screen"/>
+
 </head>
+
 <body>
+
 <script type="text/javascript">
     // JK Pop up image viewer script- By JavaScriptKit.com
     // Visit JavaScript Kit (http://javascriptkit.com)
@@ -87,7 +92,7 @@ Released : 20090303
         processForm.submit();
     }
 
-    function showForm(formTemplate) {
+    function displayForm(formTemplate) {
         popwidth = 600
         popheight = 600
         function getpos() {
@@ -100,20 +105,15 @@ Released : 20090303
         }
 
         getpos()
-        var winattributes = 'width=' + popwidth + ',height=' + popheight + ',resizable=yes,left=' + leftpos + ',top=' + toppos
-        var bodyattribute = (popbackground.indexOf(".") != -1) ? 'background="' + popbackground + '"' : 'bgcolor="' + popbackground + '"'
-        if (typeof jkpopwin == "undefined" || jkpopwin.closed)
-            jkpopwin = window.open("", "", winattributes)
-        else {
-            jkpopwin.resizeTo(popwidth, popheight + 30)
-            jkpopwin.scrolling = true
-        }
-        jkpopwin.border = 0
-        jkpopwin.frameBorder = 0
-        jkpopwin.document.open()
-        jkpopwin.document.write(formTemplate.replace("&quot;", "\""))
-        jkpopwin.document.close()
-        jkpopwin.focus()
+        formWindow = window.open("vel", "", "location=0,status=0,scrollbars=1,width=600,height=600");
+        formWindow.moveTo(leftpos, toppos);
+    }
+
+    function showForm() {
+        var processForm = document.createElement("form");
+        processForm.method = "post";
+        processForm.action = "processes.jsp?formStarted=true";
+        processForm.submit();
     }
 
 </script>
@@ -170,6 +170,7 @@ Released : 20090303
 
             </td>
         </tr>
+
         <%for (String process : processesList) { %>
         <tr>
             <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">
@@ -233,8 +234,8 @@ Released : 20090303
                         //formTemplate=formTemplate.replace("<", "&lt;");
                         //formTemplate=formTemplate.replace(">", "&gt;");
                     %>
-                    <input type="button" value="Show Form" onclick="showForm('<%=formTemplate%>'); return false">
-
+                    <input type="button" value="Show Form" onclick="displayForm('vel'); return false">
+                    <!--a href="vel" target="_new"><input type="button" value="Show Form"></a-->
                 </td>
                 <%--
                 <td>
@@ -253,6 +254,7 @@ Released : 20090303
                     %>
                 </td>
                       ---%>
+
             </form>
         </tr>
         <% }
