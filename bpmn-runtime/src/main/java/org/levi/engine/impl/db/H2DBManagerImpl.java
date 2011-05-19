@@ -1,6 +1,7 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.identity.Group;
@@ -62,7 +63,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void saveProcess(ProcessInstanceBean process) {
+    public void saveProcess(DeploymentBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -70,7 +71,7 @@ public class H2DBManagerImpl implements DBManager {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void updateProcess(ProcessInstanceBean process) {
+    public void updateProcess(DeploymentBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -98,7 +99,7 @@ public class H2DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<ProcessInstanceBean> getDeployedProcessList() {
+    public List<DeploymentBean> getDeployedProcessList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
