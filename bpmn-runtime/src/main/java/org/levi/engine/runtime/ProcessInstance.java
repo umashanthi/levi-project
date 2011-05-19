@@ -156,6 +156,13 @@ public class ProcessInstance extends BPMNJacobRunnable {
         return variables.put(name, value);
     }
 
+    public void setVariables(Map<String, Object> variables) {
+        if (variables == null) {
+            throw new NullPointerException("Variables map is null.");
+        }
+        variables.putAll(variables);
+    }
+
     public RunnableFlowNode executeNext(RunnableFlowNode currentFlowNode) {
         return flowNodeFac.getNextNode(currentFlowNode);
     }

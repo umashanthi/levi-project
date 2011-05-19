@@ -14,4 +14,8 @@ public interface RuntimeService {
     void showRunningProcess();
     void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);
     void resumeProcessInstance(String processId);
+    void setVariable(String processId, String name, Object value);
+    void setVariables(String processId, Map<String, Object> values);
+    Object getVariable(String processId, String name);
+    Map<String, Object> getVariables(String processId);
 }
