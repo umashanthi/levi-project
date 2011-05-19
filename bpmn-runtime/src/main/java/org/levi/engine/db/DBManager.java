@@ -1,10 +1,10 @@
 package org.levi.engine.db;
 
-import org.levi.engine.identity.Group;
-import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.List;
 
@@ -19,13 +19,13 @@ public interface DBManager {
      *
      * @param user The user
      */
-    void saveUser(User user);
+    void saveUser(UserBean user);
 
-    void saveGroup(Group group);
+    void saveGroup(GroupBean group);
 
-    User getUser(String userId);
+    UserBean getUser(String userId);
 
-    Group getGroup(String groupId);
+    GroupBean getGroup(String groupId);
 
     void addUserToGroup(String userId, String groupId);
 
@@ -61,7 +61,7 @@ public interface DBManager {
 
     List<DeploymentBean> getDeployedProcessList();
 
-    User getAssigneeForTask(String taskId);
+    UserBean getAssigneeForTask(String taskId);
 
     List<TaskBean> getActiveTasks();
 
