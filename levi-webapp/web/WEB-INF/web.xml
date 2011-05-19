@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
+
     <welcome-file-list>
         <!-- call index.jsp as first page -->
         <welcome-file>index.jsp</welcome-file>
@@ -32,6 +33,22 @@
         <servlet-name>SubmitUserTaskFormServlet</servlet-name>
         <servlet-class>org.levi.web.SubmitUserTaskFormServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>velocityView</servlet-name>
+        <servlet-class>org.apache.velocity.tools.view.servlet.VelocityViewServlet</servlet-class>
+        <init-param>
+            <param-name>org.apache.velocity.toolbox</param-name>
+            <param-value>/WEB-INF/toolbox.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.apache.velocity.properties</param-name>
+            <param-value>/WEB-INF/velocity.properties</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>VelTestServlet</servlet-name>
+        <servlet-class>org.levi.web.VelTestServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -56,4 +73,20 @@
         <servlet-name>SubmitUserTaskFormServlet</servlet-name>
         <url-pattern>/submitUserTaskForm</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>velocityView</servlet-name>
+        <url-pattern>*.vm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VelTestServlet</servlet-name>
+        <url-pattern>/vel</url-pattern>
+    </servlet-mapping>
+
+    <jsp-config>
+    <taglib>
+    <taglib-uri>http://jakarta.apache.org/taglibs/veltag-1.0 </taglib-uri>
+    <taglib-location>/WEB-INF/velocity-view.tld</taglib-location>
+    </taglib>
+    </jsp-config>
+
 </web-app>

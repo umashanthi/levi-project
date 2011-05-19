@@ -2,6 +2,7 @@ package org.levi.engine.db;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 
@@ -32,8 +33,7 @@ public interface DBManager {
 
     void deleteGroup(String groupId);
 
-    void removeUserFromGroup(String userId,
-                             String groupId); //?? UserBean& Group objects or simple the ids?
+    void removeUserFromGroup(String userId, String groupId); //?? UserBean& Group objects or simple the ids?
 
     void saveTask(TaskBean task);
 
@@ -41,11 +41,13 @@ public interface DBManager {
 
     void updateTask(TaskBean task);
 
-    void saveProcess(ProcessInstanceBean process);
+    void saveProcess(DeploymentBean process);
 
     void deleteProcess(String processId);
 
     void updateProcess(ProcessInstanceBean process);
+
+    void saveProcessInstance(ProcessInstanceBean process);
 
     void deleteProcessInstance(String processId);
 
@@ -57,7 +59,7 @@ public interface DBManager {
 
     List<ProcessInstanceBean> getRunningProcessesInstancesList();
 
-    List<ProcessInstanceBean> getDeployedProcessList();
+    List<DeploymentBean> getDeployedProcessList();
 
     User getAssigneeForTask(String taskId);
 

@@ -7,6 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head><title>Success</title></head>
-  <body>Successfully ran process</body>
+  <head><title>Success</title>
+      <script type="text/javascript">
+    function closeWindow() {
+
+        window.close();
+    }
+</script>
+  </head>
+  <body onload="closeWindow()">Successfully ran process
+
+  <%--<%=request.getParameter("test")%>--%>
+  <%--<input type="button" onclick="closeWindow()" value="OK">--%>
+</body>
 </html>

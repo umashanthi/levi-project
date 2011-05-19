@@ -139,4 +139,26 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .build();
         p.resume();
     }
+
+    public void setVariable(String processId, String name, Object value) {
+        if (name == null) {
+            throw new NullPointerException("variable name is null.");
+        }
+        engineData.getProcessInstance(processId).setVariable(name, value);
+    }
+
+    public void setVariables(String processId, Map<String, Object> values) {
+        engineData.getProcessInstance(processId).setVariables(values);
+    }
+
+    public Object getVariable(String processId, String name) {
+        if (name == null) {
+            throw new NullPointerException("variable name is null.");
+        }
+        return engineData.getProcessInstance(processId).getVariable(name);
+    }
+
+    public Map<String, Object> getVariables(String processId) {
+        return engineData.getProcessInstance(processId).getVariables();
+    }
 }
