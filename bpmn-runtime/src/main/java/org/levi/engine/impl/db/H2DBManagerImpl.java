@@ -1,6 +1,7 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
+import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
@@ -11,6 +12,11 @@ import java.util.List;
 
 public class H2DBManagerImpl implements DBManager {
 
+    HibernateDao dao;
+
+    public H2DBManagerImpl() {
+        dao = new HibernateDao();
+    }
 
     /**
      * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
@@ -52,7 +58,7 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void saveTask(TaskBean task) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.save(task);
     }
 
     public void deleteTask(String taskId) {
@@ -64,18 +70,22 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void saveProcess(DeploymentBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.save(process);
     }
 
     public void deleteProcess(String processId) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void updateProcess(DeploymentBean process) {
+    public void updateProcess(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void saveProcessInstance(ProcessInstanceBean process) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void updateProcess(DeploymentBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -117,5 +127,12 @@ public class H2DBManagerImpl implements DBManager {
 
     public List<TaskBean> getActiveTasks(String processId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    // given the taskId, the id of the process instance that task belongs to should be retrieved
+    // TaskBean has a processInstanceId attribute
+    // Can this be retrieved from the TaskBean table?
+    public String getProcessInstanceId(String taskId) {
+        return null;
     }
 }

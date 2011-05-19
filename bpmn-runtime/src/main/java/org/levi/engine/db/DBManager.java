@@ -33,8 +33,7 @@ public interface DBManager {
 
     void deleteGroup(String groupId);
 
-    void removeUserFromGroup(String userId,
-                             String groupId); //?? UserBean& Group objects or simple the ids?
+    void removeUserFromGroup(String userId, String groupId); //?? UserBean& Group objects or simple the ids?
 
     void saveTask(TaskBean task);
 
@@ -46,7 +45,7 @@ public interface DBManager {
 
     void deleteProcess(String processId);
 
-    void updateProcess(DeploymentBean process);
+    void updateProcess(ProcessInstanceBean process);
 
     void saveProcessInstance(ProcessInstanceBean process);
 
@@ -69,6 +68,11 @@ public interface DBManager {
     List<TaskBean> getUnassignedTasks();
 
     List<TaskBean> getActiveTasks(String processId);
+
+    // given the taskId, the id of the process instance that task belongs to should be retrieved
+    // TaskBean has a processInstanceId attribute
+    // Can this be retrieved from the TaskBean table?
+    String getProcessInstanceId(String taskId);
 
 
 }
