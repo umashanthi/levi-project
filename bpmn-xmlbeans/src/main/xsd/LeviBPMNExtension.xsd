@@ -15,4 +15,38 @@
             attributes introduced by Levi.
         </documentation>
     </annotation>
+
+    <!-- Following three already exist in activiti. Add what is necessary
+    -->
+    <attribute name="assignee" type="string">
+    <annotation>
+      <documentation>
+        User Task attribute to set the human performer of a user task.
+        Also supports expressions that evaluate to a String.
+      </documentation>
+    </annotation>
+  </attribute>
+
+  <attribute name="candidateUsers">
+    <annotation>
+      <documentation>
+        User Task attribute to set the potential owners of a user task.
+        The provided user(s) will be candidate for performing the user task.
+        In case of multiple user ids, a comma-separated list must be provided.
+        Also supports expressions that evaluate to a String or Collection&lt;String&gt;.
+      </documentation>
+    </annotation>
+  </attribute>
+
+  <attribute name="candidateGroups">
+    <annotation>
+      <documentation>
+        User Task attribute to set the potential owners of a user task.
+        The provided group(s) will be candidate for performing the user task.
+        In case of multiple group ids, a comma-separated list must be provided.
+        Also supports expressions that evaluate to a String or Collection&lt;String&gt;.
+      </documentation>
+    </annotation>
+  </attribute>
+
 </schema>
