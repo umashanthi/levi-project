@@ -5,6 +5,7 @@ import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DeploymentBean extends HObject {
     private Date deploymentTime;
     private String businessArchiveName;
     private String businessArchiveLocation;
-    private List<String> businessArchiveContents;// should list all the contents eg:forms etc
+    private ArrayList<String> businessArchiveContents;// should list all the contents eg:forms etc
     private UserBean undeployedUser;
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
@@ -59,7 +60,7 @@ public class DeploymentBean extends HObject {
         this.diagramPath = diagramPath;
     }
 
-    @Transient
+    @Transient  //TODO
     public UserBean getDeployedUser() {
         return deployedUser;
     }
@@ -92,16 +93,14 @@ public class DeploymentBean extends HObject {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
-    @Transient //TODO map a list-OneToMany
-    public List<String> getBusinessArchiveContents() {
+    public ArrayList<String> getBusinessArchiveContents() {
         return businessArchiveContents;
     }
 
-    public void setBusinessArchiveContents(List<String> businessArchiveContents) {
+    public void setBusinessArchiveContents(ArrayList<String> businessArchiveContents) {
         this.businessArchiveContents = businessArchiveContents;
     }
 
-    @Transient
     public UserBean getUndeployedUser() {
         return undeployedUser;
     }

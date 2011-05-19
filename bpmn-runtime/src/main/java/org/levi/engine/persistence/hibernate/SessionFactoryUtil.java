@@ -44,10 +44,9 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(UserBean.class);
         config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
         config.addAnnotatedClass(DeploymentBean.class);
-        config.addAnnotatedClass(ProcessBean.class);
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
-    	config.configure("persistance_derby.xml");
+    	config.configure("persistance.xml");
         new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();

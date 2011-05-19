@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class ProcessActionServlet extends HttpServlet {
 
@@ -27,6 +28,8 @@ public class ProcessActionServlet extends HttpServlet {
         try {
             if (action.equals("Start")) {
                 engine.startProcess(processId, null);
+                List<String> processInstanceList = engine.getRunningProcessIds();
+                request.getSession().setAttribute("processInstanceList", processInstanceList);
                 response.sendRedirect("processes.jsp?isProcessStarted=true&processId=" + processId);
             } else if (action.equals("Stop")) {
                 engine.stopProcess(processId);
