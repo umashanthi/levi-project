@@ -161,4 +161,8 @@ public class RuntimeServiceImpl implements RuntimeService {
     public Map<String, Object> getVariables(String processId) {
         return engineData.getProcessInstance(processId).getVariables();
     }
+
+    public boolean hasStartForm(String processId) {
+        return engineData.getProcessInstance(processId).hasStartForm();
+    }
 }

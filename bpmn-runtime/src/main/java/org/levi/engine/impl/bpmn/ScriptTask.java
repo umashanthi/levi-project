@@ -91,4 +91,9 @@ public class ScriptTask extends RunnableFlowNode {
     public String toString() {
         return "[" + language + ", " + resultVariableName +", "+ processInstance +", " + script +"]";
     }
+
+    // todo
+    public boolean hasInputForm() {
+        return false;
+    }
 }

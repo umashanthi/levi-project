@@ -193,4 +193,13 @@ public class ProcessEngineImpl implements ProcessEngine {
         }
         return runtimeService.getVariables(processId);
     }
+
+    public boolean hasStartForm(String processId) {
+        if (processId == null) {
+            throw new NullPointerException("process ID is null.");
+        }
+        // get the definitions ID
+        engineData.getProcessInstance(processId).getProcessId();
+        return false;
+    }
 }

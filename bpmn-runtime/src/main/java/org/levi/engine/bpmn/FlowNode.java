@@ -6,5 +6,5 @@ package org.levi.engine.bpmn;
 public interface FlowNode {
     String getId();
     void resumeTask();
+    boolean hasInputForm();
 }
-

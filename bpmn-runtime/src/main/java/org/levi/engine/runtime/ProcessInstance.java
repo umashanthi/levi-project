@@ -16,19 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 public class ProcessInstance extends BPMNJacobRunnable {
-    ProcessDefinition processDefinition;
-    Boolean isRunning;
-    ExecutionQueueImpl soup;
-    JacobVPU vpu;
-    FlowNodeFactory flowNodeFac;
-    Map<String, Object> variables;
-    Map<String, WaitedTask> waitedTasks;
-    ArrayList<String> runningTaskIds;
-    ArrayList<String> completedTaskIds;
-    String processId;
-    String processDefId;
+    private ProcessDefinition processDefinition;
+    private boolean isRunning;
+    private ExecutionQueueImpl soup;
+    private JacobVPU vpu;
+    private FlowNodeFactory flowNodeFac;
+    private Map<String, Object> variables;
+    private Map<String, WaitedTask> waitedTasks;
+    private ArrayList<String> runningTaskIds;
+    private ArrayList<String> completedTaskIds;
+    private String processId;
+    private String processDefId;
     private List<String> pauseSignals;
     private List<String> resumeSignals;
+    private boolean hasStartForm;
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
@@ -46,6 +47,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         pauseSignals = LeviUtils.newArrayList();
         resumeSignals = LeviUtils.newArrayList();
         setIsRunning(false);
+        hasStartForm = false;
     }
     // this is used by the ProcessInstanceManager class
     public static class Builder {
@@ -99,11 +101,20 @@ public class ProcessInstance extends BPMNJacobRunnable {
         processId = builder.processId;
         pauseSignals = LeviUtils.newArrayList();
         resumeSignals = LeviUtils.newArrayList();
+        hasStartForm = false;
     }
 
     public String getProcessId() {
         return processId;
     }
+
+    public String getDefinitionsId() {
+        if (processDefId == null) {
+            throw new NullPointerException("ProcessDefID is null.");
+        }
+        return processDefId;
+    }
+    
     public void execute() {
         soup = new ExecutionQueueImpl(null);
         vpu = new JacobVPU();
@@ -117,6 +128,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         synchronized (runningTaskIds) {
             if (runningTaskIds.isEmpty()) {
                 RunnableFlowNode startEvent = flowNodeFac.getStartEvent();
+                hasStartForm = startEvent.hasInputForm();
                 instance(startEvent);
             } else {
                 // todo check if all the
@@ -294,5 +306,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
     private synchronized void setIsRunning(boolean value) {
         isRunning = value;
+    }
+
+    public boolean hasStartForm() {
+        return hasStartForm;
     }
 }
