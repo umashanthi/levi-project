@@ -67,6 +67,7 @@ public class ScriptTask extends RunnableFlowNode {
 
     @Override
     public void run() {
+        // todo: see if a form is present and pause the process accordingly
         System.out.println("Evaluating Script Task.");
         ScriptEngines scriptEngines = ScriptEngines.getInstance();
         Object result = null;
@@ -75,11 +76,15 @@ public class ScriptTask extends RunnableFlowNode {
                 language,
                 processInstance);
         processInstance.setVariable(resultVariableName, result);
-        instance(processInstance.executeNext(this));
+        resumeTask();
     }
 
     public String getId() {
         return id;
+    }
+
+    public void resumeTask() {
+        instance(processInstance.executeNext(this));
     }
 
     @Override

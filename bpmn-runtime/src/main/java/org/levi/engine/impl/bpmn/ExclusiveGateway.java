@@ -16,6 +16,10 @@ public final class ExclusiveGateway extends Gateway {
     private final List<TSequenceFlow> output;
     private final String defaultSequenceFlowId;
 
+    public void resumeTask() {
+        throw new AssertionError("resumeTask() is not intended to be called.");
+    }
+
 
     public static class Builder {
         private TExclusiveGateway eg;

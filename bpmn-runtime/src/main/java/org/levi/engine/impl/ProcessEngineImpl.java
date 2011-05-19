@@ -44,16 +44,27 @@ public class ProcessEngineImpl implements ProcessEngine {
             throws IOException, ClassNotFoundException {
         File leviHome = new File(Constants.LEVI_HOME);
         if (!leviHome.exists()) {
-            leviHome.mkdir();
-        }
-        File lomPath = new File(Constants.LOM_PATH);
-        if (!lomPath.exists()) {
-            lomPath.mkdir();    
+            if (!leviHome.mkdirs()) {
+                throw new LeviException("Could not create Levi home at " + Constants.LEVI_HOME);
+            }
+            System.out.println("Created Levi home at " + Constants.LEVI_HOME);
         }
         File extractPath = new File(Constants.LAR_EXTRACT_PATH);
         if (!extractPath.exists()) {
-            extractPath.mkdir();
+            //extractPath.mkdir();
+            if (!extractPath.mkdir()) {
+                throw new LeviException("Could not create LAR_EXTRACT_PATH at " + Constants.LAR_EXTRACT_PATH);
+            }
+            System.out.println("Created Lar extract path at " + Constants.LAR_EXTRACT_PATH);
         }
+        File lomPath = new File(Constants.LOM_PATH);
+        if (!lomPath.exists()) {
+            if (!lomPath.mkdir()) {
+                throw new LeviException("Could not create LOM_PATH at " + Constants.LOM_PATH);
+            }
+            System.out.println("Created Lom directory at " + Constants.LOM_PATH);
+        }
+
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);
         if (engineDataFile.exists()) {
             ObjectLoader loader = new ObjectLoader(Constants.ENGINEDATA_PATH);
@@ -77,6 +88,10 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized List<String> getRunningProcessIds() {
         return LeviUtils.giveList(engineData.getRunningProcessIds());
+    }
+
+    public void resumeProcessInstance(String processId) {
+        runtimeService.resumeProcessInstance(processId);
     }
 
     public synchronized void stop()
@@ -114,15 +129,19 @@ public class ProcessEngineImpl implements ProcessEngine {
         storageService.cleanup();
     }
 
-    public synchronized void startProcess(String id, Map<String, Object> variables)
+    public synchronized String startProcess(String id)
+            throws IOException, ClassNotFoundException {
+        return startProcess(id, LeviUtils.<String, Object>newHashMap());   // Collections.<String, Object>emptyMap()
+    }
+
+    public synchronized String startProcess(String id, Map<String, Object> variables)
             throws IOException, ClassNotFoundException {
         if (id == null) {
             throw new LeviException("Process ID is null.");
         }
         try {
-            runtimeService.startProcess(id, variables);
+            return runtimeService.startProcess(id, variables);
         } catch (Exception e) {
-            // cleanup
             cleanup();
             throw new LeviException(e);
         }
@@ -134,6 +153,10 @@ public class ProcessEngineImpl implements ProcessEngine {
             throw new LeviException("Process ID is null.");
         }
         runtimeService.stopProcess(id);
+    }
+
+    public void claimUserTask(String pid, String userTaskId, Map<String, Object> variables) {
+        runtimeService.claimUserTask(pid, userTaskId, variables);
     }
 
     public String getDiagramPath(String id) {

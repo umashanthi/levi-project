@@ -24,9 +24,13 @@
         <servlet-name>ListProcessesServlet</servlet-name>
         <servlet-class>org.levi.web.ListProcessesServlet</servlet-class>
     </servlet>
-       <servlet>
+    <servlet>
         <servlet-name>ProcessActionServlet</servlet-name>
         <servlet-class>org.levi.web.ProcessActionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitUserTaskFormServlet</servlet-name>
+        <servlet-class>org.levi.web.SubmitUserTaskFormServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -44,8 +48,12 @@
         <servlet-name>ListProcessesServlet</servlet-name>
         <url-pattern>/processes</url-pattern>
     </servlet-mapping>
-      <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProcessActionServlet</servlet-name>
         <url-pattern>/startProcess</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitUserTaskFormServlet</servlet-name>
+        <url-pattern>/submitUserTaskForm</url-pattern>
     </servlet-mapping>
 </web-app>

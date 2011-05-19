@@ -2,7 +2,7 @@ package org.levi.visualize.api;
 
 /**
  * Created by IntelliJ IDEA.
- * User: keheliya
+ * UserBean: keheliya
  * Date: Feb 4, 2011
  * Time: 1:49:39 PM
  * For Levi - The Native BPMN 2.0 Execution Engine

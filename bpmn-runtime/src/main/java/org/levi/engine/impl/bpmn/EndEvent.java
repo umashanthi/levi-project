@@ -41,4 +41,8 @@ public class EndEvent extends Event implements FlowNode {
     public String getId() {
         return endEvent.getId();
     }
+
+    public void resumeTask() {
+        System.out.println("EndEvent: resumeTask().");
+    }
 }

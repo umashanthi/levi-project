@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class EngineData implements Serializable {
     private transient List<String> runningProcessIds;
     private static final int DEFAULT_SIZE = 25;
 
-    public EngineData() {
+    public EngineData() {   
         nDeployments = 0;
         nDeploymentPIds = 0;
         nRunningProcesses = 0;
@@ -45,7 +46,9 @@ public class EngineData implements Serializable {
     }
 
     public void setDeployments(Map<String, Deployment> deployments) {
-        assert deployments != null;
+        if (deployments == null) {
+            throw new NullPointerException("Deployments is null.");
+        }
         this.deployments = deployments;
     }
 
@@ -54,7 +57,9 @@ public class EngineData implements Serializable {
     }
 
     public void setDeploymentPIds(List<String> deploymentPIds) {
-        assert deploymentPIds != null;
+        if (deploymentPIds == null) {
+            throw new NullPointerException("deploymentPIds is null");
+        }
         this.deploymentPIds = deploymentPIds;
     }
 
@@ -63,12 +68,16 @@ public class EngineData implements Serializable {
     }
 
     public boolean removeDeployment(Deployment d) {
-        assert d != null;
+        if (d == null) {
+            throw new NullPointerException("Cannot remove a null deployment.");
+        }
         return removeDeployment(d.getDefinitionsId());
     }
 
     public boolean removeDeployment(String id) {
-        assert id != null;
+        if (id == null) {
+            throw new NullPointerException("Cannot remove a deployment by a null id.");
+        }
         if (deployments.containsKey(id)) {
             deployments.remove(id);
             deploymentPIds.remove(id);
@@ -112,6 +121,7 @@ public class EngineData implements Serializable {
             s.writeObject(d.getProcessDefinitionPath());
             s.writeObject(d.getDiagramPath());
             s.writeObject(d.getExtractPath());
+            s.writeObject(d.getDate());
         }
     }
 
@@ -125,7 +135,8 @@ public class EngineData implements Serializable {
             String omPath = (String)s.readObject();
             String diagramPath = (String)s.readObject();
             String extractPath = (String)s.readObject();
-            Deployment d = new Deployment(processId, omPath, diagramPath, extractPath);
+            Date date = (Date)s.readObject();
+            Deployment d = new Deployment(processId, omPath, diagramPath, extractPath, date);
             addDeployment(d);
         }
     }
@@ -152,11 +163,16 @@ public class EngineData implements Serializable {
     }
 
     public boolean isRunning(String processId) {
-        assert processId != null;
+        if (processId == null) {
+            throw new NullPointerException("ProcessId is null.");
+        }
         return runningProcesses.containsKey(processId);
     }
 
-    public String toString() {
-        return "["+"{"+deploymentPIds +"}," +"]";
+    public ProcessInstance getProcessInstance(String id) {
+        if (id == null) {
+            throw new NullPointerException("Process Id is null.");
+        }
+        return runningProcesses.get(id);
     }
 }

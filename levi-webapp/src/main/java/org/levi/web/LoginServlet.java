@@ -44,7 +44,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
     }
 
     protected boolean allowUser(String username, String password) {
-        //TODO: Handle User Authentication here
+        //TODO: Handle UserBean Authentication here
         if (username.trim().equals("admin") && password.trim().equals("admin")) {
             return true;
         } else {

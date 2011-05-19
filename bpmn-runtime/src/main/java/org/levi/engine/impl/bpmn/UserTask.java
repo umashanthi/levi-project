@@ -3,21 +3,25 @@ package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.runtime.ProcessInstance;
-import org.omg.spec.bpmn.x20100524.model.TTask;
+import org.omg.spec.bpmn.x20100524.model.TUserTask;
+import org.omg.spec.bpmn.x20100524.model.THumanPerformer;
+import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
+import org.omg.spec.bpmn.x20100524.model.TResourceRole;
+
 
 /**
  * @author Ishan Jayawardena
  */
 public class UserTask extends RunnableFlowNode {
-    private final TTask task;
+    private final TUserTask task;
     private final ProcessInstance processInstance;
 
     public static class Builder {
         private FlowNodeFactory flowNodeFac;
-        private TTask task;
+        private TUserTask task;
         private ProcessInstance process;
 
-        public Builder(TTask task) {
+        public Builder(TUserTask task) {
             this.task = task;
         }
         public Builder processInstance(ProcessInstance process) {
@@ -31,14 +35,59 @@ public class UserTask extends RunnableFlowNode {
     private UserTask(Builder builder) {
         this.task = builder.task;
         this.processInstance = builder.process;
+        TResourceRole[] resourceRoles = task.getResourceRoleArray();
+        if (resourceRoles[0] instanceof TPotentialOwner) {
+            TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
+            potentialOwner.getResourceAssignmentExpression().getExpression();
+        }
+        THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
+        humanPerformer.getResourceAssignmentExpression().getExpression();
     }
 
     public void run() {
-        System.out.println(task.getName());
-        instance(processInstance.executeNext(this));
+        processInstance.addRunning(getId());
+        // get the details
+        System.out.println("UserTask run(): Getting the task details.");
+        // write them to the db
+        System.out.println("UserTask run(): Wrote details to the db.");
+        // see if a form is there
+        System.out.println("UserTask run(): Checking for an input form.");
+        // if yes then create a waitedtask and wait for it
+        System.out.println("UserTask run(): Creating the waited task for the form.");
+        System.out.println("UserTask run(): Waiting for the form reply...");
+        //WaitedTaskChannel channel = newChannel(WaitedTaskChannel.class, "channel");
+        //WaitedTask task = new WaitedTask(channel);
+        //processInstance.addWaitedTask(getId(), task);
+        //instance(task);
+        // todo:
+        if (true) {
+            processInstance.pause(getId());
+        } else {
+            resumeTask();
+        }
+        /*
+        object(new WaitedTaskChannelListener(channel) {
+            @Override
+            public void resume(Map<String, Object> vars) {
+                System.out.println("UserTask run(). done." + vars.toString());
+                System.out.println("UserTask run(). saving the variables.");
+                processInstance.getVariables().putAll(vars);
+                resumeTask();
+            }
+        }); */
+
+
     }
 
     public String getId() {
         return task.getId();
+    }
+
+    public void resumeTask() {
+        // todo this is what must happen when
+        // processInstance.getVariables().putAll(vars);
+        System.out.println("Resuming user task id " + getId());
+        instance(processInstance.executeNext(this));
+        processInstance.addCompleted(getId());
     }
 }

@@ -2,7 +2,10 @@ package org.levi.engine.db;
 
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
-import org.levi.engine.impl.identity.Permission;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+
+import java.util.List;
 
 /**
  * This is the interface to classes which handles the back end database management of Levi Engine
@@ -11,7 +14,7 @@ import org.levi.engine.impl.identity.Permission;
 public interface DBManager {
 
     /**
-     * This method saves a User to the database; if the User already exists, it updates the attributes
+     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
      * @param user The user
      */
@@ -25,29 +28,46 @@ public interface DBManager {
 
     void addUserToGroup(String userId, String groupId);
 
-    void deleteUser(String userId);        //?? Only ids or the User object?
+    void deleteUser(String userId);        //?? Only ids or the UserBean object?
 
     void deleteGroup(String groupId);
 
     void removeUserFromGroup(String userId,
-                             String groupId); //?? User& Group objects or simple the ids?
+                             String groupId); //?? UserBean& Group objects or simple the ids?
 
-    /* methods to be added
-        saveTask()
-        deleteTask()
-        saveProcess()
-        deleteProcess()
-        updateProcess()
-        updateTask()
-        getUserTaskList(String userId)
-        getGroupTaskList(String groupId)
-        getRunningProcessesList()
-        getAssigneeForTask(String taskId)
-        getActiveTasks()
-        getActiveTasks(String processId)
+    void saveTask(TaskBean task);
 
+    void deleteTask(String taskId);
 
-     */
+    void updateTask(TaskBean task);
+
+    void saveProcess(ProcessInstanceBean process);
+
+    void deleteProcess(String processId);
+
+    void updateProcess(ProcessInstanceBean process);
+
+    void saveProcessInstance(ProcessInstanceBean process);
+
+    void deleteProcessInstance(String processId);
+
+    void updateProcessInstance(ProcessInstanceBean process);
+
+    List<TaskBean> getUserTaskList(String userId);
+
+    List<TaskBean> getGroupTaskList(String groupId);
+
+    List<ProcessInstanceBean> getRunningProcessesInstancesList();
+
+    List<ProcessInstanceBean> getDeployedProcessList();
+
+    User getAssigneeForTask(String taskId);
+
+    List<TaskBean> getActiveTasks();
+
+    List<TaskBean> getUnassignedTasks();
+
+    List<TaskBean> getActiveTasks(String processId);
 
 
 }

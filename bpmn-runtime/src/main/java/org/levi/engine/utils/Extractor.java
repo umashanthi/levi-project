@@ -83,7 +83,7 @@ public final class Extractor {
 
     private static String makePath(String entryName) {
         String path;
-        path = LeviUtils.getyyyyMMddHHmmss();
+        path = "";//LeviUtils.getyyyyMMddHHmmss();
         String name = LeviUtils.trimAndReplace(entryName);
         return Constants.LAR_EXTRACT_PATH + name + "_" + path + "/";
     }

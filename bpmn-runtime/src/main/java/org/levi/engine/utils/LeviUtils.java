@@ -2,6 +2,9 @@ package org.levi.engine.utils;
 
 import org.levi.engine.LeviException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -15,7 +18,7 @@ public class LeviUtils {
     public static String trimAndReplace(String str) {
         return str == null ? "" : str
                 .trim()
-                .replaceAll(" ", "_")
+                .replaceAll(" ", "")
                 .replaceAll("-", "_")
                 .replaceAll("/", "");
     }
@@ -53,5 +56,22 @@ public class LeviUtils {
 
     public static <K, V> HashMap<K, V> newHashMap() {
         return new HashMap<K, V>();
+    }
+
+    public static int readUserInput(int nOptions) {
+        int input;
+        System.out.print("What is your option {0 through " + (nOptions - 1) + "}? ");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            input = br.read();
+            input = input - '0';
+            if (input < 0 || input > nOptions - 1) {
+                throw new IllegalArgumentException("input " + input + " is out of range");
+            }
+            return input;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
