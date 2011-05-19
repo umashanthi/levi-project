@@ -47,8 +47,6 @@ public interface DBManager {
 
     void updateProcess(ProcessInstanceBean process);
 
-    void saveProcessInstance(ProcessInstanceBean process);
-
     void deleteProcessInstance(String processId);
 
     void updateProcessInstance(ProcessInstanceBean process);

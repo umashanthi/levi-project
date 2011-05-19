@@ -1,6 +1,7 @@
 package org.levi.engine.impl.db;
 
 import org.levi.engine.db.DBManager;
+import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.identity.Group;
@@ -10,7 +11,10 @@ import java.util.List;
 
 public class H2DBManagerImpl implements DBManager {
 
-
+    HibernateDao dao;
+    public H2DBManagerImpl(){
+        dao = new HibernateDao();
+    }
     /**
      * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
@@ -51,7 +55,7 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void saveTask(TaskBean task) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.save(task);
     }
 
     public void deleteTask(String taskId) {
@@ -63,7 +67,7 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void saveProcess(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.save(process);
     }
 
     public void deleteProcess(String processId) {
@@ -71,10 +75,6 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void updateProcess(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void saveProcessInstance(ProcessInstanceBean process) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
