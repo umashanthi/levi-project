@@ -5,15 +5,15 @@ import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.identity.Group;
-import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.List;
 
-public class H2DBManagerImpl implements DBManager {
+public class DBManagerImpl implements DBManager {
 
     HibernateDao dao;
-    public H2DBManagerImpl(){
+    DBManagerImpl(){
         dao = new HibernateDao();
     }
     /**
@@ -23,36 +23,40 @@ public class H2DBManagerImpl implements DBManager {
      */
 
 
-    public void saveUser(User user) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void saveUser(UserBean user) {
+        dao.save(user);
     }
 
-    public void saveGroup(Group group) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void saveGroup(GroupBean group) {
+        dao.save(group);
     }
 
-    public User getUser(String userId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public UserBean getUser(String userId) {
+        return (UserBean)dao.getObject(UserBean.class,userId);
     }
 
-    public Group getGroup(String groupId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public GroupBean getGroup(String groupId) {
+        return (GroupBean)dao.getObject(GroupBean.class,groupId);
     }
 
     public void addUserToGroup(String userId, String groupId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
+        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
+        group.getMembers().add(user);
     }
 
     public void deleteUser(String userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.remove(UserBean.class, userId);
     }
 
     public void deleteGroup(String groupId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.remove(GroupBean.class, groupId);
     }
 
     public void removeUserFromGroup(String userId, String groupId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
+        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
+        group.getMembers().remove(user);
     }
 
     public void saveTask(TaskBean task) {
@@ -60,19 +64,19 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void deleteTask(String taskId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.remove(TaskBean.class, taskId);
     }
 
     public void updateTask(TaskBean task) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void saveProcess(DeploymentBean process) {
-        dao.save(process);
+    public void saveProcess(DeploymentBean deployedProcess) {
+        dao.save(deployedProcess);
     }
 
     public void deleteProcess(String processId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.remove(DeploymentBean.class, processId);
     }
 
     public void updateProcess(ProcessInstanceBean process) {
@@ -80,7 +84,7 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void saveProcessInstance(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.save(process);
     }
 
     public void updateProcess(DeploymentBean process) {
@@ -88,7 +92,7 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public void deleteProcessInstance(String processId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.remove(ProcessInstanceBean.class, processId);
     }
 
     public void updateProcessInstance(ProcessInstanceBean process) {
@@ -96,10 +100,12 @@ public class H2DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
+        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public List<TaskBean> getGroupTaskList(String groupId) {
+        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -111,7 +117,7 @@ public class H2DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public User getAssigneeForTask(String taskId) {
+    public UserBean getAssigneeForTask(String taskId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

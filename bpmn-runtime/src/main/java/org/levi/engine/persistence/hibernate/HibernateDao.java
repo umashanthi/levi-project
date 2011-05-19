@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.io.Serializable;
+
 /**
  * Created by IntelliJ IDEA.
  * UserBean: eranda
@@ -28,9 +30,24 @@ public class HibernateDao {
             Transaction tx = session.beginTransaction();
             session.save(hobj);
             tx.commit();
+            session.flush();
         } catch(ConstraintViolationException e){
             System.out.println("Constraint violated"); //TODO need to handle this exception
         }
+    }
+
+    public Object getObject(Class hibCls,String id){
+        Transaction tx = session.beginTransaction();
+        Object obj = session.get(hibCls,id);
+        tx.commit();
+        return obj;
+    }
+
+    public Object remove(Class hibCls,String id){
+        Transaction tx = session.beginTransaction();
+        Object obj = session.get(hibCls,id);
+        session.delete(obj);
+        return  obj;
     }
 
     public void update(){
@@ -38,7 +55,6 @@ public class HibernateDao {
     }
 
     public void close(){
-        session.flush();
         session.close();
     }
 
