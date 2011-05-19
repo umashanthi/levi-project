@@ -13,9 +13,11 @@ import java.util.List;
 public class DBManagerImpl implements DBManager {
 
     HibernateDao dao;
-    DBManagerImpl(){
-        dao = new HibernateDao();
+
+    public DBManagerImpl() {
+       dao = new HibernateDao();
     }
+
     /**
      * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
      *
@@ -131,5 +133,12 @@ public class DBManagerImpl implements DBManager {
 
     public List<TaskBean> getActiveTasks(String processId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    // given the taskId, the id of the process instance that task belongs to should be retrieved
+    // TaskBean has a processInstanceId attribute
+    // Can this be retrieved from the TaskBean table?
+    public String getProcessInstanceId(String taskId) {
+        return null;
     }
 }

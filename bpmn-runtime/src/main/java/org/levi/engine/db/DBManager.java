@@ -69,5 +69,10 @@ public interface DBManager {
 
     List<TaskBean> getActiveTasks(String processId);
 
+    // given the taskId, the id of the process instance that task belongs to should be retrieved
+    // TaskBean has a processInstanceId attribute
+    // Can this be retrieved from the TaskBean table?
+    String getProcessInstanceId(String taskId);
+
 
 }
