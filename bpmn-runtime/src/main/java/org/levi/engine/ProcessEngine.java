@@ -26,4 +26,5 @@ public interface ProcessEngine {
     void setVariables(String processId, Map<String, Object> values);
     Object getVariable(String processId, String name);
     Map<String, Object> getVariables(String processId);
+    boolean hasStartForm(String processId);
 }

@@ -99,4 +99,8 @@ public final class ExclusiveGateway extends Gateway {
                 + ", Default: " + outgoingSeqFlowSet.toStringSf(defaultSequenceFlowId)
                 + "}";
     }
+
+    public boolean hasInputForm() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

@@ -90,4 +90,9 @@ public class UserTask extends RunnableFlowNode {
         instance(processInstance.executeNext(this));
         processInstance.addCompleted(getId());
     }
+
+    // todo
+    public boolean hasInputForm() {
+        return false;
+    }
 }
