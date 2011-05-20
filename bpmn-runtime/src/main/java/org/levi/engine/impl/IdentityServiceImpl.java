@@ -4,6 +4,7 @@ import org.levi.engine.identity.Group;
 import org.levi.engine.identity.IdentityService;
 import org.levi.engine.identity.User;
 import org.levi.engine.impl.identity.Permission;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 public class IdentityServiceImpl implements IdentityService {
     /**
@@ -22,7 +23,7 @@ public class IdentityServiceImpl implements IdentityService {
      *
      * @param user the UserBean object to persist
      */
-    public void saveUser(User user) {
+    public void saveUser(UserBean user) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

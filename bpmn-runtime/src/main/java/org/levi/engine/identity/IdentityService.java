@@ -1,6 +1,7 @@
 package org.levi.engine.identity;
 
 import org.levi.engine.impl.identity.Permission;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 /**
  * This is the interface which defines the methods related to Identity and UserBean Management
@@ -23,7 +24,7 @@ public interface IdentityService {
      * @param user the UserBean object to persist
      */
 
-    void saveUser(User user);
+    void saveUser(UserBean user);
 
     /**
      * Removes a user from the persistence system

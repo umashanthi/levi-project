@@ -3,13 +3,13 @@ package org.levi.engine.impl.cmd;
 import org.levi.engine.cmd.CommandExecutor;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.IdentityService;
-import org.levi.engine.identity.User;
 import org.levi.engine.impl.identity.Permission;
 import org.levi.engine.impl.identity.UserImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 public class Test {
     public static void main(String[] args) {
-        User u = new UserImpl();
+        UserBean u = new UserBean();
         u.setLastName("afddsf");
         IS is = new IS();
         is.saveUser(u);
@@ -30,7 +30,7 @@ class IS implements IdentityService {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void saveUser(User user) {
+    public void saveUser(UserBean user) {
         new CommandExecutor().execute(new SaveUserCmd(user));
     }
 
