@@ -26,6 +26,10 @@
         <servlet-class>org.levi.web.ListProcessesServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ListTasksServlet</servlet-name>
+        <servlet-class>org.levi.web.ListTasksServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ProcessActionServlet</servlet-name>
         <servlet-class>org.levi.web.ProcessActionServlet</servlet-class>
     </servlet>
@@ -46,8 +50,8 @@
         </init-param>
     </servlet>
     <servlet>
-        <servlet-name>VelTestServlet</servlet-name>
-        <servlet-class>org.levi.web.VelTestServlet</servlet-class>
+        <servlet-name>FormGeneratorServlet</servlet-name>
+        <servlet-class>org.levi.web.FormGeneratorServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -66,6 +70,10 @@
         <url-pattern>/processes</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ListTasksServlet</servlet-name>
+        <url-pattern>/tasks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProcessActionServlet</servlet-name>
         <url-pattern>/startProcess</url-pattern>
     </servlet-mapping>
@@ -78,15 +86,15 @@
         <url-pattern>*.vm</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>VelTestServlet</servlet-name>
+        <servlet-name>FormGeneratorServlet</servlet-name>
         <url-pattern>/vel</url-pattern>
     </servlet-mapping>
 
     <jsp-config>
-    <taglib>
-    <taglib-uri>http://jakarta.apache.org/taglibs/veltag-1.0 </taglib-uri>
-    <taglib-location>/WEB-INF/velocity-view.tld</taglib-location>
-    </taglib>
+        <taglib>
+            <taglib-uri>http://jakarta.apache.org/taglibs/veltag-1.0</taglib-uri>
+            <taglib-location>/WEB-INF/velocity-view.tld</taglib-location>
+        </taglib>
     </jsp-config>
 
 </web-app>

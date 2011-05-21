@@ -1,7 +1,9 @@
 package org.levi.web;
 
 import org.levi.engine.ProcessEngine;
+import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.ProcessEngineImpl;
+import org.levi.engine.impl.db.DBManagerImpl;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -34,9 +36,10 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             } catch (Exception ignored) {
             }
             // Start Engine
-                ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
-                request.getSession().setAttribute("processEngine", engine);
-
+            ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
+            request.getSession().setAttribute("processEngine", engine);
+            DBManager dbManager = new DBManagerImpl();
+            request.getSession().setAttribute("dbManager", dbManager);
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
         }

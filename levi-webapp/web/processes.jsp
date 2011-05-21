@@ -92,7 +92,7 @@ Released : 20090303
         processForm.submit();
     }
 
-    function displayForm(formTemplate) {
+    function displayForm(processId) {
         popwidth = 600
         popheight = 600
         function getpos() {
@@ -105,7 +105,7 @@ Released : 20090303
         }
 
         getpos()
-        formWindow = window.open("vel", "", "location=0,status=0,scrollbars=1,width=600,height=600");
+        formWindow = window.open("vel?processId=" + processId, "", "location=0,status=0,scrollbars=1,width=600,height=600");
         formWindow.moveTo(leftpos, toppos);
     }
 
@@ -224,36 +224,11 @@ Released : 20090303
 
                 </td>
                 <td>
-                    <!-- test - rendering forms  -->
-                    <%
 
-                        File formFile = new File(application.getRealPath("/") + "requestForm.txt");
-                        String formTemplate = FileUtils.readFileToString(formFile, null);
-                        formTemplate = formTemplate.replace("\n", "");
-                        formTemplate = formTemplate.replace("\"", "&quot;");
-                        //formTemplate=formTemplate.replace("<", "&lt;");
-                        //formTemplate=formTemplate.replace(">", "&gt;");
-                    %>
-                    <input type="button" value="Show Form" onclick="displayForm('vel'); return false">
-                    <!--a href="vel" target="_new"><input type="button" value="Show Form"></a-->
+                    <input type="button" value="Show Form"
+                           onclick="displayForm('<%=process.toString()%>'); return false">
                 </td>
-                <%--
-                <td>
-                    <% //show whether the process is started
-                        if (request.getParameter("isProcessStarted") != null && request.getParameter("processInstanceId") != null) {
-                            String result = request.getParameter("isProcessStarted");
-                            String processInstanceId = request.getParameter("processInstanceId");
-                            if (result.equals("true") && processInstanceId.equals(process.toString())) { %>
-                    <h3>&nbsp; &nbsp; &nbsp; &nbsp;Process started successfully</h3>
-                    <% } else if (result.equals("false") && processInstanceId.equals(process.toString())) { // provide suitable error message %>
-                    <h3>Failed to start process. Try again</h3>
-                    <%
-                            }
-                        }
-                        //else no start action carried out
-                    %>
-                </td>
-                      ---%>
+
 
             </form>
         </tr>
