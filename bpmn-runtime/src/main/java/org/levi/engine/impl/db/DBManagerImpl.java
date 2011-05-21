@@ -15,7 +15,7 @@ public class DBManagerImpl implements DBManager {
     HibernateDao dao;
 
     public DBManagerImpl() {
-       dao = new HibernateDao();
+        dao = new HibernateDao();
     }
 
     /**
@@ -34,16 +34,16 @@ public class DBManagerImpl implements DBManager {
     }
 
     public UserBean getUser(String userId) {
-        return (UserBean)dao.getObject(UserBean.class,userId);
+        return (UserBean) dao.getObject(UserBean.class, userId);
     }
 
     public GroupBean getGroup(String groupId) {
-        return (GroupBean)dao.getObject(GroupBean.class,groupId);
+        return (GroupBean) dao.getObject(GroupBean.class, groupId);
     }
 
     public void addUserToGroup(String userId, String groupId) {
-        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
-        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
         group.getMembers().add(user);
     }
 
@@ -56,8 +56,8 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void removeUserFromGroup(String userId, String groupId) {
-        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
-        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
+        GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         group.getMembers().remove(user);
     }
 
@@ -102,12 +102,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
-        UserBean user = (UserBean)dao.getObject(UserBean.class,userId);
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public List<TaskBean> getGroupTaskList(String groupId) {
-        GroupBean group =  (GroupBean)dao.getObject(GroupBean.class,groupId);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -129,6 +124,10 @@ public class DBManagerImpl implements DBManager {
 
     public List<TaskBean> getUnassignedTasks() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<TaskBean> getUnassignedTasks(String groupId) {
+        return null;  // This method should return the list of tasks for this group which are unassigned
     }
 
     public List<TaskBean> getActiveTasks(String processId) {

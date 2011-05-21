@@ -55,8 +55,6 @@ public interface DBManager {
 
     List<TaskBean> getUserTaskList(String userId);
 
-    List<TaskBean> getGroupTaskList(String groupId);
-
     List<ProcessInstanceBean> getRunningProcessesInstancesList();
 
     List<DeploymentBean> getDeployedProcessList();
@@ -66,6 +64,8 @@ public interface DBManager {
     List<TaskBean> getActiveTasks();
 
     List<TaskBean> getUnassignedTasks();
+
+    List<TaskBean> getUnassignedTasks(String groupId);
 
     List<TaskBean> getActiveTasks(String processId);
 
