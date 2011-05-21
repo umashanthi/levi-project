@@ -35,6 +35,14 @@ public interface DBManager {
 
     void removeUserFromGroup(String userId, String groupId); //?? UserBean& Group objects or simple the ids?
 
+    /**
+     * Given the userId, return the list of groups the user has membership of
+     *
+     * @param userId
+     * @return
+     */
+    List<String> getGroupIds(String userId);
+
     void saveTask(TaskBean task);
 
     void deleteTask(String taskId);

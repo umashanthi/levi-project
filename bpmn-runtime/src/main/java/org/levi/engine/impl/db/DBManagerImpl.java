@@ -61,6 +61,16 @@ public class DBManagerImpl implements DBManager {
         group.getMembers().remove(user);
     }
 
+    /**
+     * Given the userId, return the list of groups the user has membership of
+     *
+     * @param userId
+     * @return
+     */
+    public List<String> getGroupIds(String userId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public void saveTask(TaskBean task) {
         dao.save(task);
     }
