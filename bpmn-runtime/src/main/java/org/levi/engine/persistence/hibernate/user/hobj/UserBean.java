@@ -1,7 +1,9 @@
 package org.levi.engine.persistence.hibernate.user.hobj;
 
-import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,7 +26,12 @@ public class UserBean extends HObject implements Serializable{
     private String lastName;
     private String userEmail;
     private List<GroupBean> userGroups = new ArrayList<GroupBean>();
-    
+    private List<TaskBean> assigned = new ArrayList<TaskBean>();
+    private List<TaskBean> owned = new ArrayList<TaskBean>();
+    private List<ProcessInstanceBean> started = new ArrayList<ProcessInstanceBean>();
+    private List<DeploymentBean> deployed = new ArrayList<DeploymentBean>();
+    private List<DeploymentBean> undeployed = new ArrayList<DeploymentBean>();
+
 
     @Id
     public String getUserId() {
@@ -75,5 +82,50 @@ public class UserBean extends HObject implements Serializable{
 
     public void setUserGroups(List<GroupBean> groups) {
         this.userGroups =groups;
+    }
+
+    @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<TaskBean> getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(List<TaskBean> assigned) {
+        this.assigned = assigned;
+    }
+
+    @OneToMany(targetEntity = TaskBean.class, mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<TaskBean> getOwned() {
+        return owned;
+    }
+
+    public void setOwned(List<TaskBean> owned) {
+        this.owned = owned;
+    }
+
+    @OneToMany(targetEntity = ProcessInstanceBean.class, mappedBy = "startUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<ProcessInstanceBean> getStarted() {
+        return started;
+    }
+
+    public void setStarted(List<ProcessInstanceBean> started) {
+        this.started = started;
+    }
+
+    @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "deployedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<DeploymentBean> getDeployed() {
+        return deployed;
+    }
+
+    public void setDeployed(List<DeploymentBean> deployed) {
+        this.deployed = deployed;
+    }
+
+    @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "undeployedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<DeploymentBean> getUndeployed() {
+        return undeployed;
+    }
+
+    public void setUndeployed(List<DeploymentBean> undeployed) {
+        this.undeployed = undeployed;
     }
 }

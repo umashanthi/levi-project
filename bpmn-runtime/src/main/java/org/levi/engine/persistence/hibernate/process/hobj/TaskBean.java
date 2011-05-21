@@ -4,15 +4,15 @@ import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Map;
 
 
 /* This class represents a single task in the process (including usertask) */
 @Entity
+@Table(name = "task")
+@SecondaryTables(value = {@SecondaryTable(name = "taskowner"),@SecondaryTable(name = "taskassignee")})
 public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
@@ -74,7 +74,8 @@ public class TaskBean extends HObject{
         this.taskDescription = taskDescription;
     }
 
-    @Transient //TODO OneToOne mapping with the User
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "owner", table = "taskowner")
     public UserBean getOwner() {
         return owner;
     }
@@ -83,7 +84,8 @@ public class TaskBean extends HObject{
         this.owner = owner;
     }
 
-    @Transient //TODO OneToOne mapping with the User
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "assignee", table = "taskassignee")
     public UserBean getAssignee() {
         return assignee;
     }

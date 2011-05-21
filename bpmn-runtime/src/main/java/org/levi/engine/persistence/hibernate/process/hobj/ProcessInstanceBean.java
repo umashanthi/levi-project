@@ -4,9 +4,7 @@ package org.levi.engine.persistence.hibernate.process.hobj;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -14,6 +12,8 @@ import java.util.Map;
 /* This class represents a Process instance  */
 
 @Entity
+@Table(name = "processinstance")
+@SecondaryTable(name = "processstarteduser")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
     private String processId;; // primary key
@@ -76,7 +76,8 @@ public class ProcessInstanceBean extends HObject {
         isRunning = running;
     }
 
-    @Transient //TODO OneToOne mapping
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "startuser", table = "processstarteduser")
     public UserBean getStartUser() {
         return startUser;
     }

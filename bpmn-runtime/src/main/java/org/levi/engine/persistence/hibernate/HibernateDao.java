@@ -32,7 +32,7 @@ public class HibernateDao {
             tx.commit();
             session.flush();
         } catch(ConstraintViolationException e){
-            System.out.println("Constraint violated"); //TODO need to handle this exception
+            System.out.println("[error] Constrained violated"); //TODO need to handle this exception
         }
     }
 

@@ -82,5 +82,7 @@ public interface DBManager {
     // Can this be retrieved from the TaskBean table?
     String getProcessInstanceId(String taskId);
 
+    TaskBean getTaskBean(String taskId);
+
 
 }

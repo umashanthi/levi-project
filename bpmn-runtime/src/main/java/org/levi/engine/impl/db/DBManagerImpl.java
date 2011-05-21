@@ -150,4 +150,8 @@ public class DBManagerImpl implements DBManager {
     public String getProcessInstanceId(String taskId) {
         return null;
     }
+
+    public TaskBean getTaskBean(String taskId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

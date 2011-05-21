@@ -45,4 +45,8 @@ public class EndEvent extends Event implements FlowNode {
     public void resumeTask() {
         System.out.println("EndEvent: resumeTask().");
     }
+
+    public boolean hasInputForm() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

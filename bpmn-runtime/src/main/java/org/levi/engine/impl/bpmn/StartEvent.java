@@ -42,10 +42,13 @@ public class StartEvent extends Event {
         resumeTask();
     }
 
-    @Override
     public void resumeTask() {
         instance(processInstance.executeNext(this));
         processInstance.addCompleted(getId());
+    }
+
+    public boolean hasInputForm() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public String toString() {
