@@ -1,10 +1,13 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CollectionOfElements;
 import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -134,7 +137,9 @@ public class TaskBean extends HObject{
         isAssigned = assigned;
     }
 
-    @Transient //TODO Map the map
+    @CollectionOfElements
+	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	@JoinTable( name="taskproperties",joinColumns={ @JoinColumn(name="id")})
     public Map<String, String> getProperties() {
         return properties;
     }
