@@ -154,4 +154,9 @@ public class DBManagerImpl implements DBManager {
     public TaskBean getTaskBean(String taskId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
+    public boolean claimUserTask(String taskId, String processInstanceId, String username) {
+        return false;
+    }
 }
