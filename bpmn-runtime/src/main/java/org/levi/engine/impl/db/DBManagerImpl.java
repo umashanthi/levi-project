@@ -113,7 +113,7 @@ public class DBManagerImpl implements DBManager {
 
     public List<TaskBean> getUserTaskList(String userId) {
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return user.getAssigned();
     }
 
     public List<ProcessInstanceBean> getRunningProcessesInstancesList() {
@@ -125,7 +125,8 @@ public class DBManagerImpl implements DBManager {
     }
 
     public UserBean getAssigneeForTask(String taskId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        return task.getAssignee();
     }
 
     public List<TaskBean> getActiveTasks() {
@@ -144,14 +145,13 @@ public class DBManagerImpl implements DBManager {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    // given the taskId, the id of the process instance that task belongs to should be retrieved
-    // TaskBean has a processInstanceId attribute
-    // Can this be retrieved from the TaskBean table?
     public String getProcessInstanceId(String taskId) {
-        return null;
+        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        return task.getProcessInstanceId();
     }
 
     public TaskBean getTaskBean(String taskId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        return task;
     }
 }

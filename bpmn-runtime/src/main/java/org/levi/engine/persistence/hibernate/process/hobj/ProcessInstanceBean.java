@@ -16,7 +16,7 @@ import java.util.Map;
 @SecondaryTable(name = "processstarteduser")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
-    private String processId;; // primary key
+    private String processId; // primary key
     private String processDefId;
     private Map<String, Object> variables;
     private ArrayList<String> runningTaskIds;

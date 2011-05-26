@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
@@ -46,6 +47,7 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(DeploymentBean.class);
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
+        config.addAnnotatedClass(EngineDataBean.class);
     	config.configure("persistance.xml");
         new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();

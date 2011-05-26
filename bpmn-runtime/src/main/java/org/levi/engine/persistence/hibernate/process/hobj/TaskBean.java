@@ -19,8 +19,8 @@ import java.util.Map;
 public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
-    private String processInstanceId;
-    private String processDefName;
+    private String processInstanceId; //TODO are these names include in the  class??
+    private String processDefName;    //TODO are these names include in the  class??
     private String taskName;
     private String taskDescription;
     private UserBean owner;
