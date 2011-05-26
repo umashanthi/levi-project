@@ -84,5 +84,7 @@ public interface DBManager {
 
     TaskBean getTaskBean(String taskId);
 
+    // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
+    boolean claimUserTask(String taskId, String processInstanceId, String username);
 
 }

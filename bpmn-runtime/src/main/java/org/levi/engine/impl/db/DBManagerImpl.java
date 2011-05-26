@@ -154,4 +154,9 @@ public class DBManagerImpl implements DBManager {
         TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
         return task;
     }
+
+    // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
+    public boolean claimUserTask(String taskId, String processInstanceId, String username) {
+        return false;
+    }
 }
