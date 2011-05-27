@@ -24,10 +24,11 @@ public class DeploymentBean extends HObject {
     private Date deploymentTime;
     private String businessArchiveName;
     private String businessArchiveLocation;
-    private ArrayList<String> businessArchiveContents;// should list all the contents eg:forms etc
+    private List<String> businessArchiveContents;// should list all the contents eg:forms etc
     private UserBean undeployedUser;
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
+    private EngineDataBean engineData;
 
     @Id
     public String getDefinitionsId() {
@@ -96,7 +97,8 @@ public class DeploymentBean extends HObject {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
-    public ArrayList<String> getBusinessArchiveContents() {
+    @Transient
+    public List<String> getBusinessArchiveContents() {
         return businessArchiveContents;
     }
 

@@ -3,6 +3,7 @@ package org.levi.engine.persistence.hibernate.process.hobj;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.levi.engine.Deployment;
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.runtime.ProcessInstance;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "enginedata")
-public class EngineDataBean {
+public class EngineDataBean extends HObject {
 
     private String id;
     private Map<String, Deployment> deployments;
@@ -40,7 +41,8 @@ public class EngineDataBean {
         this.id = id;
     }
 
-    @Transient
+    @OneToMany(targetEntity = DeploymentBean.class)
+	@JoinTable( name="deploymentdata",joinColumns={ @JoinColumn(name="id")})
     public Map<String, Deployment> getDeployments() {
         return deployments;
     }
@@ -82,7 +84,8 @@ public class EngineDataBean {
         this.nRunningProcesses = nRunningProcesses;
     }
 
-    @Transient
+    @OneToMany(targetEntity = ProcessInstanceBean.class)
+	@JoinTable( name="processinstancedata",joinColumns={ @JoinColumn(name="id")})
     public Map<String, ProcessInstance> getRunningProcesses() {
         return runningProcesses;
     }
@@ -91,7 +94,8 @@ public class EngineDataBean {
         this.runningProcesses = runningProcesses;
     }
 
-    @Transient
+    @OneToMany(targetEntity = ProcessInstanceBean.class)
+	@JoinTable( name="stoppedprocessinstancedata",joinColumns={ @JoinColumn(name="id")})
     public Map<String, ProcessInstance> getStoppedProcesses() {
         return stoppedProcesses;
     }
@@ -100,7 +104,8 @@ public class EngineDataBean {
         this.stoppedProcesses = stoppedProcesses;
     }
 
-    @Transient
+    @OneToMany(targetEntity = ProcessInstanceBean.class)
+	@JoinTable( name="pausedprocessinstancedata",joinColumns={ @JoinColumn(name="id")})
     public Map<String, ProcessInstance> getPausedProcesses() {
         return pausedProcesses;
     }

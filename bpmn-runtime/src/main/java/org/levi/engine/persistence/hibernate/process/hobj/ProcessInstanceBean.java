@@ -7,6 +7,7 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /* This class represents a Process instance  */
@@ -16,11 +17,11 @@ import java.util.Map;
 @SecondaryTable(name = "processstarteduser")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
-    private String processId; // primary key
-    private String processDefId;
+    private String processId;
+    private String processDefId;  //TODO DeploymentBean instead processDefId
     private Map<String, Object> variables;
-    private ArrayList<String> runningTaskIds;
-    private ArrayList<String> completedTaskIds;
+    private List<String> runningTaskIds;    //TODO TaskBean instead taskId
+    private List<String> completedTaskIds;   //TODO TaskBean instead taskId
     private Boolean isRunning;
     private Date startTime;
     private String startEventId;
@@ -43,7 +44,7 @@ public class ProcessInstanceBean extends HObject {
         this.processDefId = processDefId;
     }
 
-    @Transient //TODO
+    @Transient //TODO Object
     public Map<String, Object> getVariables() {
         return variables;
     }
@@ -52,7 +53,8 @@ public class ProcessInstanceBean extends HObject {
         this.variables = variables;
     }
 
-    public ArrayList<String> getRunningTaskIds() {
+    @Transient
+    public List<String> getRunningTaskIds() {
         return runningTaskIds;
     }
 
@@ -60,7 +62,8 @@ public class ProcessInstanceBean extends HObject {
         this.runningTaskIds = runningTaskIds;
     }
 
-    public ArrayList<String> getCompletedTaskIds() {
+    @Transient
+    public List<String> getCompletedTaskIds() {
         return completedTaskIds;
     }
 

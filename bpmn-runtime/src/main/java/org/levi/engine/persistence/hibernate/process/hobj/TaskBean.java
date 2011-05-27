@@ -2,7 +2,6 @@ package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
-import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
