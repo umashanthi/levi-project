@@ -57,8 +57,6 @@ public class ListTasksServlet extends HttpServlet {
                 request.getSession().setAttribute("userTaskList", userTaskList);
                 response.sendRedirect("tasks.jsp");
             }
-
-
         } catch (Exception ex) {
             response.getWriter().write("exception");
         }

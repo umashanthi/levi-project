@@ -51,7 +51,12 @@ Released : 20090303
         formWindow = window.open("vel?taskId=" + taskId + "&formName=" + formName + "&formPath=" + formPath, "", "location=0,status=0,scrollbars=1,width=600,height=600");
         formWindow.moveTo(leftpos, toppos);
     }
-
+    function claimTask(username, taskId, processInstanceId) {
+        var form = document.claimTaskForm;
+        form.method = "post";
+        form.action = "taskAction?action=claimTask&taskId=" + taskId + "&username=" + username + "&processInstanceId=" + processInstanceId;
+        form.submit();
+    }
 </script>
 <!-- start header -->
 <div id="header">
@@ -90,44 +95,52 @@ Released : 20090303
             if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
                 // display unassigned tasks
                 assert request.getSession().getAttribute("unassignedTasks") != null;
-                List<TaskBean> userTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
-                for (TaskBean task : userTaskList) { %>
+                List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
+                if (unassignedTaskList.size() > 0) {
+                    for (TaskBean task : unassignedTaskList) { %>
         <tr>
-            <form action="" method="post">
+            <form name="claimTaskForm" action="" method="post">
                 <td>
                     <%=task.getTaskName()%>
                 </td>
-                <
+                <td>
+                    <input type="button" value="Claim Task"
+                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=task.getTaskId()%>','<%=task.getProcessInstanceId()%>');return false">
+                </td>
             </form>
         </tr>
         <%
+                }
             }
         } else {
             // display tasks for this user
             assert request.getSession().getAttribute("userTaskList") != null;
             List<TaskBean> userTaskList = (List<TaskBean>) request.getSession().getAttribute("userTaskList");
-            for (TaskBean task : userTaskList) { %>
+            assert userTaskList != null;
+            if (userTaskList.size() > 0) {
+                for (TaskBean task : userTaskList) { %>
         <tr>
-            <form action="" method="post">
-                <td>
-                    <%=task.getTaskName()%>
-                </td>
-                <td>
-                    <% if (task.isHasUserForm()) {
-                        String taskId = task.getTaskId();
-                        String taskFormName = task.getFormName();
-                        String taskFromPath = task.getFromPath(); %>
+            <%--<form action="" method="post">--%>
+            <td>
+                <%=task.getTaskName()%>
+            </td>
+            <td>
+                <% if (task.isHasUserForm()) {
+                    String taskId = task.getTaskId();
+                    String taskFormName = task.getFormName();
+                    String taskFromPath = task.getFromPath(); %>
 
-                    <input type="button" value="Start Form"
-                           onclick="displayForm('<%=taskId%>','<%=taskFormName%>','<%=taskFromPath%>'); return false">
+                <input type="button" value="Start Form"
+                       onclick="displayForm('<%=taskId%>','<%=taskFormName%>','<%=taskFromPath%>'); return false">
 
-                    <%} else {%>
-                    <input type="button" value="Start Task" onclick="">
-                    <%}%>
-                </td>
-            </form>
+                <%} else {%>
+                <input type="button" value="Start Task" onclick="">
+                <%}%>
+            </td>
+            <%--</form>--%>
         </tr>
         <% }
+        }
         }
         } else {
 
