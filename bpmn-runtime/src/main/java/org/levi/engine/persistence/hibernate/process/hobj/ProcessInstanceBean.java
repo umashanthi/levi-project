@@ -29,6 +29,7 @@ public class ProcessInstanceBean extends HObject {
     private Date startTime;
     private String startEventId;
     private String endEventId;
+    private List<TaskBean> tasks;
 
     @Id
     public String getProcessId() {
@@ -40,7 +41,7 @@ public class ProcessInstanceBean extends HObject {
     }
 
 
-    @Transient //TODO
+    @OneToOne(targetEntity = DeploymentBean.class)
     public DeploymentBean getDeployedProcess() {
         return deployedProcess;
     }
@@ -77,7 +78,9 @@ public class ProcessInstanceBean extends HObject {
         this.runningTaskIds = runningTaskIds;
     }
     */
-    @Transient //TODO
+
+    @OneToMany(targetEntity = TaskBean.class)
+	@JoinTable( name="runningtasks",joinColumns={ @JoinColumn(name="processId")})
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
     }
@@ -97,7 +100,8 @@ public class ProcessInstanceBean extends HObject {
     }
     */
 
-    @Transient //TODO
+    @OneToMany(targetEntity = TaskBean.class)
+	@JoinTable( name="completedtasks",joinColumns={ @JoinColumn(name="processId")})
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
     }
@@ -148,4 +152,12 @@ public class ProcessInstanceBean extends HObject {
         this.endEventId = endEventId;
     }
 
+    @OneToMany(targetEntity = TaskBean.class, mappedBy = "processeInstance", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<TaskBean> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskBean> tasks) {
+        this.tasks = tasks;
+    }
 }

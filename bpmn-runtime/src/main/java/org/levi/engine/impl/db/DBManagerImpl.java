@@ -147,7 +147,7 @@ public class DBManagerImpl implements DBManager {
 
     public String getProcessInstanceId(String taskId) {
         TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
-        return task.getProcessInstanceId();
+        return task.getProcesseInstance().getProcessId();
     }
 
     public TaskBean getTaskBean(String taskId) {

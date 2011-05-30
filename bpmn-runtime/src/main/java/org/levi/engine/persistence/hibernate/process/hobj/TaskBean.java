@@ -19,6 +19,7 @@ public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
     //private String processInstanceId;
+    private ProcessInstanceBean processeInstance;
     //private String processDefName;
     private String taskName;
     private String taskDescription;
@@ -61,6 +62,16 @@ public class TaskBean extends HObject{
         this.processInstanceId = processInstanceId;
     }
     */
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "processinstance", table = "taskprocessinstance")
+    public ProcessInstanceBean getProcesseInstance() {
+        return processeInstance;
+    }
+
+    public void setProcesseInstance(ProcessInstanceBean processeInstance) {
+        this.processeInstance = processeInstance;
+    }
 
     public String getTaskName() {
         return taskName;
