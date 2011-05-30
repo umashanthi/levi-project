@@ -125,7 +125,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public UserBean getAssigneeForTask(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
         return task.getAssignee();
     }
 
@@ -151,7 +151,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public TaskBean getTaskBean(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
         return task;
     }
 

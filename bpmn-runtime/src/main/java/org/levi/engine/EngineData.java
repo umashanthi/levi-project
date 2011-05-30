@@ -1,5 +1,9 @@
 package org.levi.engine;
 
+import org.hibernate.Hibernate;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.LeviUtils;
 
@@ -7,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +25,14 @@ public class EngineData implements Serializable {
     private int nDeployments;
     private transient List<String> deploymentPIds;
     private int nDeploymentPIds;
-    private transient Map<String, ProcessInstance>  runningProcesses;
+    private transient Map<String, ProcessInstance> runningProcesses;
     private int nRunningProcesses;
     private transient Map<String, ProcessInstance> stoppedProcesses;
     private transient Map<String, ProcessInstance> pausedProcesses;
     private transient List<String> runningProcessIds;
     private static final int DEFAULT_SIZE = 25;
 
-    public EngineData() {   
+    public EngineData() {
         nDeployments = 0;
         nDeploymentPIds = 0;
         nRunningProcesses = 0;
@@ -64,7 +69,15 @@ public class EngineData implements Serializable {
     }
 
     public List<String> getDeploymentIds() {
-        return deploymentPIds;
+        HibernateDao dao = new HibernateDao();
+        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
+        List<String> deploymentIds = new ArrayList<String>();
+        for (String id : deployedProcesses.keySet()) {
+            deploymentIds.add(((DeploymentBean) deployedProcesses.get(id)).getDefinitionsId());
+        }
+        //return deploymentPIds;
+        return deploymentIds;
     }
 
     public boolean removeDeployment(Deployment d) {
@@ -86,8 +99,8 @@ public class EngineData implements Serializable {
         }
         return false;
     }
-    
-    public void setRunningProcesses(Map<String, ProcessInstance>  runningProcesses) {
+
+    public void setRunningProcesses(Map<String, ProcessInstance> runningProcesses) {
         assert runningProcesses != null;
         this.runningProcesses = runningProcesses;
     }
@@ -110,10 +123,10 @@ public class EngineData implements Serializable {
     }
 
     private void writeObject(ObjectOutputStream s)
-    	throws IOException {
+            throws IOException {
         nDeployments = deployments.size();
         nDeploymentPIds = deploymentPIds.size();
-    	s.defaultWriteObject();
+        s.defaultWriteObject();
         assert nDeploymentPIds == nDeployments;
         for (int i = 0; i < nDeploymentPIds; ++i) {
             Deployment d = deployments.get(deploymentPIds.get(i));
@@ -126,16 +139,16 @@ public class EngineData implements Serializable {
     }
 
     private void readObject(ObjectInputStream s)
-    	throws IOException, ClassNotFoundException {
-    	s.defaultReadObject(); // read the non transient fields
+            throws IOException, ClassNotFoundException {
+        s.defaultReadObject(); // read the non transient fields
         // TODO;
         init(nDeploymentPIds);
         for (int i = 0; i < nDeploymentPIds; ++i) {
-            String processId = (String)s.readObject();
-            String omPath = (String)s.readObject();
-            String diagramPath = (String)s.readObject();
-            String extractPath = (String)s.readObject();
-            Date date = (Date)s.readObject();
+            String processId = (String) s.readObject();
+            String omPath = (String) s.readObject();
+            String diagramPath = (String) s.readObject();
+            String extractPath = (String) s.readObject();
+            Date date = (Date) s.readObject();
             Deployment d = new Deployment(processId, omPath, diagramPath, extractPath, date);
             addDeployment(d);
         }
