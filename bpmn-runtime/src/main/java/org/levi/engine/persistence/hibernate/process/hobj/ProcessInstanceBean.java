@@ -18,10 +18,13 @@ import java.util.Map;
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
     private String processId;
-    private String processDefId;  //TODO DeploymentBean instead processDefId
+    //private String processDefId;
+    private DeploymentBean deployedProcess;
     private Map<String, Object> variables;
-    private List<String> runningTaskIds;    //TODO TaskBean instead taskId
-    private List<String> completedTaskIds;   //TODO TaskBean instead taskId
+    //private List<String> runningTaskIds;
+    private Map<String, TaskBean> runningTasks;
+    //private List<String> completedTaskIds;
+    private Map<String, TaskBean> completedTasks;
     private Boolean isRunning;
     private Date startTime;
     private String startEventId;
@@ -36,6 +39,17 @@ public class ProcessInstanceBean extends HObject {
         this.processId = processId;
     }
 
+
+    @Transient //TODO
+    public DeploymentBean getDeployedProcess() {
+        return deployedProcess;
+    }
+
+    public void setDeployedProcess(DeploymentBean deployedProcess) {
+        this.deployedProcess = deployedProcess;
+    }
+
+    /*
     public String getProcessDefId() {
         return processDefId;
     }
@@ -43,8 +57,9 @@ public class ProcessInstanceBean extends HObject {
     public void setProcessDefId(String processDefId) {
         this.processDefId = processDefId;
     }
+    */
 
-    @Transient //TODO Object
+    @Transient //TODO Object (use a wrapper class)
     public Map<String, Object> getVariables() {
         return variables;
     }
@@ -53,7 +68,7 @@ public class ProcessInstanceBean extends HObject {
         this.variables = variables;
     }
 
-    @Transient
+    /*
     public List<String> getRunningTaskIds() {
         return runningTaskIds;
     }
@@ -61,7 +76,17 @@ public class ProcessInstanceBean extends HObject {
     public void setRunningTaskIds(ArrayList<String> runningTaskIds) {
         this.runningTaskIds = runningTaskIds;
     }
+    */
+    @Transient //TODO
+    public Map<String, TaskBean> getRunningTasks() {
+        return runningTasks;
+    }
 
+    public void setRunningTasks(Map<String, TaskBean> runningTasks) {
+        this.runningTasks = runningTasks;
+    }
+
+    /*
     @Transient
     public List<String> getCompletedTaskIds() {
         return completedTaskIds;
@@ -69,6 +94,16 @@ public class ProcessInstanceBean extends HObject {
 
     public void setCompletedTaskIds(ArrayList<String> completedTaskIds) {
         this.completedTaskIds = completedTaskIds;
+    }
+    */
+
+    @Transient //TODO
+    public Map<String, TaskBean> getCompletedTasks() {
+        return completedTasks;
+    }
+
+    public void setCompletedTasks(Map<String, TaskBean> completedTasks) {
+        this.completedTasks = completedTasks;
     }
 
     public Boolean getRunning() {

@@ -18,8 +18,8 @@ import java.util.Map;
 public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
-    private String processInstanceId; //TODO are these names include in the  class??
-    private String processDefName;    //TODO are these names include in the  class??
+    //private String processInstanceId;
+    //private String processDefName;
     private String taskName;
     private String taskDescription;
     private UserBean owner;
@@ -52,6 +52,7 @@ public class TaskBean extends HObject{
         this.taskId = taskId;
     }
 
+    /*
     public String getProcessInstanceId() {
         return processInstanceId;
     }
@@ -59,6 +60,7 @@ public class TaskBean extends HObject{
     public void setProcessInstanceId(String processInstanceId) {
         this.processInstanceId = processInstanceId;
     }
+    */
 
     public String getTaskName() {
         return taskName;
@@ -112,6 +114,7 @@ public class TaskBean extends HObject{
         this.endTime = endTime;
     }
 
+    /*
     public String getProcessDefName() {
         return processDefName;
     }
@@ -119,6 +122,7 @@ public class TaskBean extends HObject{
     public void setProcessDefName(String processDefName) {
         this.processDefName = processDefName;
     }
+    */
 
     public boolean isActive() {
         return isActive;

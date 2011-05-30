@@ -1,5 +1,7 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CollectionOfElements;
 import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -28,7 +30,6 @@ public class DeploymentBean extends HObject {
     private UserBean undeployedUser;
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
-    private EngineDataBean engineData;
 
     @Id
     public String getDefinitionsId() {
@@ -97,7 +98,9 @@ public class DeploymentBean extends HObject {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
-    @Transient
+    @CollectionOfElements
+	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	@JoinTable( name="businessarchivecontents",joinColumns={ @JoinColumn(name="definitionsId")})
     public List<String> getBusinessArchiveContents() {
         return businessArchiveContents;
     }
