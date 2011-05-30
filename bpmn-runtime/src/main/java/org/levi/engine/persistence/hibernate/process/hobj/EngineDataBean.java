@@ -59,7 +59,9 @@ public class EngineDataBean extends HObject {
         this.nDeployments = nDeployments;
     }
 
-    @Transient
+    @CollectionOfElements
+	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	@JoinTable( name="deploymentpids",joinColumns={ @JoinColumn(name="id")})
     public List<String> getDeploymentPIds() {
         return deploymentPIds;
     }
