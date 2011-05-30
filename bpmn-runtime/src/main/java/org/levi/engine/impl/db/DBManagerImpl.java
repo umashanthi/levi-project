@@ -125,7 +125,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public UserBean getAssigneeForTask(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
         return task.getAssignee();
     }
 
@@ -146,12 +146,13 @@ public class DBManagerImpl implements DBManager {
     }
 
     public String getProcessInstanceId(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
-        return task.getProcessInstanceId();
+        //TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        // return task.getProcessInstanceId();
+        return "";
     }
 
     public TaskBean getTaskBean(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
         return task;
     }
 

@@ -7,6 +7,7 @@ import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.runtime.ProcessInstance;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class EngineDataBean extends HObject {
     //private List<String> deploymentPIds;
     private Map<String, DeploymentBean> deployedProcesses;
     //private int nDeploymentPIds;
-    private Map<String, ProcessInstanceBean>  runningProcesses;
+    private Map<String, ProcessInstanceBean> runningProcesses;
     //private int nRunningProcesses;
     private Map<String, ProcessInstanceBean> stoppedProcesses;
     private Map<String, ProcessInstanceBean> pausedProcesses;
@@ -43,7 +44,7 @@ public class EngineDataBean extends HObject {
     }
 
     @OneToMany(targetEntity = DeploymentBean.class)
-	@JoinTable( name="deploymentdata",joinColumns={ @JoinColumn(name="id")})
+    @JoinTable(name = "deploymentdata", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, Deployment> getDeployments() {
         return deployments;
     }
@@ -76,7 +77,7 @@ public class EngineDataBean extends HObject {
      */
 
     @OneToMany(targetEntity = DeploymentBean.class)
-	@JoinTable( name="deployedprocesses",joinColumns={ @JoinColumn(name="id")})
+    @JoinTable(name = "deployedprocesses", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, DeploymentBean> getDeployedProcesses() {
         return deployedProcesses;
     }
@@ -106,7 +107,7 @@ public class EngineDataBean extends HObject {
     */
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-	@JoinTable( name="processinstancedata",joinColumns={ @JoinColumn(name="id")})
+    @JoinTable(name = "processinstancedata", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getRunningProcesses() {
         return runningProcesses;
     }
@@ -116,7 +117,7 @@ public class EngineDataBean extends HObject {
     }
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-	@JoinTable( name="stoppedprocessinstancedata",joinColumns={ @JoinColumn(name="id")})
+    @JoinTable(name = "stoppedprocessinstancedata", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getStoppedProcesses() {
         return stoppedProcesses;
     }
@@ -126,7 +127,7 @@ public class EngineDataBean extends HObject {
     }
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-	@JoinTable( name="pausedprocessinstancedata",joinColumns={ @JoinColumn(name="id")})
+    @JoinTable(name = "pausedprocessinstancedata", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getPausedProcesses() {
         return pausedProcesses;
     }
@@ -144,4 +145,11 @@ public class EngineDataBean extends HObject {
         this.runningProcessIds = runningProcessIds;
     }
     */
+
+    public void addDeployment(DeploymentBean deploymentBean) {
+        if (deployedProcesses == null)
+            deployedProcesses = new HashMap<String, DeploymentBean>();
+
+        deployedProcesses.put(deploymentBean.getDefinitionsId(), deploymentBean);
+    }
 }

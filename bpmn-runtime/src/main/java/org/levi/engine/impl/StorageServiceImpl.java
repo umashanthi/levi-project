@@ -4,6 +4,7 @@ import org.levi.engine.*;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.LeviUtils;
@@ -58,17 +59,27 @@ public class StorageServiceImpl implements StorageService {
         if (d == null) {
             throw new LeviException("Null Deployment. Deployment failed.");
         }
-        DeploymentBean deploymentBean = new DeploymentBean();
-        deploymentBean.setDefinitionsId(d.getDefinitionsId());
-        deploymentBean.setExtractPath(d.getExtractPath());
-        deploymentBean.setProcessDefinitionPath(d.getProcessDefinitionPath());
-        deploymentBean.setDiagramPath(d.getDiagramPath());
-        deploymentBean.setDeploymentTime(d.getDate());
-        HibernateDao dao = new HibernateDao();
-        dao.save(deploymentBean);
+        persistDeployment(d);
         engineData.addDeployment(d);
         System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return d;
+    }
+
+    private void persistDeployment(Deployment deployment) {
+        //Converting to DeploymentBean
+        DeploymentBean deploymentBean = new DeploymentBean();
+        deploymentBean.setDefinitionsId(deployment.getDefinitionsId());
+        deploymentBean.setExtractPath(deployment.getExtractPath());
+        deploymentBean.setProcessDefinitionPath(deployment.getProcessDefinitionPath());
+        deploymentBean.setDiagramPath(deployment.getDiagramPath());
+        deploymentBean.setDeploymentTime(deployment.getDate());
+        EngineDataBean engineDataBean = new EngineDataBean();
+        engineDataBean.setId("1");
+        engineDataBean.set_dateCreated(new Date());
+        engineDataBean.addDeployment(deploymentBean);
+        HibernateDao dao = new HibernateDao();
+        dao.save(deploymentBean);
+        dao.save(engineDataBean);
     }
 
     public void undeploy(String id) throws IOException {
