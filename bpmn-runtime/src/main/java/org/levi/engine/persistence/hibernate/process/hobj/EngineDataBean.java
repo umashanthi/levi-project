@@ -136,9 +136,9 @@ public class EngineDataBean extends HObject {
     */
 
     public void addDeployment(DeploymentBean deploymentBean) {
-        if (deployedProcesses == null)
+        if (deployedProcesses == null){
             deployedProcesses = new HashMap<String, DeploymentBean>();
-
+        }
         deployedProcesses.put(deploymentBean.getDefinitionsId(), deploymentBean);
     }
 }

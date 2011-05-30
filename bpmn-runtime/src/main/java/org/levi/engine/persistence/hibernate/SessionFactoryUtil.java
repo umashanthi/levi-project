@@ -45,8 +45,6 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
         config.addAnnotatedClass(EngineDataBean.class);
-        config.addAnnotatedClass(RuntimeServiceBean.class);
-        config.addAnnotatedClass(ProcessEngineBean.class);
     	config.configure("persistance.xml");
         new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();

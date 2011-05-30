@@ -14,7 +14,7 @@ import java.util.Map;
 /* This class represents a single task in the process (including usertask) */
 @Entity
 @Table(name = "task")
-@SecondaryTables(value = {@SecondaryTable(name = "taskowner"),@SecondaryTable(name = "taskassignee")})
+@SecondaryTables(value = {@SecondaryTable(name = "taskowner"),@SecondaryTable(name = "taskassignee"),@SecondaryTable(name = "taskprocessinstance")})
 public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
