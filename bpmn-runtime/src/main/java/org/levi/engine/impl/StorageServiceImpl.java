@@ -2,6 +2,8 @@ package org.levi.engine.impl;
 
 import org.levi.engine.*;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.LeviUtils;
@@ -56,6 +58,14 @@ public class StorageServiceImpl implements StorageService {
         if (d == null) {
             throw new LeviException("Null Deployment. Deployment failed.");
         }
+        DeploymentBean deploymentBean = new DeploymentBean();
+        deploymentBean.setDefinitionsId(d.getDefinitionsId());
+        deploymentBean.setExtractPath(d.getExtractPath());
+        deploymentBean.setProcessDefinitionPath(d.getProcessDefinitionPath());
+        deploymentBean.setDiagramPath(d.getDiagramPath());
+        deploymentBean.setDeploymentTime(d.getDate());
+        HibernateDao dao = new HibernateDao();
+        dao.save(deploymentBean);
         engineData.addDeployment(d);
         System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return d;
