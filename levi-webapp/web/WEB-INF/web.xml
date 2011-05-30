@@ -53,6 +53,10 @@
         <servlet-name>FormGeneratorServlet</servlet-name>
         <servlet-class>org.levi.web.FormGeneratorServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TaskActionServlet</servlet-name>
+        <servlet-class>org.levi.web.TaskActionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -89,7 +93,10 @@
         <servlet-name>FormGeneratorServlet</servlet-name>
         <url-pattern>/vel</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>TaskActionServlet</servlet-name>
+        <url-pattern>/taskAction</url-pattern>
+    </servlet-mapping>
     <jsp-config>
         <taglib>
             <taglib-uri>http://jakarta.apache.org/taglibs/veltag-1.0</taglib-uri>
