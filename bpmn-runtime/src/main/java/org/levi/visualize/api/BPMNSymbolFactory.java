@@ -35,7 +35,7 @@ public class BPMNSymbolFactory {
     * @param id Unique id of the event
     */
     public void endEvent(String name, String id) {
-        gv.addln(id+" [shape=doublecircle,fixedsize=true,width=.5, height=.5, label = \""+name+"\"];");
+        gv.addln(id+" [shape=doublecircle,fixedsize=true,width=.5, style=bold, height=.5, label = \""+name+"\"];");
     }
 
     /**
