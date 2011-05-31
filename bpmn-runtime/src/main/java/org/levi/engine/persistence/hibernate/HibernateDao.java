@@ -47,11 +47,15 @@ public class HibernateDao {
         Transaction tx = session.beginTransaction();
         Object obj = session.get(hibCls,id);
         session.delete(obj);
+        tx.commit();
         return  obj;
     }
 
-    public void update(){
-        //TODO update data
+    public void update(HObject hobj){
+        //TODO update without an existing object cause exception
+        Transaction tx = session.beginTransaction();
+        session.update(hobj);
+        tx.commit();
     }
 
     public void close(){
