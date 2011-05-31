@@ -8,6 +8,7 @@ import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.impl.bpmn.FlowNodeFactory;
 import org.levi.engine.impl.bpmn.WaitedTask;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
+import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
@@ -49,6 +50,12 @@ public class ProcessInstance extends BPMNJacobRunnable {
         setIsRunning(false);
         hasStartForm = false;
     }
+
+    private void init(){
+        //TODO
+        HibernateDao dao = new HibernateDao();
+    }
+
     // this is used by the ProcessInstanceManager class
     public static class Builder {
         private ProcessDefinition processDefinition;
