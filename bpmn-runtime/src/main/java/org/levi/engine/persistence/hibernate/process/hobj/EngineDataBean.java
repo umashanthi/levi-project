@@ -65,7 +65,7 @@ public class EngineDataBean extends HObject {
     }
      */
 
-    @OneToMany(targetEntity = DeploymentBean.class)
+    @OneToMany(targetEntity = DeploymentBean.class, fetch = FetchType.EAGER)
     @JoinTable(name = "deployedprocesses", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, DeploymentBean> getDeployedProcesses() {
         return deployedProcesses;
@@ -136,7 +136,7 @@ public class EngineDataBean extends HObject {
     */
 
     public void addDeployment(DeploymentBean deploymentBean) {
-        if (deployedProcesses == null){
+        if (deployedProcesses == null) {
             deployedProcesses = new HashMap<String, DeploymentBean>();
         }
         deployedProcesses.put(deploymentBean.getDefinitionsId(), deploymentBean);

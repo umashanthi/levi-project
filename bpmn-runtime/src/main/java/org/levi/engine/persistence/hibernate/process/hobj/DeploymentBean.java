@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "deployment")
-@SecondaryTables(value = {@SecondaryTable(name = "processdeployeduser"),@SecondaryTable(name = "processundeployeduser")})
+@SecondaryTables(value = {@SecondaryTable(name = "processdeployeduser"), @SecondaryTable(name = "processundeployeduser")})
 public class DeploymentBean extends HObject {
     private String definitionsId;
     private String extractPath;
@@ -26,7 +26,7 @@ public class DeploymentBean extends HObject {
     private Date deploymentTime;
     private String businessArchiveName;
     private String businessArchiveLocation;
-    private List<String> businessArchiveContents;// should list all the contents eg:forms etc
+    // private List<String> businessArchiveContents;// should list all the contents eg:forms etc
     private UserBean undeployedUser;
     private Date undeployedTime;
     private boolean isUndeployed; // i.e. undeployed
@@ -98,16 +98,16 @@ public class DeploymentBean extends HObject {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
-    @CollectionOfElements
-	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinTable( name="businessarchivecontents",joinColumns={ @JoinColumn(name="definitionsId")})
+    /* @CollectionOfElements
+    @Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+    @JoinTable( name="businessarchivecontents",joinColumns={ @JoinColumn(name="definitionsId")})
     public List<String> getBusinessArchiveContents() {
         return businessArchiveContents;
     }
 
     public void setBusinessArchiveContents(ArrayList<String> businessArchiveContents) {
         this.businessArchiveContents = businessArchiveContents;
-    }
+    }*/
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "undeployeduser", table = "processundeployeduser")

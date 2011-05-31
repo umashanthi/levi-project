@@ -3,6 +3,8 @@
 <%@ page import="org.levi.engine.ProcessEngine" %>
 <%@ page import="java.io.File" %>
 <%@ page import="org.apache.commons.io.FileUtils" %>
+<%@ page import="org.levi.engine.Deployment" %>
+<%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
 
 
 <%--
@@ -157,6 +159,7 @@ Released : 20090303
     <div><br></div>
     <%
         List<String> processesList = (List<String>) session.getAttribute("processList");
+        List<DeploymentBean> deployments = (List<DeploymentBean>) session.getAttribute("deployments");
 
     %>
 
@@ -171,11 +174,11 @@ Released : 20090303
             </td>
         </tr>
 
-        <%for (String process : processesList) { %>
+        <%for (DeploymentBean process : deployments) { %>
         <tr>
             <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">
                 <td>
-                    <%=process.toString()%>
+                    <%=process.getDefinitionsId()%>
                 </td>
                 <td>
                     <%
@@ -216,7 +219,7 @@ Released : 20090303
                 </td>
                 <td>
                     <% ProcessEngine engine = (ProcessEngine) session.getAttribute("processEngine");
-                        String diagramPath = engine.getDiagramPath(process.toString());
+                        String diagramPath = process.getDiagramPath();//engine.getDiagramPath(process.toString());
                     %>
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
                                                                     value="Show Process Diagram"
@@ -226,7 +229,7 @@ Released : 20090303
                 <td>
 
                     <input type="button" value="Show Form"
-                           onclick="displayForm('<%=process.toString()%>'); return false">
+                           onclick="displayForm('<%=process.getDefinitionsId()%>'); return false">
                 </td>
 
 
