@@ -23,7 +23,7 @@ public class ScriptTaskTest {
         System.out.println("HelloWorld-----------------------");
         ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
         String id = engine.deploy(Constants.LAR_PATH + "HelloWorldScriptTask.lar");
-        engine.startProcess(id, null);
+        engine.startProcess(id, null, null);
         engine.undeploy(id);
         engine.stop();
     }
@@ -33,10 +33,10 @@ public class ScriptTaskTest {
         ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
         String id = engine.deploy(Constants.LAR_PATH + "ScriptTaskTest2.lar");
         Map<String, Object> variables = LeviUtils.newHashMap(2);
-        variables.put("inputArray", new int[] {1, 2, 3, 4, 5});
+        variables.put("inputArray", new int[]{1, 2, 3, 4, 5});
         variables.put("result", 0);
-        
-        engine.startProcess(id, variables);
+
+        engine.startProcess(id, variables, null);
         System.out.println("result: " + variables.get("result"));
         System.out.println("printString: " + variables.get("printString"));
         engine.undeploy(id);

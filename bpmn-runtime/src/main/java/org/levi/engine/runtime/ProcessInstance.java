@@ -31,6 +31,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private List<String> pauseSignals;
     private List<String> resumeSignals;
     private boolean hasStartForm;
+    private String startUserId;
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
@@ -51,9 +52,17 @@ public class ProcessInstance extends BPMNJacobRunnable {
         hasStartForm = false;
     }
 
-    private void init(){
+    private void init() {
         //TODO
         HibernateDao dao = new HibernateDao();
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
     }
 
     // this is used by the ProcessInstanceManager class
@@ -68,26 +77,32 @@ public class ProcessInstance extends BPMNJacobRunnable {
         public Builder(ProcessDefinition processDefinition) {
             this.processDefinition = processDefinition;
         }
+
         public Builder variables(Map<String, Object> variables) {
             this.variables = variables;
             return this;
         }
+
         public Builder waitedTasks(Map<String, WaitedTask> waitedTasks) {
             this.waitedTasks = waitedTasks;
             return this;
         }
+
         public Builder runningIds(ArrayList<String> ids) {
             runningElemIds = ids;
             return this;
         }
+
         public Builder completedIds(ArrayList<String> ids) {
             completedElemIds = ids;
             return this;
         }
+
         public Builder processId(String id) {
             processId = id;
             return this;
         }
+
         public ProcessInstance build() {
             return new ProcessInstance(this);
         }
@@ -121,7 +136,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
         return processDefId;
     }
-    
+
     public void execute() {
         soup = new ExecutionQueueImpl(null);
         vpu = new JacobVPU();
@@ -195,6 +210,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public ProcessDefinition getObjectModel() {
         return processDefinition;
     }
+
     // TODO
     public void continueUserTask(String userTaskId, Map<String, Object> variables) {
         if (userTaskId == null) {
@@ -213,7 +229,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public void addRunning(String id) {
         synchronized (runningTaskIds) {
             if (runningTaskIds.contains(id)) {
-                throw new LeviException("Running processId is already added.") ;
+                throw new LeviException("Running processId is already added.");
             }
             runningTaskIds.add(id);
         }
@@ -292,11 +308,13 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
         return false;
     }
+
     public void resume() {
         System.out.println("Retrieved process data from the database.");
         execute();
         //setIsRunning(true);
     }
+
     public void resume(String taskId) {
         System.out.println("Retrieved process data from the database.");
         if (checkResumeSignal(taskId)) {
@@ -309,7 +327,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         //setIsRunning(true);
     }
 
-    private synchronized  boolean isRunning() {
+    private synchronized boolean isRunning() {
         return isRunning;
     }
 

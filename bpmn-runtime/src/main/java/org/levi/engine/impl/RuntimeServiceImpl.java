@@ -1,14 +1,21 @@
 package org.levi.engine.impl;
 
+import org.hibernate.Hibernate;
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.LeviException;
 import org.levi.engine.RuntimeService;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 
+import java.awt.image.ImageFilter;
 import java.io.IOException;
 import java.util.*;
 
@@ -35,17 +42,17 @@ public class RuntimeServiceImpl implements RuntimeService {
         return true;
     }
 
-    public void startProcessByDefinitionsName(String definitionsName, Map<String, Object> variables)
+    public void startProcessByDefinitionsName(String definitionsName, Map<String, Object> variables, String userId)
             throws ClassNotFoundException, IOException {
-        startProcess(String.valueOf(definitionsName.hashCode()), variables);
+        startProcess(String.valueOf(definitionsName.hashCode()), variables, userId);
     }
 
     // TODO path != uri, Path.toUri()
-    public String startProcess(String definitionsId, Map<String, Object> variables)
+    public String startProcess(String definitionsId, Map<String, Object> variables, String userId)
             throws IOException, ClassNotFoundException {
         assert definitionsId != null;
         if (engineData.isRunning(definitionsId)) {
-            throw new LeviException("Process already running : "+ definitionsId);
+            throw new LeviException("Process already running : " + definitionsId);
         }
         // check if a deployment is available for this process id
         Deployment deployment = engineData.getDeployment(definitionsId);
@@ -56,12 +63,13 @@ public class RuntimeServiceImpl implements RuntimeService {
         String definitionPath = deployment.getProcessDefinitionPath();
         // read it in
         ObjectLoader loader = new ObjectLoader(definitionPath);
-        ProcessDefinition processDefinition = (ProcessDefinition)loader.readNextObject();
+        ProcessDefinition processDefinition = (ProcessDefinition) loader.readNextObject();
         if (processDefinition == null) {
             throw new LeviException("Retrieved process definition is null");
         }
         // create a new process instance with that processDefinition
         ProcessInstance processInstance = new ProcessInstance(processDefinition, variables);
+        processInstance.setStartUserId(userId);
 
         System.out.println("[Info] Process running : " + definitionsId);
         // run it
@@ -71,13 +79,58 @@ public class RuntimeServiceImpl implements RuntimeService {
         processInstance.execute();
         // record this as a running process
         engineData.addProcessInstance(processInstance.getProcessId(), processInstance);
+        persistProcessInstance(processInstance);
         System.out.println("Started process  " + processInstance.getProcessId() + " " + definitionsId);
 
         return processInstance.getProcessId();
     }
 
+    private void persistProcessInstance(ProcessInstance processInstance) {
+        HibernateDao dao = new HibernateDao();
+        // Retrieving DeploymentBean for this process
+        DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
+        assert deploymentBean != null;
+        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
+        processInstanceBean.setProcessId(processInstance.getProcessId());
+        processInstanceBean.setDeployedProcess(deploymentBean);
+        UserBean userBean = new UserBean();
+        userBean.setUserId(processInstance.getStartUserId());
+        UserBean user = (UserBean) dao.getObject(UserBean.class, processInstance.getStartUserId());
+        if (user != null) {
+            processInstanceBean.setStartUser(user);
+        } else {
+            processInstanceBean.setStartUser(userBean);
+        }
+
+        processInstanceBean.setStartTime(new Date());
+        processInstanceBean.setVariables(processInstance.getVariables());
+        processInstanceBean.setStartEventId(processInstance.getObjectModel().getStartEvent().getId());
+        processInstanceBean.setRunning(true);
+
+        dao.save(processInstanceBean);
+        if (user != null) {
+            user.addStartedProcessInstances(processInstanceBean);
+            dao.update(user);
+        } else {
+            userBean.addStartedProcessInstances(processInstanceBean);
+            dao.save(userBean);
+        }
+        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        if (engineDataBean != null) {
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.update(engineDataBean);
+        } else {
+            engineDataBean = new EngineDataBean();
+            engineDataBean.setId("1");
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.save(engineDataBean);
+        }
+        dao.close();
+
+    }
+
     public void stopProcess(String processId) {
-        
+
     }
 
     public void showRunningProcess() {
@@ -119,7 +172,7 @@ public class RuntimeServiceImpl implements RuntimeService {
         }
         ProcessDefinition processDefinition = null;
         try {
-            processDefinition = (ProcessDefinition)loader.readNextObject();
+            processDefinition = (ProcessDefinition) loader.readNextObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
@@ -128,8 +181,10 @@ public class RuntimeServiceImpl implements RuntimeService {
         if (processDefinition == null) {
             throw new LeviException("Retrieved process definition is null");
         }
-        ArrayList<String> completed = LeviUtils.newArrayList(); completed.add("theStart");
-        ArrayList<String> running = LeviUtils.newArrayList(); running.add("theTask2");
+        ArrayList<String> completed = LeviUtils.newArrayList();
+        completed.add("theStart");
+        ArrayList<String> running = LeviUtils.newArrayList();
+        running.add("theTask2");
 
         ProcessInstance p = new ProcessInstance.Builder(processDefinition)
                 .variables(Collections.<String, Object>emptyMap())

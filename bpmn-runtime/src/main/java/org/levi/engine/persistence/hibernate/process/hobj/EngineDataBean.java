@@ -141,4 +141,11 @@ public class EngineDataBean extends HObject {
         }
         deployedProcesses.put(deploymentBean.getDefinitionsId(), deploymentBean);
     }
+
+    public void addProcessInstance(ProcessInstanceBean processInstanceBean) {
+        if (runningProcesses == null) {
+            runningProcesses = new HashMap<String, ProcessInstanceBean>();
+        }
+        runningProcesses.put(processInstanceBean.getProcessId(), processInstanceBean);
+    }
 }
