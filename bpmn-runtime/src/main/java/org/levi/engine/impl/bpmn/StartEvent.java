@@ -1,6 +1,9 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.Event;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 
@@ -10,6 +13,7 @@ import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 public class StartEvent extends Event {
     private final ProcessInstance processInstance;
     private final TStartEvent startEvent;
+    private final boolean hasInputForm;
 
     public static class Builder {
         private ProcessInstance process;
@@ -30,7 +34,25 @@ public class StartEvent extends Event {
     private StartEvent(Builder builder) {
         this.startEvent = builder.se;
         this.processInstance = builder.process;
+        hasInputForm = startEvent.getInputForm() != null;
+        // todo check and write the input form data
+        if (hasInputForm()) {
+            persistStartEvent(this);
+        }
     }
+
+    private void persistStartEvent(StartEvent startEvent) {
+        HibernateDao dao = new HibernateDao();
+        TaskBean starteventbean = new TaskBean();
+        starteventbean.setId(startEvent.getId());
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean)dao.getObject(ProcessInstance.class, processInstance.getProcessId());
+        starteventbean.setProcesseInstance(processInstanceBean);
+        starteventbean.setAssignee(processInstanceBean.getStartUser());
+        starteventbean.setFormName(this.startEvent.getInputForm());
+        dao.save(starteventbean);
+        dao.close();
+    }
+
 
     public String getId() {
         return startEvent.getId();
@@ -38,8 +60,11 @@ public class StartEvent extends Event {
 
     public void run() {
         // todo see if a form is present and pause accordingly
-        processInstance.addRunning(getId());
-        resumeTask();
+        if (hasInputForm()) {
+            processInstance.pause(this.getId());
+        }
+        //processInstance.addRunning(getId());
+        //resumeTask();
     }
 
     public void resumeTask() {
@@ -48,7 +73,7 @@ public class StartEvent extends Event {
     }
 
     public boolean hasInputForm() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return hasInputForm;
     }
 
     public String toString() {

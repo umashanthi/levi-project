@@ -2,11 +2,11 @@ package org.levi.engine.impl.bpmn;
 
 
 import org.levi.engine.bpmn.RunnableFlowNode;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
-import org.omg.spec.bpmn.x20100524.model.THumanPerformer;
-import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
-import org.omg.spec.bpmn.x20100524.model.TResourceRole;
 
 
 /**
@@ -15,6 +15,7 @@ import org.omg.spec.bpmn.x20100524.model.TResourceRole;
 public class UserTask extends RunnableFlowNode {
     private final TUserTask task;
     private final ProcessInstance processInstance;
+    private final boolean hasInputForm;
 
     public static class Builder {
         private FlowNodeFactory flowNodeFac;
@@ -35,17 +36,34 @@ public class UserTask extends RunnableFlowNode {
     private UserTask(Builder builder) {
         this.task = builder.task;
         this.processInstance = builder.process;
-        TResourceRole[] resourceRoles = task.getResourceRoleArray();
-        if (resourceRoles[0] instanceof TPotentialOwner) {
-            TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
-            potentialOwner.getResourceAssignmentExpression().getExpression();
+        //TResourceRole[] resourceRoles = task.getResourceRoleArray();
+        //if (resourceRoles[0] instanceof TPotentialOwner) {
+        //    TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
+        //    potentialOwner.getResourceAssignmentExpression().getExpression();
+        //}
+        //THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
+        //humanPerformer.getResourceAssignmentExpression().getExpression();
+        hasInputForm = task.getInputForm() != null;
+        // todo check and write the input form data.
+        if (hasInputForm()) {
+            persistUserTask(this);
         }
-        THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
-        humanPerformer.getResourceAssignmentExpression().getExpression();
+    }
+
+    private void persistUserTask(UserTask userTask) {
+        HibernateDao dao = new HibernateDao();
+        TaskBean starteventbean = new TaskBean();
+        starteventbean.setId(userTask.getId());
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean)dao.getObject(ProcessInstance.class, processInstance.getProcessId());
+        starteventbean.setProcesseInstance(processInstanceBean);
+        starteventbean.setAssignee(processInstanceBean.getStartUser());
+        starteventbean.setFormName(this.task.getInputForm());
+        dao.save(starteventbean);
+        dao.close();
     }
 
     public void run() {
-        processInstance.addRunning(getId());
+        //processInstance.addRunning(getId());
         // get the details
         System.out.println("UserTask run(): Getting the task details.");
         // write them to the db
@@ -60,11 +78,12 @@ public class UserTask extends RunnableFlowNode {
         //processInstance.addWaitedTask(getId(), task);
         //instance(task);
         // todo:
-        if (true) {
+        if (hasInputForm()) {
+            System.out.println("Usertask hasInputForm. Pause.");
             processInstance.pause(getId());
-        } else {
-            resumeTask();
-        }
+        } //else {
+        //    resumeTask();
+        //}
         /*
         object(new WaitedTaskChannelListener(channel) {
             @Override
@@ -93,6 +112,6 @@ public class UserTask extends RunnableFlowNode {
 
     // todo
     public boolean hasInputForm() {
-        return false;
+        return hasInputForm;
     }
 }

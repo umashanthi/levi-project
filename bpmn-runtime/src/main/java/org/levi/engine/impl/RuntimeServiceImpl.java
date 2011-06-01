@@ -1,6 +1,5 @@
 package org.levi.engine.impl;
 
-import org.hibernate.Hibernate;
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.LeviException;
@@ -15,7 +14,6 @@ import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 
-import java.awt.image.ImageFilter;
 import java.io.IOException;
 import java.util.*;
 
@@ -76,12 +74,12 @@ public class RuntimeServiceImpl implements RuntimeService {
         if (variables != null) {
             variables.put("processInstance", processInstance);     // todo process instance variable name
         }
-        processInstance.execute();
+
         // record this as a running process
         engineData.addProcessInstance(processInstance.getProcessId(), processInstance);
         persistProcessInstance(processInstance);
         System.out.println("Started process  " + processInstance.getProcessId() + " " + definitionsId);
-
+        processInstance.execute();
         return processInstance.getProcessId();
     }
 
@@ -139,6 +137,10 @@ public class RuntimeServiceImpl implements RuntimeService {
         for (String id : runningProcesses) {
             System.out.println("  " + id);
         }
+    }
+
+    public void claim(String pid, String uid, String itemId) {
+        engineData.getProcessInstance(pid).claim(uid, itemId);   
     }
 
     public void claimUserTask(String pid, String userTaskId, Map<String, Object> variables) {

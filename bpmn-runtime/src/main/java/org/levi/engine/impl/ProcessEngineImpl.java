@@ -14,7 +14,6 @@ import org.levi.engine.utils.ObjectSaver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -179,6 +178,10 @@ public class ProcessEngineImpl implements ProcessEngine {
             throw new LeviException("Process ID is null.");
         }
         runtimeService.stopProcess(id);
+    }
+
+    public void claim(String pid, String uid, String itemId) {
+
     }
 
     public void claimUserTask(String pid, String userTaskId, Map<String, Object> variables) {
