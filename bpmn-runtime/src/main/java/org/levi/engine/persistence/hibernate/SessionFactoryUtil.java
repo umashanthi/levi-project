@@ -31,13 +31,14 @@ public class SessionFactoryUtil {
 
 
     private static SessionFactory sessionFactory;
-    private static AnnotationConfiguration config = new AnnotationConfiguration();
+    private static AnnotationConfiguration config;
     /**
      * Opens a session configured with the default settings.
      *
      * @return the session
      */
     public static void exportSchema(){
+        config = new AnnotationConfiguration();
         AnnotationConfiguration config = new AnnotationConfiguration();
         config.addAnnotatedClass(UserBean.class);
         config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
