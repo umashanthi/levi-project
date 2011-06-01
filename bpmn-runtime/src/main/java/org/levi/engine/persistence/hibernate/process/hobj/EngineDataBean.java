@@ -19,7 +19,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "enginedata")
+@Table(name = "engine_data")
 public class EngineDataBean extends HObject {
 
     private String id;

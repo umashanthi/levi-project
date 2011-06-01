@@ -153,7 +153,7 @@ public class TaskBean extends HObject{
 
     @CollectionOfElements
 	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinTable( name="taskproperties",joinColumns={ @JoinColumn(name="id")})
+	@JoinTable( name="task_properties",joinColumns={ @JoinColumn(name="id")})
     public Map<String, String> getProperties() {
         return properties;
     }

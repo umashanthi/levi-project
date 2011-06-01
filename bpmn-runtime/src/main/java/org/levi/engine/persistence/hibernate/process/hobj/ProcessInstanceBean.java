@@ -13,7 +13,7 @@ import java.util.Map;
 /* This class represents a Process instance  */
 
 @Entity
-@Table(name = "processinstance")
+@Table(name = "process_instance")
 @SecondaryTable(name = "process_started_user")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
@@ -102,7 +102,7 @@ public class ProcessInstanceBean extends HObject {
     */
 
     @OneToMany(targetEntity = TaskBean.class)
-	@JoinTable( name="completedtasks",joinColumns={ @JoinColumn(name="processId")})
+	@JoinTable( name="completed_tasks",joinColumns={ @JoinColumn(name="processId")})
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
     }
@@ -120,7 +120,7 @@ public class ProcessInstanceBean extends HObject {
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "startuser", table = "process_started_user")
+    @JoinColumn(name = "start_user", table = "process_started_user")
     public UserBean getStartUser() {
         return startUser;
     }

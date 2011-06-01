@@ -48,7 +48,7 @@ public class GroupBean extends HObject{
     }
 
     @ManyToMany
-    @JoinTable(name = "usergroup", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
+    @JoinTable(name = "user_group", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
     public List<UserBean> getMembers() {
         return members;
     }
