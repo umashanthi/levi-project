@@ -3,6 +3,7 @@ package org.levi.engine.impl;
 import org.levi.engine.*;
 import org.levi.engine.identity.IdentityService;
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
@@ -70,6 +71,10 @@ public class ProcessEngineImpl implements ProcessEngine {
             System.out.println("Created Lom directory at " + Constants.LOM_PATH);
         }
 
+        //TODO this is a short fix for the database schema recreating problem
+        //TODO the problem: restart the server will recreate the db schema
+        SessionFactoryUtil.exportSchema();
+        
         /*
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);
         if (engineDataFile.exists()) {

@@ -31,13 +31,13 @@ public class SessionFactoryUtil {
 
 
     private static SessionFactory sessionFactory;
-
+    private static AnnotationConfiguration config = new AnnotationConfiguration();
     /**
      * Opens a session configured with the default settings.
      *
      * @return the session
      */
-    public static Session getSession() {
+    public static void exportSchema(){
         AnnotationConfiguration config = new AnnotationConfiguration();
         config.addAnnotatedClass(UserBean.class);
         config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
@@ -46,7 +46,10 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(TaskBean.class);
         config.addAnnotatedClass(EngineDataBean.class);
         config.configure("persistance.xml");
-        //new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
+        new SchemaExport(config).create(true, true);
+    }
+
+    public static Session getSession() {
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();
     }
