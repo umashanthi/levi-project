@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ishan Jayawardena
@@ -92,7 +93,13 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public void undeploy(String id) throws IOException {
-        undeploy(engineData.getDeployment(id));
+        //TODO this is a short fix. We need to get the DeploymentBean map using the EngineDataBean and delete the map entry.
+        //TODO delete the engineDataBean variable in Deployment bean after fixing this
+        //TODO the problem here is we cannot get the EngineData from the EngineDataBean
+        HibernateDao dao = new HibernateDao();
+        dao.remove(DeploymentBean.class,id);
+        dao.close();
+        //undeploy(engineData.getDeployment(id));
     }
 
     public String getDiagramPath(String id) {
@@ -111,6 +118,11 @@ public class StorageServiceImpl implements StorageService {
 
     public void undeploy(Deployment d)
             throws IOException {
+        //TODO HibernateDao object must instantiate once in this class
+        HibernateDao dao = new HibernateDao();
+        dao.remove(DeploymentBean.class, d.getDefinitionsId());
+        dao.close();
+
         if (engineData.hasDeployment(d)) {
             engineData.removeDeployment(d);
             deleteDeploymentData(d);

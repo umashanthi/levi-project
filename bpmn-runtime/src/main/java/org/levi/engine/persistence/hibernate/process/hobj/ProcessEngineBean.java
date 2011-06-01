@@ -16,7 +16,7 @@ import javax.persistence.*;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "processengine")
+@Table(name = "process_engine")
 public class ProcessEngineBean extends HObject {
 
     private String id;

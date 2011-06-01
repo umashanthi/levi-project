@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Ishan Jayawardena
@@ -28,7 +25,9 @@ public class EngineData implements Serializable {
     private transient Map<String, ProcessInstance> runningProcesses;
     private int nRunningProcesses;
     private transient Map<String, ProcessInstance> stoppedProcesses;
+    private transient List<String> stoppedProcessIds;
     private transient Map<String, ProcessInstance> pausedProcesses;
+    private transient List<String> pausedProcessIds;
     private transient List<String> runningProcessIds;
     private static final int DEFAULT_SIZE = 25;
 
@@ -198,5 +197,13 @@ public class EngineData implements Serializable {
             throw new NullPointerException("Process Id is null.");
         }
         return runningProcesses.get(id);
+    }
+
+    public void setStoppedProcessIds(List<String> stoppedProcessIds) {
+        this.stoppedProcessIds = stoppedProcessIds;
+    }
+
+    public void setPausedProcessIds(List<String> pausedProcessIds) {
+        this.pausedProcessIds = pausedProcessIds;
     }
 }

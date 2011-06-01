@@ -19,7 +19,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "enginedata")
+@Table(name = "engine_data")
 public class EngineDataBean extends HObject {
 
     private String id;
@@ -65,8 +65,9 @@ public class EngineDataBean extends HObject {
     }
      */
 
-    @OneToMany(targetEntity = DeploymentBean.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "deployedprocesses", joinColumns = {@JoinColumn(name = "id")})
+    @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "engineDataBean")
+    @MapKey(name = "definitionsId")
+    @JoinTable(name = "deployed_processes", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, DeploymentBean> getDeployedProcesses() {
         return deployedProcesses;
     }
@@ -96,7 +97,8 @@ public class EngineDataBean extends HObject {
     */
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-    @JoinTable(name = "processinstancedata", joinColumns = {@JoinColumn(name = "id")})
+    @MapKey(name = "processId")
+    @JoinTable(name = "process_instance_data", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getRunningProcesses() {
         return runningProcesses;
     }
@@ -106,7 +108,8 @@ public class EngineDataBean extends HObject {
     }
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-    @JoinTable(name = "stoppedprocessinstancedata", joinColumns = {@JoinColumn(name = "id")})
+    @MapKey(name = "processId")
+    @JoinTable(name = "stopped_process_instance_data", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getStoppedProcesses() {
         return stoppedProcesses;
     }
@@ -116,7 +119,8 @@ public class EngineDataBean extends HObject {
     }
 
     @OneToMany(targetEntity = ProcessInstanceBean.class)
-    @JoinTable(name = "pausedprocessinstancedata", joinColumns = {@JoinColumn(name = "id")})
+    @MapKey(name = "processId")
+    @JoinTable(name = "paused_process_instance_data", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, ProcessInstanceBean> getPausedProcesses() {
         return pausedProcesses;
     }

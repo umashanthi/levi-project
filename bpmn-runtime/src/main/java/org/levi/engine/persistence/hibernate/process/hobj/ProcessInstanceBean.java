@@ -13,8 +13,8 @@ import java.util.Map;
 /* This class represents a Process instance  */
 
 @Entity
-@Table(name = "processinstance")
-@SecondaryTable(name = "processstarteduser")
+@Table(name = "process_instance")
+@SecondaryTable(name = "process_started_user")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
     private String processId;
@@ -30,6 +30,7 @@ public class ProcessInstanceBean extends HObject {
     private String startEventId;
     private String endEventId;
     private List<TaskBean> tasks;
+    
 
     @Id
     public String getProcessId() {
@@ -80,7 +81,7 @@ public class ProcessInstanceBean extends HObject {
     */
 
     @OneToMany(targetEntity = TaskBean.class)
-	@JoinTable( name="runningtasks",joinColumns={ @JoinColumn(name="processId")})
+	@JoinTable( name="running_tasks",joinColumns={ @JoinColumn(name="processId")})
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
     }
@@ -101,7 +102,7 @@ public class ProcessInstanceBean extends HObject {
     */
 
     @OneToMany(targetEntity = TaskBean.class)
-	@JoinTable( name="completedtasks",joinColumns={ @JoinColumn(name="processId")})
+	@JoinTable( name="completed_tasks",joinColumns={ @JoinColumn(name="processId")})
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
     }
@@ -119,7 +120,7 @@ public class ProcessInstanceBean extends HObject {
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "startuser", table = "processstarteduser")
+    @JoinColumn(name = "start_user", table = "process_started_user")
     public UserBean getStartUser() {
         return startUser;
     }
