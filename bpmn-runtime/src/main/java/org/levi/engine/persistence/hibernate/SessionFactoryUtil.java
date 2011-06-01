@@ -30,10 +30,10 @@ public class SessionFactoryUtil {
     }
 
 
-
     private static SessionFactory sessionFactory;
-   /**
-     * Opens a session configured with the default settings. 
+
+    /**
+     * Opens a session configured with the default settings.
      *
      * @return the session
      */
@@ -45,8 +45,8 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
         config.addAnnotatedClass(EngineDataBean.class);
-    	config.configure("persistance.xml");
-        new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
+        config.configure("persistance.xml");
+        //new SchemaExport(config).create(true, true);  //TODO active and deactive this option as master reset
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();
     }

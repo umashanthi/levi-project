@@ -4,6 +4,7 @@ import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.runtime.ProcessInstance;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class UserBean extends HObject implements Serializable{
+
     private String userId;
     private String password;
     private String firstName;
@@ -81,7 +83,7 @@ public class UserBean extends HObject implements Serializable{
     }
 
     public void setUserGroups(List<GroupBean> groups) {
-        this.userGroups =groups;
+        this.userGroups = groups;
     }
 
     @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -127,5 +129,12 @@ public class UserBean extends HObject implements Serializable{
 
     public void setUndeployed(List<DeploymentBean> undeployed) {
         this.undeployed = undeployed;
+    }
+
+    public void addStartedProcessInstances(ProcessInstanceBean processInstanceBean) {
+        if (started == null) {
+            started = new ArrayList<ProcessInstanceBean>();
+        }
+        started.add(processInstanceBean);
     }
 }

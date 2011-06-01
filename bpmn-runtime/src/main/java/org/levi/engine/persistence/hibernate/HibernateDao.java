@@ -17,48 +17,48 @@ public class HibernateDao {
 
     Session session;
 
-    public HibernateDao(){
+    public HibernateDao() {
         session = SessionFactoryUtil.getSession();
     }
 
-    public Session getSession(){
+    public Session getSession() {
         return session;
     }
 
-    public void save(HObject hobj){
-        try{
+    public void save(HObject hobj) {
+        try {
             Transaction tx = session.beginTransaction();
             session.save(hobj);
             tx.commit();
             session.flush();
-        } catch(ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             System.out.println("[error] Constrained violated"); //TODO need to handle this exception
         }
     }
 
-    public Object getObject(Class hibCls,String id){
+    public Object getObject(Class hibCls, String id) {
         Transaction tx = session.beginTransaction();
-        Object obj = session.get(hibCls,id);
+        Object obj = session.get(hibCls, id);
         tx.commit();
         return obj;
     }
 
-    public Object remove(Class hibCls,String id){
+    public Object remove(Class hibCls, String id) {
         Transaction tx = session.beginTransaction();
-        Object obj = session.get(hibCls,id);
+        Object obj = session.get(hibCls, id);
         session.delete(obj);
         tx.commit();
-        return  obj;
+        return obj;
     }
 
-    public void update(HObject hobj){
+    public void update(HObject hobj) {
         //TODO update without an existing object cause exception
         Transaction tx = session.beginTransaction();
         session.saveOrUpdate(hobj);
         tx.commit();
     }
 
-    public void close(){
+    public void close() {
         session.close();
     }
 

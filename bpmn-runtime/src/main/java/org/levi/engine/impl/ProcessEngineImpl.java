@@ -5,6 +5,7 @@ import org.levi.engine.identity.IdentityService;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.utils.Bean2Impl;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 import org.levi.engine.utils.ObjectSaver;
@@ -12,6 +13,7 @@ import org.levi.engine.utils.ObjectSaver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ public class ProcessEngineImpl implements ProcessEngine {
     private RuntimeService runtimeService;
     private TaskService taskService = new TaskServiceImpl();
     private IdentityService identityService = new IdentityServiceImpl();
-    
+
     private static final ProcessEngine processEngine = new ProcessEngineImpl();
     //private static Logger log = Logger.getLogger(ProcessEngineImpl.class);
 
@@ -101,6 +103,10 @@ public class ProcessEngineImpl implements ProcessEngine {
         return LeviUtils.giveList(engineData.getDeploymentIds());
     }
 
+    public List<DeploymentBean> getDeploymentBeans() {
+        return engineData.getDeploymentBeans();
+    }
+
     public synchronized List<String> getRunningProcessIds() {
         return LeviUtils.giveList(engineData.getRunningProcessIds());
     }
@@ -146,16 +152,16 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized String startProcess(String id)
             throws IOException, ClassNotFoundException {
-        return startProcess(id, LeviUtils.<String, Object>newHashMap());   // Collections.<String, Object>emptyMap()
+        return startProcess(id, LeviUtils.<String, Object>newHashMap(), null);   // Collections.<String, Object>emptyMap()   //TODO:Check!! userId=null??
     }
 
-    public synchronized String startProcess(String id, Map<String, Object> variables)
+    public synchronized String startProcess(String id, Map<String, Object> variables, String userId)
             throws IOException, ClassNotFoundException {
         if (id == null) {
             throw new LeviException("Process ID is null.");
         }
         try {
-            return runtimeService.startProcess(id, variables);
+            return runtimeService.startProcess(id, variables, userId);
         } catch (Exception e) {
             cleanup();
             throw new LeviException(e);
@@ -192,7 +198,7 @@ public class ProcessEngineImpl implements ProcessEngine {
         if (processId == null) {
             throw new NullPointerException("Process Id is null.");
         }
-       runtimeService.setVariables(processId, values);
+        runtimeService.setVariables(processId, values);
     }
 
     public Object getVariable(String processId, String name) {
@@ -217,4 +223,6 @@ public class ProcessEngineImpl implements ProcessEngine {
         engineData.getProcessInstance(processId).getProcessId();
         return false;
     }
+
+
 }

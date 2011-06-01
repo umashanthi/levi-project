@@ -60,6 +60,17 @@ public class EngineData implements Serializable {
         return deployments;
     }
 
+    public List<DeploymentBean> getDeploymentBeans() {
+        HibernateDao dao = new HibernateDao();
+        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
+        List<DeploymentBean> deployments = new ArrayList<DeploymentBean>();
+        for (String id : deployedProcesses.keySet()) {
+            deployments.add(deployedProcesses.get(id));
+        }
+        return deployments;
+    }
+
     public void setDeploymentPIds(List<String> deploymentPIds) {
         if (deploymentPIds == null) {
             throw new NullPointerException("deploymentPIds is null");

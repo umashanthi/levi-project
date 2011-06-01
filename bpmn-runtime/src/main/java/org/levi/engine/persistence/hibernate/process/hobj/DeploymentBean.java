@@ -98,6 +98,7 @@ public class DeploymentBean extends HObject {
     public void setBusinessArchiveLocation(String businessArchiveLocation) {
         this.businessArchiveLocation = businessArchiveLocation;
     }
+
     /*
     @CollectionOfElements
 	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
@@ -110,6 +111,7 @@ public class DeploymentBean extends HObject {
         this.businessArchiveContents = businessArchiveContents;
     }
     */
+
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "undeployeduser", table = "process_undeployed_user")

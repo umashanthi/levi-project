@@ -76,11 +76,19 @@ public class StorageServiceImpl implements StorageService {
         deploymentBean.setDeploymentTime(deployment.getDate());
         EngineDataBean engineDataBean = new EngineDataBean();
         engineDataBean.setId("1");
-        engineDataBean.set_dateCreated(new Date());
-        engineDataBean.addDeployment(deploymentBean);
+        //engineDataBean.set_dateCreated(new Date());
+
         HibernateDao dao = new HibernateDao();
         dao.save(deploymentBean);
-        dao.save(engineDataBean);
+        //dao.update();
+        if (dao.getObject(EngineDataBean.class, "1") != null) {
+            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+            bean.addDeployment(deploymentBean);
+            dao.update(bean);
+        } else {
+            engineDataBean.addDeployment(deploymentBean);
+            dao.save(engineDataBean);
+        }
         dao.close();
     }
 

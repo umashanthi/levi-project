@@ -21,7 +21,7 @@ public class ConditionExpressionTest {
         processEngine.deploy(Constants.LAR_PATH + "ExclusiveGatewayTest1.lar");
         Map<String, Object> variables = LeviUtils.newHashMap(1);
         variables.put("input", 3);
-        processEngine.startProcess(processEngine.getDeploymentIds().get(0), variables);
+        processEngine.startProcess(processEngine.getDeploymentIds().get(0), variables, null);
         processEngine.undeploy(processEngine.getDeploymentIds().get(0));
         processEngine.stop();
     }
