@@ -39,7 +39,6 @@ public class SessionFactoryUtil {
      */
     public static void exportSchema(){
         config = new AnnotationConfiguration();
-        AnnotationConfiguration config = new AnnotationConfiguration();
         config.addAnnotatedClass(UserBean.class);
         config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
         config.addAnnotatedClass(DeploymentBean.class);
@@ -48,10 +47,10 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(EngineDataBean.class);
         config.configure("persistance.xml");
         new SchemaExport(config).create(true, true);
-        sessionFactory = config.buildSessionFactory();
     }
 
-    public static Session getSession() {       
+    public static Session getSession() {
+        sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();
     }
 
