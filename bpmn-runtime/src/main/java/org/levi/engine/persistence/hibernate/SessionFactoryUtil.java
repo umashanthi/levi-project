@@ -48,10 +48,10 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(EngineDataBean.class);
         config.configure("persistance.xml");
         new SchemaExport(config).create(true, true);
+        sessionFactory = config.buildSessionFactory();
     }
 
-    public static Session getSession() {
-        sessionFactory = config.buildSessionFactory();
+    public static Session getSession() {       
         return sessionFactory.openSession();
     }
 

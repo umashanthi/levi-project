@@ -2,6 +2,7 @@ package org.levi.persistance;
 
 
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
@@ -25,7 +26,7 @@ public class PersistTest {
     }
 
     public void start() {
-
+        SessionFactoryUtil.exportSchema();
         HibernateDao dao = new HibernateDao();
          /*
         UserBean user1 = new UserBean();
