@@ -2,6 +2,8 @@ package org.levi.engine.runtime;
 
 import org.apache.ode.jacob.vpu.ExecutionQueueImpl;
 import org.apache.ode.jacob.vpu.JacobVPU;
+import org.hibernate.Hibernate;
+import org.hibernate.engine.HibernateIterator;
 import org.levi.engine.LeviException;
 import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.bpmn.RunnableFlowNode;
@@ -9,6 +11,8 @@ import org.levi.engine.impl.bpmn.FlowNodeFactory;
 import org.levi.engine.impl.bpmn.WaitedTask;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
@@ -235,10 +239,10 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
     public void addRunning(String id) {
         synchronized (runningTaskIds) {
-            if (runningTaskIds.contains(id)) {
-                throw new LeviException("Running processId is already added.");
+            if (!runningTaskIds.contains(id)) {
+                runningTaskIds.add(id);
             }
-            runningTaskIds.add(id);
+
         }
     }
 
@@ -265,21 +269,36 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public void pause(String taskId) {
         // todo check for the # runningTaskIds before actually pausing.
         if (checkPauseSignal(taskId)) {
+            HibernateDao dao = new HibernateDao();
+            TaskBean taskBean = (TaskBean) dao.getObject(TaskBean.class, taskId);
+            assert taskBean != null;
+            ProcessInstanceBean processInstanceBean = taskBean.getProcesseInstance();
             setIsRunning(false);
             System.out.println("Running  :   " + runningTaskIds.toString());
             System.out.println("Completed: " + completedTaskIds.toString());
-            System.out.println("variables: " + variables.toString());
+            //System.out.println("variables: " + variables.toString());
             //resume();
             while (soup.hasReactions()) {
                 System.out.println("Removing reactions from the soup.");
                 soup.dequeueReaction();
             }
             if (soup.isComplete()) {
+                TaskBean taskBeanObj;
+                for (String id : runningTaskIds) {
+                    taskBeanObj = (TaskBean) dao.getObject(TaskBean.class, id);
+                    processInstanceBean.addToRunningTask(taskBeanObj);  // adding all running task beans to the processInstance
+                }
+                for (String id : completedTaskIds) {
+                    taskBeanObj = (TaskBean) dao.getObject(TaskBean.class, id);
+                    processInstanceBean.addToCompletedTask(taskBeanObj);  // adding all completed task beans to the processInstance
+                }
+                dao.update(processInstanceBean);
                 System.out.println("Writing the processs to the database.");
             } else {
                 throw new RuntimeException("Incomplete Runtime soup. Cannot pause the process instance.");
             }
             addRunning(taskId);
+            dao.close();
         }
     }
 

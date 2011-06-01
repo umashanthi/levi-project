@@ -25,14 +25,17 @@ public class UserTask extends RunnableFlowNode {
         public Builder(TUserTask task) {
             this.task = task;
         }
+
         public Builder processInstance(ProcessInstance process) {
             this.process = process;
             return this;
         }
+
         public UserTask build() {
             return new UserTask(this);
         }
     }
+
     private UserTask(Builder builder) {
         this.task = builder.task;
         this.processInstance = builder.process;
@@ -54,16 +57,20 @@ public class UserTask extends RunnableFlowNode {
         HibernateDao dao = new HibernateDao();
         TaskBean starteventbean = new TaskBean();
         starteventbean.setId(userTask.getId());
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean)dao.getObject(ProcessInstance.class, processInstance.getProcessId());
+        starteventbean.setTaskId(userTask.getId());
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
         starteventbean.setProcesseInstance(processInstanceBean);
         starteventbean.setAssignee(processInstanceBean.getStartUser());
-        starteventbean.setFormName(this.task.getInputForm());
+        starteventbean.setFormName(task.getName());
+        starteventbean.setTaskName(task.getName());
+        starteventbean.setHasUserForm(hasInputForm());
+        starteventbean.setFromPath(task.getInputForm());
         dao.save(starteventbean);
         dao.close();
     }
 
     public void run() {
-        //processInstance.addRunning(getId());
+        processInstance.addRunning(getId());
         // get the details
         System.out.println("UserTask run(): Getting the task details.");
         // write them to the db

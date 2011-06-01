@@ -27,10 +27,12 @@ public class StartEvent extends Event {
             this.process = process;
             return this;
         }
+
         public StartEvent build() {
-            return new StartEvent(this);    
+            return new StartEvent(this);
         }
     }
+
     private StartEvent(Builder builder) {
         this.startEvent = builder.se;
         this.processInstance = builder.process;
@@ -45,7 +47,8 @@ public class StartEvent extends Event {
         HibernateDao dao = new HibernateDao();
         TaskBean starteventbean = new TaskBean();
         starteventbean.setId(startEvent.getId());
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean)dao.getObject(ProcessInstance.class, processInstance.getProcessId());
+        starteventbean.setTaskId(startEvent.getId());
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
         starteventbean.setProcesseInstance(processInstanceBean);
         starteventbean.setAssignee(processInstanceBean.getStartUser());
         starteventbean.setFormName(this.startEvent.getInputForm());
@@ -60,8 +63,11 @@ public class StartEvent extends Event {
 
     public void run() {
         // todo see if a form is present and pause accordingly
+        processInstance.addRunning(this.getId());
         if (hasInputForm()) {
             processInstance.pause(this.getId());
+        } else {
+            resumeTask();
         }
         //processInstance.addRunning(getId());
         //resumeTask();

@@ -5,10 +5,7 @@ import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /* This class represents a Process instance  */
 
@@ -30,7 +27,7 @@ public class ProcessInstanceBean extends HObject {
     private String startEventId;
     private String endEventId;
     private List<TaskBean> tasks;
-    
+
 
     @Id
     public String getProcessId() {
@@ -82,7 +79,7 @@ public class ProcessInstanceBean extends HObject {
 
     @OneToMany(targetEntity = TaskBean.class)
     @MapKey(name = "id")
-	@JoinTable( name="running_tasks",joinColumns={ @JoinColumn(name="processId")})
+    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
     }
@@ -104,7 +101,7 @@ public class ProcessInstanceBean extends HObject {
 
     @OneToMany(targetEntity = TaskBean.class)
     @MapKey(name = "id")
-	@JoinTable( name="completed_tasks",joinColumns={ @JoinColumn(name="processId")})
+    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
     }
@@ -162,5 +159,19 @@ public class ProcessInstanceBean extends HObject {
 
     public void setTasks(List<TaskBean> tasks) {
         this.tasks = tasks;
+    }
+
+    public void addToCompletedTask(TaskBean taskBean) {
+        if (completedTasks == null) {
+            completedTasks = new HashMap<String, TaskBean>();
+        }
+        completedTasks.put(taskBean.getId(), taskBean);
+    }
+
+    public void addToRunningTask(TaskBean taskBean) {
+        if (runningTasks == null) {
+            runningTasks = new HashMap<String, TaskBean>();
+        }
+        runningTasks.put(taskBean.getId(), taskBean);
     }
 }

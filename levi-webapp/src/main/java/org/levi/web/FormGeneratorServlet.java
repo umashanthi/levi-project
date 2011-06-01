@@ -25,8 +25,6 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         /* Retrieve request parameters */
         assert request.getParameter("taskId") != null;
         String taskId = request.getParameter("taskId");
-        assert request.getParameter("formName") != null;
-        String taskFormName = request.getParameter("formName");
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
         /* Retrieve DBManager from session */
@@ -41,7 +39,7 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         context.put("processId", request.getParameter("processId"));
         try {
 
-            template = getTemplate("index.vm");   // <-- taskFormPath should be the input parameter
+            template = getTemplate(taskFormPath);   // <-- taskFormPath should be the input parameter
 
         } catch (Exception e) {
             System.out.println("Error " + e);

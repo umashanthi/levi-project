@@ -1,8 +1,11 @@
 package org.levi.web;
 
+import org.hibernate.Hibernate;
 import org.levi.engine.ProcessEngine;
 import org.levi.engine.db.DBManager;
+import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +56,11 @@ public class ListTasksServlet extends HttpServlet {
                 response.sendRedirect("tasks.jsp?unassigned=true");
             } else {
                 // retrieve tasks assigned to this user
-                List<TaskBean> userTaskList = dbManager.getUserTaskList(username);
+                HibernateDao dao = new HibernateDao();
+                UserBean userBean = (UserBean) dao.getObject(UserBean.class, username);
+                assert userBean != null;
+                List<TaskBean> userTaskList = userBean.getAssigned();
+                dao.close();
                 request.getSession().setAttribute("userTaskList", userTaskList);
                 response.sendRedirect("tasks.jsp");
             }

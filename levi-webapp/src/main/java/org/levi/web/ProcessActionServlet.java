@@ -30,7 +30,8 @@ public class ProcessActionServlet extends HttpServlet {
                 String processInstanceId = engine.startProcess(processId, null, (String) request.getSession().getAttribute("username"));
                 List<String> processInstanceList = engine.getRunningProcessIds();
                 request.getSession().setAttribute("processInstanceList", processInstanceList);
-                response.sendRedirect("processes.jsp?isProcessStarted=true&processId=" + processId + "&processInstacneId=" + processInstanceId);
+                //response.sendRedirect("processes.jsp?isProcessStarted=true&processId=" + processId + "&processInstacneId=" + processInstanceId);
+                response.sendRedirect("tasks");
             } else if (action.equals("Stop")) {
                 engine.stopProcess(processId);
                 response.sendRedirect("processes.jsp?isProcessStopped=true&processId=" + processId);
