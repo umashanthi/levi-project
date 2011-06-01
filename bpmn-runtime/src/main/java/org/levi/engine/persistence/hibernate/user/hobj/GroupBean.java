@@ -15,6 +15,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
+@Table(name = "groups")
 public class GroupBean extends HObject{
     private String groupId;
     private String groupName;
@@ -47,7 +48,7 @@ public class GroupBean extends HObject{
     }
 
     @ManyToMany
-    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
+    @JoinTable(name = "usergroup", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
     public List<UserBean> getMembers() {
         return members;
     }

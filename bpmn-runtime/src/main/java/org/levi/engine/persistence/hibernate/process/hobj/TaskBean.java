@@ -14,7 +14,7 @@ import java.util.Map;
 /* This class represents a single task in the process (including usertask) */
 @Entity
 @Table(name = "task")
-@SecondaryTables(value = {@SecondaryTable(name = "taskowner"),@SecondaryTable(name = "taskassignee"),@SecondaryTable(name = "taskprocessinstance")})
+@SecondaryTables(value = {@SecondaryTable(name = "task_owner"),@SecondaryTable(name = "task_assignee"),@SecondaryTable(name = "task_process_instance")})
 public class TaskBean extends HObject{
     private String id;// primary key
     private String taskId;
@@ -64,7 +64,7 @@ public class TaskBean extends HObject{
     */
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "processinstance", table = "taskprocessinstance")
+    @JoinColumn(name = "processinstance", table = "task_process_instance")
     public ProcessInstanceBean getProcesseInstance() {
         return processeInstance;
     }
@@ -90,7 +90,7 @@ public class TaskBean extends HObject{
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "owner", table = "taskowner")
+    @JoinColumn(name = "owner", table = "task_owner")
     public UserBean getOwner() {
         return owner;
     }
@@ -100,7 +100,7 @@ public class TaskBean extends HObject{
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "assignee", table = "taskassignee")
+    @JoinColumn(name = "assignee", table = "task_assignee")
     public UserBean getAssignee() {
         return assignee;
     }

@@ -2,6 +2,9 @@ package org.levi.engine.impl;
 
 import org.levi.engine.*;
 import org.levi.engine.identity.IdentityService;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
+import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 import org.levi.engine.utils.ObjectSaver;
@@ -65,6 +68,7 @@ public class ProcessEngineImpl implements ProcessEngine {
             System.out.println("Created Lom directory at " + Constants.LOM_PATH);
         }
 
+        /*
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);
         if (engineDataFile.exists()) {
             ObjectLoader loader = new ObjectLoader(Constants.ENGINEDATA_PATH);
@@ -76,6 +80,17 @@ public class ProcessEngineImpl implements ProcessEngine {
         } else {
             engineData = new EngineData();
         }
+        */
+        HibernateDao dao = new HibernateDao();
+        try{
+            EngineDataBean bean = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
+            Bean2Impl b2i = new Bean2Impl();
+            engineData = b2i.engineData(bean);
+            //TODO need to clarified the exception   
+        }catch(Exception e){
+            engineData = new EngineData();
+        }
+
         storageService = new StorageServiceImpl(engineData);
         storageService.start();
         runtimeService = new RuntimeServiceImpl(engineData);

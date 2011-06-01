@@ -15,7 +15,7 @@ import javax.persistence.Table;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name = "runtimeservice")
+@Table(name = "runtime_service")
 public class RuntimeServiceBean extends HObject {
     private String id;
     private EngineDataBean engineData;

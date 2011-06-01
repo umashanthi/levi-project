@@ -19,6 +19,7 @@ import java.util.List;
  */
 
 @Entity
+@Table(name = "users")
 public class UserBean extends HObject implements Serializable{
     private String userId;
     private String password;
@@ -75,7 +76,6 @@ public class UserBean extends HObject implements Serializable{
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
     public List<GroupBean> getUserGroups() {
         return this.userGroups;
     }

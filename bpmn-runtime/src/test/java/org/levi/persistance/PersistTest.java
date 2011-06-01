@@ -1,8 +1,12 @@
 package org.levi.persistance;
 
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,7 +26,7 @@ public class PersistTest {
     public void start(){
 
         HibernateDao dao = new HibernateDao();
-
+         /*
         UserBean user1 = new UserBean();
         user1.setUserId("1");
         user1.setFirstName("eranda");
@@ -58,7 +62,24 @@ public class PersistTest {
         group.getMembers().add(user3);
 
         dao.save(group);
+         */
+        /*
+        DeploymentBean deploymentBean = new DeploymentBean();
+        deploymentBean.setDefinitionsId("ssd");
+        EngineDataBean engineDataBean = new EngineDataBean();
+        engineDataBean.setId("1");
+        engineDataBean.set_dateCreated(new Date());
+        engineDataBean.addDeployment(deploymentBean);
+        dao.save(deploymentBean);
+        dao.save(engineDataBean);
+                                                */
+
+
+        //EngineDataBean enginedata = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
+        //System.out.println(enginedata.getId());
+        //System.out.println(enginedata.getDeployedProcesses().get("ssd").getDefinitionsId());
 
         dao.close();
+
     }
 }

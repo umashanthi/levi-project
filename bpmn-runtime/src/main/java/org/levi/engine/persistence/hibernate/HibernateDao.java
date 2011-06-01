@@ -54,7 +54,7 @@ public class HibernateDao {
     public void update(HObject hobj){
         //TODO update without an existing object cause exception
         Transaction tx = session.beginTransaction();
-        session.update(hobj);
+        session.saveOrUpdate(hobj);
         tx.commit();
     }
 
