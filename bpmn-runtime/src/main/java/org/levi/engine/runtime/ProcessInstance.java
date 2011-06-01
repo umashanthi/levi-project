@@ -57,6 +57,12 @@ public class ProcessInstance extends BPMNJacobRunnable {
         HibernateDao dao = new HibernateDao();
     }
 
+    public void claim(String uid, String itemId) {
+        if (itemId.equals(processDefinition.getStartEvent().getId())) {
+            setStartUserId(uid);
+        }
+    }
+
     public String getStartUserId() {
         return startUserId;
     }
@@ -152,8 +158,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 RunnableFlowNode startEvent = flowNodeFac.getStartEvent();
                 if (startEvent.hasInputForm()) {
                     pause(startEvent.getId());
+                } else {
+                    instance(startEvent);
                 }
-                instance(startEvent);
             } else {
                 // todo check if all the
                 //for (String id : (ArrayList<String>) runningTaskIds.clone()) {
@@ -272,6 +279,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
             } else {
                 throw new RuntimeException("Incomplete Runtime soup. Cannot pause the process instance.");
             }
+            addRunning(taskId);
         }
     }
 

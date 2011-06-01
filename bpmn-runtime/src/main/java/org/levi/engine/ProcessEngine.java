@@ -29,6 +29,8 @@ public interface ProcessEngine {
 
     void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);
 
+    void claim(String pid, String uid, String itemId);
+
     String getDiagramPath(String id);
 
     List<String> getDeploymentIds();

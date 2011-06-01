@@ -2,6 +2,9 @@ package org.levi.engine.impl.bpmn;
 
 
 import org.levi.engine.bpmn.RunnableFlowNode;
+import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
@@ -42,10 +45,25 @@ public class UserTask extends RunnableFlowNode {
         //humanPerformer.getResourceAssignmentExpression().getExpression();
         hasInputForm = task.getInputForm() != null;
         // todo check and write the input form data.
+        if (hasInputForm()) {
+            persistUserTask(this);
+        }
+    }
+
+    private void persistUserTask(UserTask userTask) {
+        HibernateDao dao = new HibernateDao();
+        TaskBean starteventbean = new TaskBean();
+        starteventbean.setId(userTask.getId());
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean)dao.getObject(ProcessInstance.class, processInstance.getProcessId());
+        starteventbean.setProcesseInstance(processInstanceBean);
+        starteventbean.setAssignee(processInstanceBean.getStartUser());
+        starteventbean.setFormName(this.task.getInputForm());
+        dao.save(starteventbean);
+        dao.close();
     }
 
     public void run() {
-        processInstance.addRunning(getId());
+        //processInstance.addRunning(getId());
         // get the details
         System.out.println("UserTask run(): Getting the task details.");
         // write them to the db
@@ -63,9 +81,9 @@ public class UserTask extends RunnableFlowNode {
         if (hasInputForm()) {
             System.out.println("Usertask hasInputForm. Pause.");
             processInstance.pause(getId());
-        } else {
-            resumeTask();
-        }
+        } //else {
+        //    resumeTask();
+        //}
         /*
         object(new WaitedTaskChannelListener(channel) {
             @Override
