@@ -1,5 +1,6 @@
 package org.levi.persistance;
 
+
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -14,12 +15,12 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 public class PersistTest {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         PersistTest pt = new PersistTest();
         pt.start();
     }
 
-    public void start(){
+    public void start() {
 
         HibernateDao dao = new HibernateDao();
 

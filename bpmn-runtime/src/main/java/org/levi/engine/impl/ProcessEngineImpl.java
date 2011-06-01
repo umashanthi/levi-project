@@ -137,16 +137,16 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized String startProcess(String id)
             throws IOException, ClassNotFoundException {
-        return startProcess(id, LeviUtils.<String, Object>newHashMap());   // Collections.<String, Object>emptyMap()
+        return startProcess(id, LeviUtils.<String, Object>newHashMap(), null);   // Collections.<String, Object>emptyMap()   //TODO:Check!! userId=null??
     }
 
-    public synchronized String startProcess(String id, Map<String, Object> variables)
+    public synchronized String startProcess(String id, Map<String, Object> variables, String userId)
             throws IOException, ClassNotFoundException {
         if (id == null) {
             throw new LeviException("Process ID is null.");
         }
         try {
-            return runtimeService.startProcess(id, variables);
+            return runtimeService.startProcess(id, variables, userId);
         } catch (Exception e) {
             cleanup();
             throw new LeviException(e);

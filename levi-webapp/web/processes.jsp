@@ -206,7 +206,7 @@ Released : 20090303
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
                                                                     value="Start" <%if(!isStartBtnActive){%>
                                                                     disabled="true" <%} %>
-                                                                    onclick="startProcess('<%=process.toString()%>')">
+                                                                    onclick="startProcess('<%=process.getDefinitionsId()%>')">
 
                 </td>
                 <td>
@@ -214,7 +214,7 @@ Released : 20090303
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
                                                                     value="Stop" <%if(!isStopBtnActive){%>
                                                                     disabled="true" <%} %>
-                                                                    onclick="stopProcess('<%=process.toString()%>')">
+                                                                    onclick="stopProcess('<%=process.getDefinitionsId()%>')">
 
                 </td>
                 <td>

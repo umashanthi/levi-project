@@ -8,15 +8,26 @@ import java.util.Map;
  */
 public interface RuntimeService {
     boolean start();
+
     boolean stop();
-    String startProcess(String processId, Map<String, Object> variables) throws IOException, ClassNotFoundException;
+
+    String startProcess(String processId, Map<String, Object> variables, String userId) throws IOException, ClassNotFoundException;
+
     void stopProcess(String processId);
+
     void showRunningProcess();
+
     void claimUserTask(String pid, String userTaskId, Map<String, Object> variables);
+
     void resumeProcessInstance(String processId);
+
     void setVariable(String processId, String name, Object value);
+
     void setVariables(String processId, Map<String, Object> values);
+
     Object getVariable(String processId, String name);
+
     Map<String, Object> getVariables(String processId);
+
     boolean hasStartForm(String processId);
 }

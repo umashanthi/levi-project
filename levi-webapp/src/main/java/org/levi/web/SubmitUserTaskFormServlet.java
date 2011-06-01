@@ -36,7 +36,7 @@ public class SubmitUserTaskFormServlet extends HttpServlet {
                 processVariables.put(key, requestParamMap.get(key)[0]);
             }
             try {
-                String processInstanceId = engine.startProcess(processId, processVariables);
+                String processInstanceId = engine.startProcess(processId, processVariables, (String) request.getSession().getAttribute("username"));
                 engine.setVariables(processInstanceId, processVariables);
                 // TODO write the processInstance variables to db
                 engine.resumeProcessInstance(processInstanceId);

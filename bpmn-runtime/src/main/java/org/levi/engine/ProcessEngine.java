@@ -23,7 +23,7 @@ public interface ProcessEngine {
 
     String startProcess(String id) throws IOException, ClassNotFoundException;
 
-    String startProcess(String id, Map<String, Object> variables) throws IOException, ClassNotFoundException;
+    String startProcess(String id, Map<String, Object> variables, String userId) throws IOException, ClassNotFoundException;
 
     void stopProcess(String id) throws IOException, ClassNotFoundException;
 
