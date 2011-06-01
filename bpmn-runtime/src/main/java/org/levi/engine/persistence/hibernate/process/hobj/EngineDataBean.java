@@ -65,7 +65,7 @@ public class EngineDataBean extends HObject {
     }
      */
 
-    @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "engineDataBean")
+    @OneToMany
     @MapKey(name = "definitionsId")
     @JoinTable(name = "deployed_processes", joinColumns = {@JoinColumn(name = "id")})
     public Map<String, DeploymentBean> getDeployedProcesses() {
