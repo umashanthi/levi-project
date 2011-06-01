@@ -135,7 +135,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
         synchronized (runningTaskIds) {
             if (runningTaskIds.isEmpty()) {
                 RunnableFlowNode startEvent = flowNodeFac.getStartEvent();
-                hasStartForm = startEvent.hasInputForm();
+                if (startEvent.hasInputForm()) {
+                    pause(startEvent.getId());
+                }
                 instance(startEvent);
             } else {
                 // todo check if all the
@@ -241,7 +243,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         // todo check for the # runningTaskIds before actually pausing.
         if (checkPauseSignal(taskId)) {
             setIsRunning(false);
-            System.out.println("Running:   " + runningTaskIds.toString());
+            System.out.println("Running  :   " + runningTaskIds.toString());
             System.out.println("Completed: " + completedTaskIds.toString());
             System.out.println("variables: " + variables.toString());
             //resume();

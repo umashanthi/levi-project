@@ -10,6 +10,7 @@ import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 public class StartEvent extends Event {
     private final ProcessInstance processInstance;
     private final TStartEvent startEvent;
+    private final boolean hasInputForm;
 
     public static class Builder {
         private ProcessInstance process;
@@ -30,6 +31,8 @@ public class StartEvent extends Event {
     private StartEvent(Builder builder) {
         this.startEvent = builder.se;
         this.processInstance = builder.process;
+        hasInputForm = startEvent.getInputForm() != null;
+        // todo check and write the input form data
     }
 
     public String getId() {
@@ -48,7 +51,7 @@ public class StartEvent extends Event {
     }
 
     public boolean hasInputForm() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return hasInputForm;
     }
 
     public String toString() {

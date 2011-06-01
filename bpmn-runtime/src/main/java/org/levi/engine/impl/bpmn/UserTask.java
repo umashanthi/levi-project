@@ -4,9 +4,6 @@ package org.levi.engine.impl.bpmn;
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
-import org.omg.spec.bpmn.x20100524.model.THumanPerformer;
-import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
-import org.omg.spec.bpmn.x20100524.model.TResourceRole;
 
 
 /**
@@ -15,6 +12,7 @@ import org.omg.spec.bpmn.x20100524.model.TResourceRole;
 public class UserTask extends RunnableFlowNode {
     private final TUserTask task;
     private final ProcessInstance processInstance;
+    private final boolean hasInputForm;
 
     public static class Builder {
         private FlowNodeFactory flowNodeFac;
@@ -35,13 +33,15 @@ public class UserTask extends RunnableFlowNode {
     private UserTask(Builder builder) {
         this.task = builder.task;
         this.processInstance = builder.process;
-        TResourceRole[] resourceRoles = task.getResourceRoleArray();
-        if (resourceRoles[0] instanceof TPotentialOwner) {
-            TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
-            potentialOwner.getResourceAssignmentExpression().getExpression();
-        }
-        THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
-        humanPerformer.getResourceAssignmentExpression().getExpression();
+        //TResourceRole[] resourceRoles = task.getResourceRoleArray();
+        //if (resourceRoles[0] instanceof TPotentialOwner) {
+        //    TPotentialOwner potentialOwner = (TPotentialOwner)resourceRoles[0];
+        //    potentialOwner.getResourceAssignmentExpression().getExpression();
+        //}
+        //THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
+        //humanPerformer.getResourceAssignmentExpression().getExpression();
+        hasInputForm = task.getInputForm() != null;
+        // todo check and write the input form data.
     }
 
     public void run() {
@@ -60,7 +60,8 @@ public class UserTask extends RunnableFlowNode {
         //processInstance.addWaitedTask(getId(), task);
         //instance(task);
         // todo:
-        if (true) {
+        if (hasInputForm()) {
+            System.out.println("Usertask hasInputForm. Pause.");
             processInstance.pause(getId());
         } else {
             resumeTask();
@@ -93,6 +94,6 @@ public class UserTask extends RunnableFlowNode {
 
     // todo
     public boolean hasInputForm() {
-        return false;
+        return hasInputForm;
     }
 }
