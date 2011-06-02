@@ -20,9 +20,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "users")
-public class UserBean extends HObject implements Serializable{
-
+public class UserBean extends HObject implements Serializable {
     private String userId;
     private String password;
     private String firstName;
@@ -85,6 +83,7 @@ public class UserBean extends HObject implements Serializable{
         CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables
      */
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
     public List<GroupBean> getUserGroups() {
         return this.userGroups;
     }
@@ -173,5 +172,12 @@ public class UserBean extends HObject implements Serializable{
             started = new ArrayList<ProcessInstanceBean>();
         }
         started.add(processInstanceBean);
+    }
+
+    public void removeFromAssignedList(TaskBean taskBean) {
+        if (assigned == null) {
+            return;
+        }
+        assigned.remove(taskBean);
     }
 }

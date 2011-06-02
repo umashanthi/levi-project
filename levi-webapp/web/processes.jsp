@@ -129,7 +129,7 @@ Released : 20090303
     <div id="menu">
         <ul id="main">
             <li class="current_page_item"><a href="index.jsp">Home</a></li>
-            <li><a href="#">Tasks</a></li>
+            <li><a href="tasks">Tasks</a></li>
             <li><a href="processes">Processes</a></li>
             <li></li>
             <li></li>
@@ -226,11 +226,11 @@ Released : 20090303
                                                                     onclick="jkpopimage('<%=diagramPath%>', 800, 500, ''); return false">
 
                 </td>
-                <td>
+                <%--<td>
 
                     <input type="button" value="Show Form"
                            onclick="displayForm('<%=process.getDefinitionsId()%>'); return false">
-                </td>
+                </td>--%>
 
 
             </form>

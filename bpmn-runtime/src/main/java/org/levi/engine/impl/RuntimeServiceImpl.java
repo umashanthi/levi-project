@@ -1,5 +1,6 @@
 package org.levi.engine.impl;
 
+import org.hibernate.Hibernate;
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.LeviException;
@@ -140,7 +141,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     public void claim(String pid, String uid, String itemId) {
-        engineData.getProcessInstance(pid).claim(uid, itemId);   
+        engineData.getProcessInstance(pid).claim(uid, itemId);
     }
 
     public void claimUserTask(String pid, String userTaskId, Map<String, Object> variables) {
@@ -148,17 +149,21 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .continueUserTask(userTaskId, variables);
     }
 
-    public void resumeProcessInstance(String processId) {
-        if (engineData.isRunning(processId)) {
+    public boolean resumeProcessInstance(String processId) {
+        /*if (engineData.isRunning(processId)) {
             throw new RuntimeException("Process with id " + processId + " already running.");
-        }
+        }*/
         System.out.println("Resuming process instance.");
         // use the processId to load the process data from the db
         // create a new process instance
         // call resume on it.
+        /* Retrieve ProcessInstanceBean for given processInstance */
+        HibernateDao dao = new HibernateDao();
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
 
         // check if a deployment is available for this process id
-        String definitionsId = "ExclusiveGatewayTest2";
+        String definitionsId = processInstanceBean.getDeployedProcess().getDefinitionsId();// "ExclusiveGatewayTest2";             //TODO: Uma: <-- retrieve this from DB giving the processInstanceId
+
         Deployment deployment = engineData.getDeployment(definitionsId);
         if (deployment == null) {
             throw new LeviException("No deployment found for : " + definitionsId);
@@ -183,18 +188,19 @@ public class RuntimeServiceImpl implements RuntimeService {
         if (processDefinition == null) {
             throw new LeviException("Retrieved process definition is null");
         }
-        ArrayList<String> completed = LeviUtils.newArrayList();
-        completed.add("theStart");
-        ArrayList<String> running = LeviUtils.newArrayList();
-        running.add("theTask2");
 
+        ArrayList<String> completed = new ArrayList(processInstanceBean.getCompletedTasks().keySet());              //TODO Uma: <-get completed & running ids from dbv
+        //completed.add("theStart");
+        ArrayList<String> running = new ArrayList(processInstanceBean.getRunningTasks().keySet());
+        //running.add("theTask2");
+        dao.close();
         ProcessInstance p = new ProcessInstance.Builder(processDefinition)
-                .variables(Collections.<String, Object>emptyMap())
                 .completedIds(completed)
                 .runningIds(running)
                 .processId(processId)
                 .build();
-        p.resume();
+        p.resume(running.get(0));
+        return true;
     }
 
     public void setVariable(String processId, String name, Object value) {
