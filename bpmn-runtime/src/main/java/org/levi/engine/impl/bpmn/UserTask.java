@@ -1,10 +1,14 @@
 package org.levi.engine.impl.bpmn;
 
 
+import com.sun.jmx.snmp.tasks.Task;
+import org.hibernate.Hibernate;
+import org.hibernate.engine.HibernateIterator;
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
@@ -55,17 +59,21 @@ public class UserTask extends RunnableFlowNode {
 
     private void persistUserTask(UserTask userTask) {
         HibernateDao dao = new HibernateDao();
-        TaskBean starteventbean = new TaskBean();
-        starteventbean.setId(userTask.getId());
-        starteventbean.setTaskId(userTask.getId());
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-        starteventbean.setProcesseInstance(processInstanceBean);
-        starteventbean.setAssignee(processInstanceBean.getStartUser());
-        starteventbean.setFormName(task.getName());
-        starteventbean.setTaskName(task.getName());
-        starteventbean.setHasUserForm(hasInputForm());
-        starteventbean.setFromPath(task.getInputForm());
-        dao.save(starteventbean);
+        TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
+        if (starteventbean == null) {
+            starteventbean = new TaskBean();
+            starteventbean.setId(userTask.getId());
+            starteventbean.setTaskId(userTask.getId());
+            ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
+            starteventbean.setProcesseInstance(processInstanceBean);
+            UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
+            starteventbean.setAssignee(user);
+            starteventbean.setFormName(task.getName());
+            starteventbean.setTaskName(task.getName());
+            starteventbean.setHasUserForm(hasInputForm());
+            starteventbean.setFromPath(task.getInputForm());
+            dao.save(starteventbean);
+        }
         dao.close();
     }
 
@@ -115,6 +123,7 @@ public class UserTask extends RunnableFlowNode {
         System.out.println("Resuming user task id " + getId());
         instance(processInstance.executeNext(this));
         processInstance.addCompleted(getId());
+
     }
 
     // todo

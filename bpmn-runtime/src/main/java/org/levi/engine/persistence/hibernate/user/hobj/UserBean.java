@@ -85,7 +85,7 @@ public class UserBean extends HObject implements Serializable {
         this.userGroups = groups;
     }
 
-    @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     public List<TaskBean> getAssigned() {
         return assigned;
     }
@@ -135,5 +135,12 @@ public class UserBean extends HObject implements Serializable {
             started = new ArrayList<ProcessInstanceBean>();
         }
         started.add(processInstanceBean);
+    }
+
+    public void removeFromAssignedList(TaskBean taskBean) {
+        if (assigned == null) {
+            return;
+        }
+        assigned.remove(taskBean);
     }
 }

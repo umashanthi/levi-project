@@ -149,10 +149,10 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .continueUserTask(userTaskId, variables);
     }
 
-    public void resumeProcessInstance(String processId) {
-        if (engineData.isRunning(processId)) {
+    public boolean resumeProcessInstance(String processId) {
+        /*if (engineData.isRunning(processId)) {
             throw new RuntimeException("Process with id " + processId + " already running.");
-        }
+        }*/
         System.out.println("Resuming process instance.");
         // use the processId to load the process data from the db
         // create a new process instance
@@ -189,9 +189,9 @@ public class RuntimeServiceImpl implements RuntimeService {
             throw new LeviException("Retrieved process definition is null");
         }
 
-        ArrayList<String> completed = new ArrayList(processInstanceBean.getCompletedTasks().values());              //TODO Uma: <-get completed & running ids from dbv
+        ArrayList<String> completed = new ArrayList(processInstanceBean.getCompletedTasks().keySet());              //TODO Uma: <-get completed & running ids from dbv
         //completed.add("theStart");
-        ArrayList<String> running = new ArrayList(processInstanceBean.getRunningTasks().values());
+        ArrayList<String> running = new ArrayList(processInstanceBean.getRunningTasks().keySet());
         //running.add("theTask2");
         dao.close();
         ProcessInstance p = new ProcessInstance.Builder(processDefinition)
@@ -199,7 +199,8 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .runningIds(running)
                 .processId(processId)
                 .build();
-        p.resume();
+        p.resume(running.get(0));
+        return true;
     }
 
     public void setVariable(String processId, String name, Object value) {

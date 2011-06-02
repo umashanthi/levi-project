@@ -13,6 +13,7 @@ import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
@@ -247,15 +248,33 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     public void addCompleted(String id) {
+        HibernateDao dao = new HibernateDao();
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, id);
+        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
+        if (task != null) {
+            processInstanceBean = task.getProcesseInstance();
+        }
         synchronized (runningTaskIds) {
             if (!runningTaskIds.contains(id)) {
                 throw new LeviException("No running element found for the processId " + id);
             }
             runningTaskIds.remove(id);
+            if (task != null)
+                processInstanceBean.removeFromRunningTask(task);
         }
         synchronized (completedTaskIds) {
             completedTaskIds.add(id);
+            if (task != null)
+                processInstanceBean.addToCompletedTask(task);
+
         }
+        if (task != null) {
+            dao.update(processInstanceBean);
+            UserBean user = task.getAssignee();
+            user.removeFromAssignedList(task);
+            dao.update(user);
+        }
+        dao.close();
     }
 
     public synchronized List<String> getRunningTaskIds() {

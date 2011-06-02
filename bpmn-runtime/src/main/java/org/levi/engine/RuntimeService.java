@@ -21,7 +21,7 @@ public interface RuntimeService {
 
     void claim(String pid, String uid, String itemId);
 
-    void resumeProcessInstance(String processId);
+    boolean resumeProcessInstance(String processId);
 
     void setVariable(String processId, String name, Object value);
 

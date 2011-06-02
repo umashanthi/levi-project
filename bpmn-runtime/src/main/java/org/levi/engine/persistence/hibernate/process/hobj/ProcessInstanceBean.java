@@ -165,13 +165,24 @@ public class ProcessInstanceBean extends HObject {
         if (completedTasks == null) {
             completedTasks = new HashMap<String, TaskBean>();
         }
-        completedTasks.put(taskBean.getId(), taskBean);
+        if (taskBean != null)
+            completedTasks.put(taskBean.getId(), taskBean);
     }
 
     public void addToRunningTask(TaskBean taskBean) {
         if (runningTasks == null) {
             runningTasks = new HashMap<String, TaskBean>();
         }
-        runningTasks.put(taskBean.getId(), taskBean);
+        if (taskBean != null)
+            runningTasks.put(taskBean.getId(), taskBean);
+    }
+
+    public void removeFromRunningTask(TaskBean taskBean) {
+        if (runningTasks == null) {
+            return;
+        }
+        if (runningTasks.containsKey(taskBean.getId())) {
+            runningTasks.remove(taskBean.getId());
+        }
     }
 }

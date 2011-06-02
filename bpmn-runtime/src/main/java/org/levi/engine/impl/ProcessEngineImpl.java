@@ -73,7 +73,7 @@ public class ProcessEngineImpl implements ProcessEngine {
         //TODO this is a short fix for the database schema recreating problem
         //TODO the problem: restart the server will recreate the db schema
         SessionFactoryUtil.exportSchema();
-        
+
         /*
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);
         if (engineDataFile.exists()) {
@@ -88,12 +88,12 @@ public class ProcessEngineImpl implements ProcessEngine {
         }
         */
         HibernateDao dao = new HibernateDao();
-        try{
-            EngineDataBean bean = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
+        try {
+            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
             Bean2Impl b2i = new Bean2Impl();
             engineData = b2i.engineData(bean);
             //TODO need to clarified the exception   
-        }catch(Exception e){
+        } catch (Exception e) {
             engineData = new EngineData();
         }
 
@@ -115,8 +115,8 @@ public class ProcessEngineImpl implements ProcessEngine {
         return LeviUtils.giveList(engineData.getRunningProcessIds());
     }
 
-    public void resumeProcessInstance(String processId) {
-        runtimeService.resumeProcessInstance(processId);
+    public boolean resumeProcessInstance(String processId) {
+        return runtimeService.resumeProcessInstance(processId);
     }
 
     public synchronized void stop()

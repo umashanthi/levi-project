@@ -86,9 +86,8 @@ Released : 20090303
 <!-- end header -->
 <div id="body">
     <div>
-        <li><h3><a href="tasks">My Tasks </a></h3></li>
+
         &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <li><h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3></li>
     </div>
     <table>
         <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
@@ -98,6 +97,9 @@ Released : 20090303
                 List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
                 if (unassignedTaskList.size() > 0) {
                     for (TaskBean task : unassignedTaskList) { %>
+        <tr>
+            <h3><a href="tasks">Unassigned Tasks </a></h3>
+        </tr>
         <tr>
             <form name="claimTaskForm" action="" method="post">
                 <td>
@@ -112,14 +114,20 @@ Released : 20090303
         <%
                 }
             }
-        } else {
-            // display tasks for this user
-            assert request.getSession().getAttribute("userTaskList") != null;
-            List<TaskBean> userTaskList = (List<TaskBean>) request.getSession().getAttribute("userTaskList");
-            assert userTaskList != null;
-            if (userTaskList.size() > 0) {
-                for (TaskBean task : userTaskList) { %>
+        } else { %>
         <tr>
+            <h3><a href="tasks?unassigned=true">My Tasks </a></h3></tr>
+        <tr>
+            <%
+
+                // display tasks for this user
+                assert request.getSession().getAttribute("userTaskList") != null;
+                List<TaskBean> userTaskList = (List<TaskBean>) request.getSession().getAttribute("userTaskList");
+                assert userTaskList != null;
+                if (userTaskList.size() > 0) {
+                    for (TaskBean task : userTaskList) { %>
+
+
             <%--<form action="" method="post">--%>
             <td>
                 <%=task.getTaskName()%>
