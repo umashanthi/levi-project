@@ -24,9 +24,13 @@ public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
     // todo: make the dirs of serial, extract if not exsisting
     private List<Deployment> createdDeployments = LeviUtils.newArrayList(50);
+    private HibernateDao dao;
+    private EngineDataBean bean;
 
     public boolean start() {
         System.out.println("[Info] Storage Service started");
+        dao = new HibernateDao();
+        bean = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
         return true;
     }
 
@@ -74,32 +78,29 @@ public class StorageServiceImpl implements StorageService {
         deploymentBean.setProcessDefinitionPath(deployment.getProcessDefinitionPath());
         deploymentBean.setDiagramPath(deployment.getDiagramPath());
         deploymentBean.setDeploymentTime(deployment.getDate());
-        EngineDataBean engineDataBean = new EngineDataBean();
-        engineDataBean.setId("1");
-        //engineDataBean.set_dateCreated(new Date());
 
-        HibernateDao dao = new HibernateDao();
         dao.save(deploymentBean);
         //dao.update();
-        if (dao.getObject(EngineDataBean.class, "1") != null) {
-            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        if (bean != null) {
             bean.addDeployment(deploymentBean);
             dao.update(bean);
         } else {
+            EngineDataBean engineDataBean = new EngineDataBean();
+            engineDataBean.setId("1");
+            //engineDataBean.set_dateCreated(new Date());
             engineDataBean.addDeployment(deploymentBean);
             dao.save(engineDataBean);
         }
-        dao.close();
     }
 
     public void undeploy(String id) throws IOException {
         //TODO this is a short fix. We need to get the DeploymentBean map using the EngineDataBean and delete the map entry.
-        //TODO delete the engineDataBean variable in Deployment bean after fixing this
-        //TODO the problem here is we cannot get the EngineData from the EngineDataBean
-        HibernateDao dao = new HibernateDao();
+        //TODO delete the engineDataBean variable in Deployment bean and following two lines after fixing this
         dao.remove(DeploymentBean.class,id);
-        dao.close();
-        //undeploy(engineData.getDeployment(id));
+
+        //TODO the problem here is we cannot get the EngineData from the EngineDataBean
+        //EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        //bean.getDeployedProcesses().remove(id);
     }
 
     public String getDiagramPath(String id) {
@@ -118,10 +119,6 @@ public class StorageServiceImpl implements StorageService {
 
     public void undeploy(Deployment d)
             throws IOException {
-        //TODO HibernateDao object must instantiate once in this class
-        HibernateDao dao = new HibernateDao();
-        dao.remove(DeploymentBean.class, d.getDefinitionsId());
-        dao.close();
 
         if (engineData.hasDeployment(d)) {
             engineData.removeDeployment(d);
@@ -132,6 +129,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public boolean stop() throws IOException {
+        dao.close(); //in this step session will be closed
         cleanup();
         System.out.println("[Info] Storage Service stopped.");
         return true;
