@@ -35,7 +35,9 @@ public class UserBean extends HObject implements Serializable{
     private List<DeploymentBean> deployed = new ArrayList<DeploymentBean>();
     private List<DeploymentBean> undeployed = new ArrayList<DeploymentBean>();
 
-
+    /*
+        Bean Identifier-UserId
+     */
     @Id
     public String getUserId() {
         return this.userId;
@@ -77,6 +79,11 @@ public class UserBean extends HObject implements Serializable{
         this.userEmail = userEmail;
     }
 
+    /*
+        @ManyToMany - One user can be categorized  under many groups
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'GroupBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables
+     */
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<GroupBean> getUserGroups() {
         return this.userGroups;
@@ -86,6 +93,12 @@ public class UserBean extends HObject implements Serializable{
         this.userGroups = groups;
     }
 
+    /*
+        @OneToMany - One user can assign many tasks
+        mappedBy = "assignee" - attribute mapped in TaskBean 
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'TaskBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve 
+     */
     @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<TaskBean> getAssigned() {
         return assigned;
@@ -95,6 +108,12 @@ public class UserBean extends HObject implements Serializable{
         this.assigned = assigned;
     }
 
+    /*
+        @OneToMany - One user can own many tasks
+        mappedBy = "owner" - attribute mapped in TaskBean
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'TaskBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve
+     */
     @OneToMany(targetEntity = TaskBean.class, mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<TaskBean> getOwned() {
         return owned;
@@ -104,6 +123,12 @@ public class UserBean extends HObject implements Serializable{
         this.owned = owned;
     }
 
+    /*
+        @OneToMany - One user can start many processes
+        mappedBy = "startUser" - attribute mapped in ProcessInstanceBean
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'ProcessInstanceBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve
+     */
     @OneToMany(targetEntity = ProcessInstanceBean.class, mappedBy = "startUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<ProcessInstanceBean> getStarted() {
         return started;
@@ -113,6 +138,12 @@ public class UserBean extends HObject implements Serializable{
         this.started = started;
     }
 
+    /*
+        @OneToMany - One user can deploy many processes
+        mappedBy = "startUser" - attribute mapped in DeploymentBean
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'DeploymentBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve
+     */
     @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "deployedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<DeploymentBean> getDeployed() {
         return deployed;
@@ -122,6 +153,12 @@ public class UserBean extends HObject implements Serializable{
         this.deployed = deployed;
     }
 
+    /*
+        @OneToMany - One user can undeploy many processes
+        mappedBy = "startUser" - attribute mapped in DeploymentBean
+        fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'DeploymentBean's
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve
+     */
     @OneToMany(targetEntity = DeploymentBean.class, mappedBy = "undeployedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<DeploymentBean> getUndeployed() {
         return undeployed;

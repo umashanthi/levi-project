@@ -47,6 +47,9 @@ public class GroupBean extends HObject{
         this.groupDescription = description;
     }
 
+    /*
+        @ManyToMany - One group can have many users
+     */
     @ManyToMany
     @JoinTable(name = "user_group", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")})
     public List<UserBean> getMembers() {

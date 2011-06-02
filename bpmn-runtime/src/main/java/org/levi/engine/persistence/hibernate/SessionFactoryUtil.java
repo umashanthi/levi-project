@@ -45,7 +45,7 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
         config.addAnnotatedClass(EngineDataBean.class);
-        config.configure("persistance.xml");
+        config.configure("persistence.xml");
         new SchemaExport(config).create(true, true);
     }
 
