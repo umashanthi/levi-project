@@ -28,7 +28,7 @@ public class PersistTest {
     public void start() {
         SessionFactoryUtil.exportSchema();
         HibernateDao dao = new HibernateDao();
-         /*
+
         UserBean user1 = new UserBean();
         user1.setUserId("1");
         user1.setFirstName("eranda");
@@ -64,7 +64,6 @@ public class PersistTest {
         group.getMembers().add(user3);
 
         dao.save(group);
-         */
         /*
         DeploymentBean deploymentBean = new DeploymentBean();
         deploymentBean.setDefinitionsId("ssd");

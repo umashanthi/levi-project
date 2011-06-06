@@ -37,7 +37,7 @@ public interface ProcessEngine {
 
     List<String> getRunningProcessIds();
 
-    void resumeProcessInstance(String processId);
+    boolean resumeProcessInstance(String processId);
 
     void setVariable(String processId, String name, Object value);
 

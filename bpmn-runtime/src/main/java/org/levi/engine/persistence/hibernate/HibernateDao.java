@@ -32,7 +32,7 @@ public class HibernateDao {
             tx.commit();
             session.flush();
         } catch (ConstraintViolationException e) {
-            System.out.println("[error] Constrained violated"); //TODO need to handle this exception
+            System.out.println("[error] Constrained violated");
         }
     }
 
@@ -52,7 +52,6 @@ public class HibernateDao {
     }
 
     public void update(HObject hobj) {
-        //TODO update without an existing object cause exception
         Transaction tx = session.beginTransaction();
         session.saveOrUpdate(hobj);
         tx.commit();
