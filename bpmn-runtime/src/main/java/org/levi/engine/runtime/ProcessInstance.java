@@ -2,8 +2,6 @@ package org.levi.engine.runtime;
 
 import org.apache.ode.jacob.vpu.ExecutionQueueImpl;
 import org.apache.ode.jacob.vpu.JacobVPU;
-import org.hibernate.Hibernate;
-import org.hibernate.engine.HibernateIterator;
 import org.levi.engine.LeviException;
 import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.bpmn.RunnableFlowNode;
