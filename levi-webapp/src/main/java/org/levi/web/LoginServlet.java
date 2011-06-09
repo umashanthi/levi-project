@@ -61,6 +61,14 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 user.setPassword("admin");
                 dao.save(user);
             }
+            user = (UserBean) dao.getObject(UserBean.class, "john");
+            if (user == null) {
+                //no user exists in the DB
+                user = new UserBean();
+                user.setUserId("john");
+                user.setPassword("john");
+                dao.save(user);
+            }
             dao.close();
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
