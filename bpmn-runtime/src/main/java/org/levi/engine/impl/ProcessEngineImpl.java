@@ -72,7 +72,7 @@ public class ProcessEngineImpl implements ProcessEngine {
 
         //TODO this is a short fix for the database schema recreating problem
         //TODO the problem: restart the server will recreate the db schema
-        SessionFactoryUtil.exportSchema();
+        //SessionFactoryUtil.exportSchema();
 
         /*
         File engineDataFile = new File(Constants.ENGINEDATA_PATH);

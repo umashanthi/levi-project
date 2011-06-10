@@ -83,7 +83,7 @@ public class UserBean extends HObject implements Serializable {
         CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables
      */
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "USERGROUP", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
+    @JoinTable(name = "user_group", joinColumns = {@JoinColumn(name = "userId")}, inverseJoinColumns = {@JoinColumn(name = "groupId")})
     public List<GroupBean> getUserGroups() {
         return this.userGroups;
     }

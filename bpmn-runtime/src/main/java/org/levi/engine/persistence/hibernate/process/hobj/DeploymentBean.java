@@ -139,7 +139,7 @@ public class DeploymentBean extends HObject {
         isUndeployed = undeployed;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     public EngineDataBean getEngineDataBean() {
         return engineDataBean;
     }

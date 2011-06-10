@@ -94,13 +94,10 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public void undeploy(String id) throws IOException {
-        //TODO this is a short fix. We need to get the DeploymentBean map using the EngineDataBean and delete the map entry.
-        //TODO delete the engineDataBean variable in Deployment bean and following two lines after fixing this
+        EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        bean.getDeployedProcesses().remove(id);
+        dao.save(bean);
         dao.remove(DeploymentBean.class,id);
-
-        //TODO the problem here is we cannot get the EngineData from the EngineDataBean
-        //EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
-        //bean.getDeployedProcesses().remove(id);
     }
 
     public String getDiagramPath(String id) {

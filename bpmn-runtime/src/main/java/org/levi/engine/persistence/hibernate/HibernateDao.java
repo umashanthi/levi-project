@@ -4,7 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
-import java.io.Serializable;
+import java.util.List;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,6 +56,11 @@ public class HibernateDao {
         Transaction tx = session.beginTransaction();
         session.saveOrUpdate(hobj);
         tx.commit();
+    }
+
+    public List<HObject> getObjects(Class cls){
+        List objects = session.createCriteria(cls).list();
+        return objects;
     }
 
     public void close() {
