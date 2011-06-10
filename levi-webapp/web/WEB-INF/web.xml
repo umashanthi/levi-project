@@ -57,6 +57,10 @@
         <servlet-name>TaskActionServlet</servlet-name>
         <servlet-class>org.levi.web.TaskActionServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserManagerServlet</servlet-name>
+        <servlet-class>org.levi.web.UserManagerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -96,6 +100,10 @@
     <servlet-mapping>
         <servlet-name>TaskActionServlet</servlet-name>
         <url-pattern>/taskAction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserManagerServlet</servlet-name>
+        <url-pattern>/usrmng</url-pattern>
     </servlet-mapping>
     <jsp-config>
         <taglib>
