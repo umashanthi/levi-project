@@ -98,7 +98,7 @@ public class UserBean extends HObject implements Serializable {
         fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'TaskBean's
         CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve 
      */
-    @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<TaskBean> getAssigned() {
         return assigned;
     }
