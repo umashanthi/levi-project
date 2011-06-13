@@ -1,6 +1,7 @@
 package org.levi.web;
 
-import org.hibernate.Hibernate;
+
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -9,8 +10,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +31,20 @@ public class UserManagerServlet extends HttpServlet {
         // Retrieve the action
         String action = request.getParameter("action");
         if (action == null) {         // list users and groups -- default action
-            response.sendRedirect("usermanagement.jsp");
+            List<HObject> beanList = dao.getObjects(UserBean.class);
+            List<UserBean> userBeanList = new ArrayList<UserBean>();
+            for (HObject bean : beanList) {
+                userBeanList.add((UserBean) bean);
+            }
+            beanList = dao.getObjects(GroupBean.class);
+            List<GroupBean> groupBeanList = new ArrayList<GroupBean>();
+            for (HObject bean : beanList) {
+                groupBeanList.add((GroupBean) bean);
+            }
+            request.setAttribute("usersList", userBeanList);
+            request.setAttribute("groupList", groupBeanList);
+            //response.sendRedirect("usermanagement.jsp");
+            request.getRequestDispatcher("usermanagement.jsp").forward(request, response);
         } else if (action.equals("addgroup")) {  // add group
             String groupName = request.getParameter("groupname");
             String description = request.getParameter("description");

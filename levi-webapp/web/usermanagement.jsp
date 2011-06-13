@@ -5,6 +5,8 @@
 <%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="org.levi.engine.Deployment" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
 
 
 <%--
@@ -83,23 +85,25 @@ Released : 20090303
     </p>
     <table border="0" width="50%" cellpadding="10" cellspacing="0">
         <tr>
-            <th>Username</th>
-            <th>Password</th>
+            <th>User Name</th>
             <th>Group</th>
             <th></th>
         </tr>
+        <% List<UserBean> userBeanList = (List<UserBean>) request.getAttribute("usersList");
+            for (UserBean userBean : userBeanList) {
+                String userGroups = "";
+                for (GroupBean group : userBean.getUserGroups()) {
+                    userGroups += group.getGroupName() + " , ";
+                }
+        %>
         <tr>
-            <td>admin</td>
-            <td>admin</td>
-            <td>Administration</td>
-            <td><a href="usrmng?action=editUser">Edit</a></td>
+            <td><%=userBean.getUserId()%>
+            </td>
+            <td><%=userGroups%>
+            </td>
+            <td><a href="usrmng?action=editUser&username=<%=userBean.getUserId()%>">Edit</a></td>
         </tr>
-        <tr>
-            <td>john</td>
-            <td>john</td>
-            <td>Accounting</td>
-            <td><a href="usrmng?action=editUser">Edit</a></td>
-        </tr>
+        <%}%>
     </table>
     <p>&nbsp;</p>
 
@@ -115,14 +119,16 @@ Released : 20090303
             <th>Group Name</th>
             <th>Description</th>
         </tr>
+        <% List<GroupBean> groupBeanList = (List<GroupBean>) request.getAttribute("groupList");
+            for (GroupBean groupBean : groupBeanList) {
+        %>
         <tr>
-            <td>Administration</td>
-            <td>Handles administration responsibilities</td>
+            <td><%=groupBean.getGroupName()%>
+            </td>
+            <td><%=groupBean.getGroupDescription()%>
+            </td>
         </tr>
-        <tr>
-            <td>Accounting</td>
-            <td>Accounting related responsibilities</td>
-        </tr>
+        <%}%>
     </table>
     <% } else { %>
     <div id="bodylogo"></div>

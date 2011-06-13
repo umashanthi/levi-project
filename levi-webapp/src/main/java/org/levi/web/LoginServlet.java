@@ -6,11 +6,14 @@ import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.ProcessEngineImpl;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request,
@@ -45,12 +48,23 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             request.getSession().setAttribute("dbManager", dbManager);
             //TODO: Need to change!!!
             HibernateDao dao = new HibernateDao();
+            GroupBean group = (GroupBean) dao.getObject(GroupBean.class, "Administration");
+            if (group == null) {
+                group = new GroupBean();
+                group.setGroupId("Administration");
+                group.setGroupName("Administration");
+                group.setGroupDescription("Handles administrative functions");
+                dao.save(group);
+            }
             UserBean user = (UserBean) dao.getObject(UserBean.class, username);
             if (user == null) {
                 //no user exists in the DB
                 user = new UserBean();
                 user.setUserId(username);
                 user.setPassword(password);
+                List<GroupBean> userGroups = new ArrayList<GroupBean>();
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
                 dao.save(user);
             }
             user = (UserBean) dao.getObject(UserBean.class, "admin");
@@ -59,6 +73,9 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 user = new UserBean();
                 user.setUserId("admin");
                 user.setPassword("admin");
+                List<GroupBean> userGroups = new ArrayList<GroupBean>();
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
                 dao.save(user);
             }
             user = (UserBean) dao.getObject(UserBean.class, "john");
@@ -67,6 +84,9 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 user = new UserBean();
                 user.setUserId("john");
                 user.setPassword("john");
+                List<GroupBean> userGroups = new ArrayList<GroupBean>();
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
                 dao.save(user);
             }
             dao.close();
