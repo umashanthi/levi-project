@@ -80,7 +80,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateTask(TaskBean task) {
-        //To change body of implemented methods use File | Settings | File Templates.
+         dao.update(task);
     }
 
     public void saveProcess(DeploymentBean deployedProcess) {
@@ -92,7 +92,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcess(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public void saveProcessInstance(ProcessInstanceBean process) {
@@ -100,7 +100,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcess(DeploymentBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public void deleteProcessInstance(String processId) {
@@ -108,7 +108,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcessInstance(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
