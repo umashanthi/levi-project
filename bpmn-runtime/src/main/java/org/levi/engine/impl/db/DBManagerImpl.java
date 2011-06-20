@@ -159,4 +159,13 @@ public class DBManagerImpl implements DBManager {
     public boolean claimUserTask(String taskId, String processInstanceId, String username) {
         return false;
     }
+
+    public List<UserBean> getUserList(){
+        return dao.getUserObjects();
+    }
+
+    public List<GroupBean> getGroupList(){
+        return dao.getGroupObjects();
+    }
+
 }
