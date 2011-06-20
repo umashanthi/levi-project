@@ -168,4 +168,22 @@ public class DBManagerImpl implements DBManager {
         return dao.getGroupObjects();
     }
 
+    public void assignedTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
+        task.setActive(true);
+        dao.update(task);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        user.getAssigned().add(task);
+        dao.update(user);       
+    }
+
+    public void unassignedTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
+        task.setActive(false);
+        dao.update(task);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        user.getAssigned().remove(task);
+        dao.update(user);
+    }
+
 }
