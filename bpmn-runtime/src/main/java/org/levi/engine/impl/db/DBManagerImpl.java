@@ -1,12 +1,15 @@
 package org.levi.engine.impl.db;
 
+import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.utils.Bean2Impl;
 
 import java.util.List;
 
@@ -191,6 +194,20 @@ public class DBManagerImpl implements DBManager {
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         user.getAssigned().remove(task);
         dao.update(user);
+    }
+
+    public EngineData getEngineData(){
+        EngineData engineData;
+        try {
+            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+            Bean2Impl b2i = new Bean2Impl();
+            engineData = b2i.engineData(bean);
+            //TODO need to clarified the exception
+        } catch (Exception e) {
+            engineData = new EngineData();
+        }
+
+        return engineData;
     }
 
 }
