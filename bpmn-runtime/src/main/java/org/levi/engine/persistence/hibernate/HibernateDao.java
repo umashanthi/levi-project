@@ -1,8 +1,11 @@
 package org.levi.engine.persistence.hibernate;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
@@ -72,6 +75,12 @@ public class HibernateDao {
 
     public void close() {
         session.close();
+    }
+
+    public List<TaskBean> getAssignedTasks(String userId){
+        Criteria criteria = session.createCriteria(TaskBean.class);
+        criteria.add(Restrictions.eq("active", true));
+        return criteria.list();
     }
 
 

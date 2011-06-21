@@ -168,8 +168,8 @@ public class DBManagerImpl implements DBManager {
         return dao.getGroupObjects();
     }
 
-    public void assignedTask(String taskId, String userId){
-        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
+    public void assignTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         task.setActive(true);
         dao.update(task);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
@@ -177,10 +177,17 @@ public class DBManagerImpl implements DBManager {
         dao.update(user);       
     }
 
-    public void unassignedTask(String taskId, String userId){
-        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
+    public void unassignTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         task.setActive(false);
         dao.update(task);
+    }
+
+    /*
+            This method can be use to remove the TASK from the task list of the USER
+     */
+    public void removeTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         user.getAssigned().remove(task);
         dao.update(user);
