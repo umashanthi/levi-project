@@ -2,8 +2,6 @@ package org.levi.engine.runtime;
 
 import org.apache.ode.jacob.vpu.ExecutionQueueImpl;
 import org.apache.ode.jacob.vpu.JacobVPU;
-import org.hibernate.Hibernate;
-import org.hibernate.engine.HibernateIterator;
 import org.levi.engine.LeviException;
 import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.bpmn.RunnableFlowNode;
@@ -15,11 +13,9 @@ import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +27,8 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private FlowNodeFactory flowNodeFac;
     private Map<String, Object> variables;
     private Map<String, WaitedTask> waitedTasks;
-    private ArrayList<String> runningTaskIds;
-    private ArrayList<String> completedTaskIds;
+    private List<String> runningTaskIds;
+    private List<String> completedTaskIds;
     private String processId;
     private String processDefId;
     private List<String> pauseSignals;
@@ -86,8 +82,8 @@ public class ProcessInstance extends BPMNJacobRunnable {
         private ProcessDefinition processDefinition;
         private Map<String, Object> variables;
         private Map<String, WaitedTask> waitedTasks;
-        private ArrayList<String> runningElemIds;
-        private ArrayList<String> completedElemIds;
+        private List<String> runningElemIds;
+        private List<String> completedElemIds;
         private String processId;
 
         public Builder(ProcessDefinition processDefinition) {
@@ -104,12 +100,12 @@ public class ProcessInstance extends BPMNJacobRunnable {
             return this;
         }
 
-        public Builder runningIds(ArrayList<String> ids) {
+        public Builder runningIds(List<String> ids) {
             runningElemIds = ids;
             return this;
         }
 
-        public Builder completedIds(ArrayList<String> ids) {
+        public Builder completedIds(List<String> ids) {
             completedElemIds = ids;
             return this;
         }

@@ -12,10 +12,12 @@ import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.utils.Impl2Bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBManagerImpl implements DBManager {
@@ -262,14 +264,69 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    public void closeSession() {
-        dao.close();
-    }
-
     public void undeployProcess(String processId) {
         EngineDataBean bean = getEngineDataBean();
         bean.getDeployedProcesses().remove(processId);
         dao.save(bean);
         dao.remove(DeploymentBean.class, processId);
+    }
+
+    public void persistProcessInstance(ProcessInstance processInstance){
+        DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
+        assert deploymentBean != null;
+        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
+        processInstanceBean.setProcessId(processInstance.getProcessId());
+        processInstanceBean.setDeployedProcess(deploymentBean);
+        UserBean userBean = new UserBean();
+        userBean.setUserId(processInstance.getStartUserId());
+        UserBean user = (UserBean) dao.getObject(UserBean.class, processInstance.getStartUserId());
+        if (user != null) {
+            processInstanceBean.setStartUser(user);
+        } else {
+            processInstanceBean.setStartUser(userBean);
+        }
+
+        processInstanceBean.setStartTime(new Date());
+        processInstanceBean.setVariables(processInstance.getVariables());
+        processInstanceBean.setStartEventId(processInstance.getObjectModel().getStartEvent().getId());
+        processInstanceBean.setRunning(true);
+
+        dao.save(processInstanceBean);
+        if (user != null) {
+            user.addStartedProcessInstances(processInstanceBean);
+            dao.update(user);
+        } else {
+            userBean.addStartedProcessInstances(processInstanceBean);
+            dao.save(userBean);
+        }
+        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        if (engineDataBean != null) {
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.update(engineDataBean);
+        } else {
+            engineDataBean = new EngineDataBean();
+            engineDataBean.setId("1");
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.save(engineDataBean);
+        }
+    }
+
+    public String getProcessDefinition(String processId){
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        return processInstanceBean.getDeployedProcess().getDefinitionsId();
+    }
+
+    public List<String> getCompletedTasks(String processId){
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
+    }
+
+    public List<String> getRunningTasks(String processId){
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
+    }
+
+    public void closeSession() {
+        dao.close();
     }
 }
