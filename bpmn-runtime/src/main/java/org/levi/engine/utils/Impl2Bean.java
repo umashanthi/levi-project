@@ -17,23 +17,19 @@ import java.util.List;
  */
 public class Impl2Bean {
 
-    public static GroupBean getGroupBean(Group group) {
-        GroupBean groupBean = new GroupBean();
+
+    public static GroupBean getGroupBean(Group group, GroupBean groupBean, boolean update) {
+        if (!update)
+            groupBean.setGroupId(group.getGroupId());
         groupBean.setGroupName(group.getGroupName());
-        groupBean.setGroupId(group.getGroupId());
         groupBean.setGroupDescription(group.getGroupDescription());
         return groupBean;
     }
 
-    public static UserBean getUserBean(User user) {
-        UserBean userBean = new UserBean();
-        userBean.setUserId(user.getUserId());
+    public static UserBean getUserBean(User user, UserBean userBean, boolean update) {
+        if (!update)
+            userBean.setUserId(user.getUserId());
         userBean.setPassword(user.getPassword());
-        List<GroupBean> groupBeanList = new ArrayList<GroupBean>();
-        for (Group group : user.getUserGroups()) {
-            groupBeanList.add(Impl2Bean.getGroupBean(group));
-        }
-        userBean.setUserGroups(groupBeanList);
         return userBean;
     }
 }
