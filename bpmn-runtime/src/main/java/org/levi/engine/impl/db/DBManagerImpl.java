@@ -199,7 +199,7 @@ public class DBManagerImpl implements DBManager {
     public EngineData getEngineData(){
         EngineData engineData;
         try {
-            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+            EngineDataBean bean = getEngineDataBean();
             Bean2Impl b2i = new Bean2Impl();
             engineData = b2i.engineData(bean);
             //TODO need to clarified the exception
@@ -208,6 +208,10 @@ public class DBManagerImpl implements DBManager {
         }
 
         return engineData;
+    }
+
+    public EngineDataBean getEngineDataBean(){
+        return (EngineDataBean) dao.getObject(EngineDataBean.class, "1");       
     }
 
 }
