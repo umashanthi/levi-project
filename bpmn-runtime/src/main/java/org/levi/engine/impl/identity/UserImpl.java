@@ -69,4 +69,5 @@ public class UserImpl implements User, Serializable {
     public void setUserEmail(String email) {
         this.userEmail = email;
     }
+
 }

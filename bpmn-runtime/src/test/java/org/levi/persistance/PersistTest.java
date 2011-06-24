@@ -1,14 +1,19 @@
 package org.levi.persistance;
 
 
+import org.levi.engine.db.DBManager;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -64,6 +69,31 @@ public class PersistTest {
         group.getMembers().add(user3);
 
         dao.save(group);
+
+        TaskBean task1 = new TaskBean();
+        task1.setId("task1");
+
+        dao.save(task1);
+
+        TaskBean task2 = new TaskBean();
+        task2.setId("task2");
+
+        dao.save(task2);
+
+        DBManagerImpl manager = new DBManagerImpl();
+        manager.assignTask("task1","1");
+        manager.assignTask("task2","1");
+
+        List<TaskBean> tasks = dao.getAssignedTasks("1");
+        Iterator<TaskBean> itr = tasks.iterator();
+
+        while(itr.hasNext()){
+            System.out.println(itr.next().getId());
+        }
+
+        manager.unassignTask("task1","1");
+        manager.removeTask("task1", "1");
+
         /*
         DeploymentBean deploymentBean = new DeploymentBean();
         deploymentBean.setDefinitionsId("ssd");

@@ -27,5 +27,9 @@ public interface User {
 
     void setUserEmail(String email);
 
+    List<Group> getUserGroups();
+
+    void setUserGroups(List<Group> groups);
+
 
 }

@@ -1,6 +1,17 @@
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="org.levi.engine.ProcessEngine" %>
+<%@ page import="java.io.File" %>
+<%@ page import="org.apache.commons.io.FileUtils" %>
+<%@ page import="org.levi.engine.Deployment" %>
+<%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
+
+
 <%--
   Created by IntelliJ IDEA.
-  User: umashanthi
+  UserBean: umashanthi
   Date: Mar 29, 2011
   Time: 9:55:15 AM
   To change this template use File | Settings | File Templates.
@@ -26,7 +37,12 @@ Released : 20090303
     <meta name="Premium Series" content=""/>
     <link href="default.css" rel="stylesheet" type="text/css" media="screen"/>
 </head>
+
 <body>
+
+<script type="text/javascript">
+
+</script>
 <!-- start header -->
 <div id="header">
     <div id="logo">
@@ -43,7 +59,6 @@ Released : 20090303
             <li><a href="usrmng">User Management</a></li>
             <%} %>
             <li></li>
-            <li></li>
             <li>
                 <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
                 <a href="logout">Logout</a></li>
@@ -53,58 +68,63 @@ Released : 20090303
             <% }%>
         </ul>
     </div>
-
 </div>
 <!-- end header -->
 <div id="body">
     <% Object isLogged = session.getAttribute("logged");
         if (isLogged != null && isLogged.toString().equals("true")) { %>
+    <h2>Users</h2>
 
+    <p>
+        &nbsp;&nbsp;<a href="adduser.jsp"><b>Add User</b></a>
+    </p>
+    <table border="0" width="50%" cellpadding="10" cellspacing="0">
+        <tr>
+            <th>User Name</th>
+            <th>Group</th>
+            <th></th>
+        </tr>
+        <% List<UserBean> userBeanList = (List<UserBean>) request.getAttribute("usersList");
+            for (UserBean userBean : userBeanList) {
+                String userGroups = "";
+                for (GroupBean group : userBean.getUserGroups()) {
+                    userGroups += group.getGroupName() + " , ";
+                }
+        %>
+        <tr>
+            <td><%=userBean.getUserId()%>
+            </td>
+            <td><%=userGroups%>
+            </td>
+            <td><a href="usrmng?action=editUser&username=<%=userBean.getUserId()%>">Edit</a></td>
+        </tr>
+        <%}%>
+    </table>
+    <p>&nbsp;</p>
 
-    <script src="webtoolkit.aim.js" type="text/javascript"><!--mce:0--></script>
-    <script type="text/javascript"><!--mce:1--></script>
-    <br/><br/>
+    <p>&nbsp;</p>
 
-    <h1> Upload Business Archive File</h1>
+    <h2>Groups</h2>
 
-    <div><br></div>
-    <form action="upload" method="post" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <td><label>Process Name:</label>
-                </td>
-                <td><input name="processName" type="text" size="30"/></td>
-            </tr>
-
-
-            <tr>
-                <td><label>Business Archive File(*.lar):</label>
-                </td>
-                <td><input name="processArchive" type="file" size="40"/></td>
-            </tr>
-
-
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Upload"/></td>
-            </tr>
-        </table>
-    </form>
-    <%
-        // If a process lar is uploaded shows the success/failure message
-        if (request.getParameter("isUploadSuccess") != null) {
-            String result = request.getParameter("isUploadSuccess");
-            if (result.equals("true")) { %>
-    <h3>Process archive uploaded successfully</h3>
-    <% } else if (result.equals("false")) { %>
-    <h3>Failed to upload process archive. Try again</h3>
-    <%
-            }
-        }
-        // else do nothing
-    %>
-
+    <p>
+        &nbsp;&nbsp;<a href="addgroup.jsp"><b>Add Group</b></a>
+    </p>
+    <table border="0" width="50%" cellpadding="10" cellspacing="0">
+        <tr>
+            <th>Group Name</th>
+            <th>Description</th>
+        </tr>
+        <% List<GroupBean> groupBeanList = (List<GroupBean>) request.getAttribute("groupList");
+            for (GroupBean groupBean : groupBeanList) {
+        %>
+        <tr>
+            <td><%=groupBean.getGroupName()%>
+            </td>
+            <td><%=groupBean.getGroupDescription()%>
+            </td>
+        </tr>
+        <%}%>
+    </table>
     <% } else { %>
     <div id="bodylogo"></div>
 
@@ -117,5 +137,6 @@ Released : 20090303
     <p class="link"><a href="#">Privacy Policy</a>&nbsp;&#8226;&nbsp;<a href="#">Terms of Use</a>
     </p>
 </div>
+
 </body>
 </html>

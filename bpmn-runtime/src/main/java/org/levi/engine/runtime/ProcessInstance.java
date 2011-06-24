@@ -5,9 +5,11 @@ import org.apache.ode.jacob.vpu.JacobVPU;
 import org.levi.engine.LeviException;
 import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.bpmn.RunnableFlowNode;
+import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.FlowNodeFactory;
 import org.levi.engine.impl.bpmn.WaitedTask;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
@@ -36,6 +38,8 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private boolean hasStartForm;
     private String startUserId;
 
+    private DBManager dbManager;
+
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
             throw new LeviException("Cannot create a process instance. OM is null.");
@@ -58,6 +62,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private void init() {
         //TODO
         HibernateDao dao = new HibernateDao();
+        dbManager=new DBManagerImpl();
     }
 
     public void claim(String uid, String itemId) {
@@ -267,10 +272,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
         }
         if (task != null) {
-            dao.update(processInstanceBean);
-            UserBean user = task.getAssignee();
+           dao.update(processInstanceBean);
+           /* UserBean user = task.getAssignee();
             user.removeFromAssignedList(task);
-            dao.update(user);
+            dao.update(user);*/
+            dbManager.unassignTask(task.getTaskId(),task.getAssignee().getUserId());
         }
         dao.close();
     }

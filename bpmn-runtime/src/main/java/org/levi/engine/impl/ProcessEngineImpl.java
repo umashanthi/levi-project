@@ -1,14 +1,12 @@
 package org.levi.engine.impl;
 
 import org.levi.engine.*;
+import org.levi.engine.db.DBManager;
 import org.levi.engine.identity.IdentityService;
-import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
-import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
-import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.utils.LeviUtils;
-import org.levi.engine.utils.ObjectLoader;
 import org.levi.engine.utils.ObjectSaver;
 
 import java.io.File;
@@ -87,15 +85,8 @@ public class ProcessEngineImpl implements ProcessEngine {
             engineData = new EngineData();
         }
         */
-        HibernateDao dao = new HibernateDao();
-        try {
-            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
-            Bean2Impl b2i = new Bean2Impl();
-            engineData = b2i.engineData(bean);
-            //TODO need to clarified the exception   
-        } catch (Exception e) {
-            engineData = new EngineData();
-        }
+        DBManager manager = new DBManagerImpl();
+        engineData = manager.getEngineData();
 
         storageService = new StorageServiceImpl(engineData);
         storageService.start();

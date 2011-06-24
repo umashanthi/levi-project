@@ -1,6 +1,11 @@
 package org.levi.engine.db;
 
+import org.levi.engine.Deployment;
+import org.levi.engine.EngineData;
+import org.levi.engine.identity.Group;
+import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
@@ -87,4 +92,27 @@ public interface DBManager {
     // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
     boolean claimUserTask(String taskId, String processInstanceId, String username);
 
+    List<UserBean> getUserList();
+
+    List<GroupBean> getGroupList();
+
+    void assignTask(String taskId, String userId);
+
+    void unassignTask(String taskId, String userId);
+
+    void removeTask(String taskId, String userId);
+
+    EngineData getEngineData();
+
+    EngineDataBean getEngineDataBean();
+
+    void persistDeployment(Deployment deployment);
+
+    void closeSession();
+
+    void undeployProcess(String processId);
+
+    void saveGroup(Group group);
+
+    void saveUser(User user);
 }

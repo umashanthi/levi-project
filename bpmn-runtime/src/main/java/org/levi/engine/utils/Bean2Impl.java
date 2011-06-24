@@ -24,13 +24,5 @@ public class Bean2Impl {
         engine.setPausedProcessIds(new ArrayList<String>(bean.getPausedProcesses().keySet()));
         engine.setStoppedProcessIds(new ArrayList<String>(bean.getStoppedProcesses().keySet()));
         return engine;
-    }
-
-    public Deployment deployment(DeploymentBean bean){
-        Deployment deployment = new Deployment(bean.getDefinitionsId(),bean.getProcessDefinitionPath(),bean.getDiagramPath(),bean.getExtractPath(),bean.getDeploymentTime());
-        return deployment;
-    }
-
-    
-    
+    }    
 }

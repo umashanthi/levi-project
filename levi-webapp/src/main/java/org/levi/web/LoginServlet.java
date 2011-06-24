@@ -3,14 +3,21 @@ package org.levi.web;
 import org.hibernate.Hibernate;
 import org.levi.engine.ProcessEngine;
 import org.levi.engine.db.DBManager;
+import org.levi.engine.identity.Group;
+import org.levi.engine.identity.User;
 import org.levi.engine.impl.ProcessEngineImpl;
 import org.levi.engine.impl.db.DBManagerImpl;
+import org.levi.engine.impl.identity.GroupImpl;
+import org.levi.engine.impl.identity.UserImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request,
@@ -44,24 +51,36 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             DBManager dbManager = new DBManagerImpl();
             request.getSession().setAttribute("dbManager", dbManager);
             //TODO: Need to change!!!
-            HibernateDao dao = new HibernateDao();
-            UserBean user = (UserBean) dao.getObject(UserBean.class, username);
-            if (user == null) {
-                //no user exists in the DB
-                user = new UserBean();
-                user.setUserId(username);
-                user.setPassword(password);
-                dao.save(user);
-            }
-            user = (UserBean) dao.getObject(UserBean.class, "admin");
-            if (user == null) {
-                //no user exists in the DB
-                user = new UserBean();
-                user.setUserId("admin");
-                user.setPassword("admin");
-                dao.save(user);
-            }
-            dao.close();
+            Group group = new GroupImpl();
+            group.setGroupId("Administration");
+            group.setGroupName("Administration");
+            group.setGroupDescription("Handles administrative functions");
+            dbManager.saveGroup(group);
+
+            User user = new UserImpl();
+            user.setUserId(username);
+            user.setPassword(password);
+            List<Group> userGroups = new ArrayList<Group>();
+            userGroups.add(group);
+            user.setUserGroups(userGroups);
+            dbManager.saveUser(user);
+
+            user = new UserImpl();
+            user.setUserId("admin");
+            user.setPassword("admin");
+            userGroups = new ArrayList<Group>();
+            userGroups.add(group);
+            user.setUserGroups(userGroups);
+            dbManager.saveUser(user);
+
+            user = new UserImpl();
+            user.setUserId("john");
+            user.setPassword("john");
+            userGroups = new ArrayList<Group>();
+            userGroups.add(group);
+            user.setUserGroups(userGroups);
+            dbManager.saveUser(user);
+
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
         }

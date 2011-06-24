@@ -1,6 +1,15 @@
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="org.levi.engine.ProcessEngine" %>
+<%@ page import="java.io.File" %>
+<%@ page import="org.apache.commons.io.FileUtils" %>
+<%@ page import="org.levi.engine.Deployment" %>
+<%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
+
+
 <%--
   Created by IntelliJ IDEA.
-  User: umashanthi
+  UserBean: umashanthi
   Date: Mar 29, 2011
   Time: 9:55:15 AM
   To change this template use File | Settings | File Templates.
@@ -25,8 +34,14 @@ Released : 20090303
     <meta name="keywords" content=""/>
     <meta name="Premium Series" content=""/>
     <link href="default.css" rel="stylesheet" type="text/css" media="screen"/>
+
 </head>
+
 <body>
+
+<script type="text/javascript">
+
+</script>
 <!-- start header -->
 <div id="header">
     <div id="logo">
@@ -43,7 +58,6 @@ Released : 20090303
             <li><a href="usrmng">User Management</a></li>
             <%} %>
             <li></li>
-            <li></li>
             <li>
                 <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
                 <a href="logout">Logout</a></li>
@@ -51,7 +65,10 @@ Released : 20090303
             <%} else { %>
             <a href="login.jsp">Login</a></li>
             <% }%>
+
+
         </ul>
+
     </div>
 
 </div>
@@ -59,51 +76,25 @@ Released : 20090303
 <div id="body">
     <% Object isLogged = session.getAttribute("logged");
         if (isLogged != null && isLogged.toString().equals("true")) { %>
+    <h3><a href="usrmng"> User Management </a> > Add Group</h3>
 
-
-    <script src="webtoolkit.aim.js" type="text/javascript"><!--mce:0--></script>
-    <script type="text/javascript"><!--mce:1--></script>
-    <br/><br/>
-
-    <h1> Upload Business Archive File</h1>
-
-    <div><br></div>
-    <form action="upload" method="post" enctype="multipart/form-data">
-        <table>
+    <form name="adduser" action="usrmng?action=addgroup" method="POST">
+        <table border="0" width="50%" cellpadding="5" cellspacing="0">
             <tr>
-                <td><label>Process Name:</label>
-                </td>
-                <td><input name="processName" type="text" size="30"/></td>
+                <td>Group Name:</td>
+                <td><input type="text" name="groupname" size="40"/></td>
             </tr>
-
-
             <tr>
-                <td><label>Business Archive File(*.lar):</label>
-                </td>
-                <td><input name="processArchive" type="file" size="40"/></td>
+                <td>Description:</td>
+                <td><input type="text" name="description" size="40"/></td>
             </tr>
-
-
             <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Upload"/></td>
+                <td><input type="submit" value="Add Group"/></td>
+                <td><input type="reset" value="Cancel"/></td>
             </tr>
         </table>
     </form>
-    <%
-        // If a process lar is uploaded shows the success/failure message
-        if (request.getParameter("isUploadSuccess") != null) {
-            String result = request.getParameter("isUploadSuccess");
-            if (result.equals("true")) { %>
-    <h3>Process archive uploaded successfully</h3>
-    <% } else if (result.equals("false")) { %>
-    <h3>Failed to upload process archive. Try again</h3>
-    <%
-            }
-        }
-        // else do nothing
-    %>
+    <p>&nbsp;</p>
 
     <% } else { %>
     <div id="bodylogo"></div>
@@ -117,5 +108,6 @@ Released : 20090303
     <p class="link"><a href="#">Privacy Policy</a>&nbsp;&#8226;&nbsp;<a href="#">Terms of Use</a>
     </p>
 </div>
+
 </body>
 </html>

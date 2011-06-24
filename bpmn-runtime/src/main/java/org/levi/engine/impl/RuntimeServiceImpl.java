@@ -5,6 +5,7 @@ import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.LeviException;
 import org.levi.engine.RuntimeService;
+import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
@@ -23,12 +24,14 @@ import java.util.*;
  */
 public class RuntimeServiceImpl implements RuntimeService {
     private EngineData engineData;
+    private DBManager dbManager;
 
     public RuntimeServiceImpl(EngineData engineData) {
         if (engineData == null) {
             throw new LeviException("EngineData is null.");
         }
         this.engineData = engineData;
+        
     }
 
     public boolean start() {

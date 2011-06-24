@@ -1,10 +1,16 @@
 package org.levi.engine.persistence.hibernate;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
+import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
-import java.io.Serializable;
+import java.util.List;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -57,8 +63,24 @@ public class HibernateDao {
         tx.commit();
     }
 
+    public List<UserBean> getUserObjects(){
+        List objects = session.createCriteria(UserBean.class).list();
+        return objects;
+    }
+
+    public List<GroupBean> getGroupObjects(){
+        List objects = session.createCriteria(GroupBean.class).list();
+        return objects;
+    }
+
     public void close() {
         session.close();
+    }
+
+    public List<TaskBean> getAssignedTasks(String userId){
+        Criteria criteria = session.createCriteria(TaskBean.class);
+        criteria.add(Restrictions.eq("active", true));
+        return criteria.list();
     }
 
 
