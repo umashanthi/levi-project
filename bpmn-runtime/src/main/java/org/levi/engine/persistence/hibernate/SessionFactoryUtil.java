@@ -54,7 +54,6 @@ public class SessionFactoryUtil {
     }
 
     public static Session getSession() {
-        init();
         sessionFactory = config.buildSessionFactory();
         return sessionFactory.openSession();
     }

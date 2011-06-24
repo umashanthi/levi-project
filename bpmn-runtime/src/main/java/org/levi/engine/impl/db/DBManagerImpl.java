@@ -1,12 +1,15 @@
 package org.levi.engine.impl.db;
 
+import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.utils.Bean2Impl;
 
 import java.util.List;
 
@@ -80,7 +83,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateTask(TaskBean task) {
-        //To change body of implemented methods use File | Settings | File Templates.
+         dao.update(task);
     }
 
     public void saveProcess(DeploymentBean deployedProcess) {
@@ -92,7 +95,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcess(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public void saveProcessInstance(ProcessInstanceBean process) {
@@ -100,7 +103,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcess(DeploymentBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public void deleteProcessInstance(String processId) {
@@ -108,7 +111,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateProcessInstance(ProcessInstanceBean process) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        dao.update(process);
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
@@ -159,4 +162,52 @@ public class DBManagerImpl implements DBManager {
     public boolean claimUserTask(String taskId, String processInstanceId, String username) {
         return false;
     }
+
+    public List<UserBean> getUserList(){
+        return dao.getUserObjects();
+    }
+
+    public List<GroupBean> getGroupList(){
+        return dao.getGroupObjects();
+    }
+
+    public void assignTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
+        task.setActive(true);
+        dao.update(task);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        user.getAssigned().add(task);
+        dao.update(user);       
+    }
+
+    public void unassignTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
+        task.setActive(false);
+        dao.update(task);
+    }
+
+    /*
+            This method can be use to remove the TASK from the task list of the USER
+     */
+    public void removeTask(String taskId, String userId){
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        user.getAssigned().remove(task);
+        dao.update(user);
+    }
+
+    public EngineData getEngineData(){
+        EngineData engineData;
+        try {
+            EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+            Bean2Impl b2i = new Bean2Impl();
+            engineData = b2i.engineData(bean);
+            //TODO need to clarified the exception
+        } catch (Exception e) {
+            engineData = new EngineData();
+        }
+
+        return engineData;
+    }
+
 }

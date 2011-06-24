@@ -20,6 +20,7 @@ import java.util.List;
  */
 
 @Entity
+@Table(name = "users")
 public class UserBean extends HObject implements Serializable {
     private String userId;
     private String password;
