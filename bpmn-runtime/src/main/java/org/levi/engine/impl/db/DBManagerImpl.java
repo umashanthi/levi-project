@@ -42,11 +42,15 @@ public class DBManagerImpl implements DBManager {
     public void saveUser(User user) {
         UserBean userBean = null;
         if (dao.getObject(UserBean.class, user.getUserId()) != null) {
-            dao.update(Impl2Bean.getUserBean(user));
+            userBean = (UserBean) dao.getObject(UserBean.class, user.getUserId());
+            dao.update(Impl2Bean.getUserBean(user, userBean,true));
         } else {
-            dao.save(Impl2Bean.getUserBean(user));
+            userBean = new UserBean();
+            dao.save(Impl2Bean.getUserBean(user, userBean,false));
         }
-
+        for (Group group : user.getUserGroups()) {
+            addUserToGroup(user.getUserId(), group.getGroupId());
+        }
 
     }
 
@@ -56,10 +60,12 @@ public class DBManagerImpl implements DBManager {
 
     public void saveGroup(Group group) {
         GroupBean groupBean = null;
-        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) {
-            dao.update(Impl2Bean.getGroupBean(group));
+        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) { // group Exists
+            groupBean = (GroupBean) dao.getObject(GroupBean.class, group.getGroupId());
+            dao.update(Impl2Bean.getGroupBean(group, groupBean,true));
         } else {
-            dao.save(Impl2Bean.getGroupBean(group));
+            groupBean = new GroupBean();
+            dao.save(Impl2Bean.getGroupBean(group, groupBean,false));
         }
     }
 
@@ -75,6 +81,7 @@ public class DBManagerImpl implements DBManager {
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
         group.getMembers().add(user);
+        dao.update(group);
     }
 
     public void deleteUser(String userId) {
