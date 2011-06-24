@@ -1,5 +1,6 @@
 package org.levi.engine.db;
 
+import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -102,4 +103,10 @@ public interface DBManager {
     EngineData getEngineData();
 
     EngineDataBean getEngineDataBean();
+
+    void persistDeployment(Deployment deployment);
+
+    void closeSession();
+
+    void undeployProcess(String processId);
 }

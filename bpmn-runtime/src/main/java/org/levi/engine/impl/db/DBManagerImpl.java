@@ -1,5 +1,6 @@
 package org.levi.engine.impl.db;
 
+import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.HibernateDao;
@@ -83,7 +84,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void updateTask(TaskBean task) {
-         dao.update(task);
+        dao.update(task);
     }
 
     public void saveProcess(DeploymentBean deployedProcess) {
@@ -149,7 +150,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public String getProcessInstanceId(String taskId) {
-        TaskBean task = (TaskBean)dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
         return task.getProcesseInstance().getProcessId();
     }
 
@@ -163,24 +164,24 @@ public class DBManagerImpl implements DBManager {
         return false;
     }
 
-    public List<UserBean> getUserList(){
+    public List<UserBean> getUserList() {
         return dao.getUserObjects();
     }
 
-    public List<GroupBean> getGroupList(){
+    public List<GroupBean> getGroupList() {
         return dao.getGroupObjects();
     }
 
-    public void assignTask(String taskId, String userId){
+    public void assignTask(String taskId, String userId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         task.setActive(true);
         dao.update(task);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         user.getAssigned().add(task);
-        dao.update(user);       
+        dao.update(user);
     }
 
-    public void unassignTask(String taskId, String userId){
+    public void unassignTask(String taskId, String userId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         task.setActive(false);
         dao.update(task);
@@ -189,14 +190,14 @@ public class DBManagerImpl implements DBManager {
     /*
             This method can be use to remove the TASK from the task list of the USER
      */
-    public void removeTask(String taskId, String userId){
+    public void removeTask(String taskId, String userId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         user.getAssigned().remove(task);
         dao.update(user);
     }
 
-    public EngineData getEngineData(){
+    public EngineData getEngineData() {
         EngineData engineData;
         try {
             EngineDataBean bean = getEngineDataBean();
@@ -210,8 +211,41 @@ public class DBManagerImpl implements DBManager {
         return engineData;
     }
 
-    public EngineDataBean getEngineDataBean(){
-        return (EngineDataBean) dao.getObject(EngineDataBean.class, "1");       
+    public EngineDataBean getEngineDataBean() {
+        return (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
     }
 
+    public void persistDeployment(Deployment deployment) {
+        //Converting to DeploymentBean
+        DeploymentBean deploymentBean = new DeploymentBean();
+        deploymentBean.setDefinitionsId(deployment.getDefinitionsId());
+        deploymentBean.setExtractPath(deployment.getExtractPath());
+        deploymentBean.setProcessDefinitionPath(deployment.getProcessDefinitionPath());
+        deploymentBean.setDiagramPath(deployment.getDiagramPath());
+        deploymentBean.setDeploymentTime(deployment.getDate());
+
+        dao.save(deploymentBean);
+        EngineDataBean engineDataBean = getEngineDataBean();
+        if (engineDataBean != null) {
+            engineDataBean.addDeployment(deploymentBean);
+            dao.update(engineDataBean);
+        } else {
+            engineDataBean = new EngineDataBean();
+            engineDataBean.setId("1");
+            //engineDataBean.set_dateCreated(new Date());
+            engineDataBean.addDeployment(deploymentBean);
+            dao.save(engineDataBean);
+        }
+    }
+
+    public void closeSession() {
+        dao.close();
+    }
+
+    public void undeployProcess(String processId){
+        EngineDataBean bean = getEngineDataBean();
+        bean.getDeployedProcesses().remove(processId);
+        dao.save(bean);
+        dao.remove(DeploymentBean.class,processId);
+    }
 }

@@ -1,10 +1,9 @@
 package org.levi.engine.impl;
 
 import org.levi.engine.*;
+import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
-import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.utils.ExtractData;
 import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.LeviUtils;
@@ -24,13 +23,11 @@ public class StorageServiceImpl implements StorageService {
     private EngineData engineData;
     // todo: make the dirs of serial, extract if not exsisting
     private List<Deployment> createdDeployments = LeviUtils.newArrayList(50);
-    private HibernateDao dao;
-    private EngineDataBean bean;
+    private DBManager dbManager;
 
     public boolean start() {
         System.out.println("[Info] Storage Service started");
-        dao = new HibernateDao();
-        bean = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
+        dbManager = new DBManagerImpl();
         return true;
     }
 
@@ -64,40 +61,15 @@ public class StorageServiceImpl implements StorageService {
         if (d == null) {
             throw new LeviException("Null Deployment. Deployment failed.");
         }
-        persistDeployment(d);
+        dbManager.persistDeployment(d);
         engineData.addDeployment(d);
         System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return d;
     }
 
-    private void persistDeployment(Deployment deployment) {
-        //Converting to DeploymentBean
-        DeploymentBean deploymentBean = new DeploymentBean();
-        deploymentBean.setDefinitionsId(deployment.getDefinitionsId());
-        deploymentBean.setExtractPath(deployment.getExtractPath());
-        deploymentBean.setProcessDefinitionPath(deployment.getProcessDefinitionPath());
-        deploymentBean.setDiagramPath(deployment.getDiagramPath());
-        deploymentBean.setDeploymentTime(deployment.getDate());
-
-        dao.save(deploymentBean);
-        //dao.update();
-        if (bean != null) {
-            bean.addDeployment(deploymentBean);
-            dao.update(bean);
-        } else {
-            EngineDataBean engineDataBean = new EngineDataBean();
-            engineDataBean.setId("1");
-            //engineDataBean.set_dateCreated(new Date());
-            engineDataBean.addDeployment(deploymentBean);
-            dao.save(engineDataBean);
-        }
-    }
 
     public void undeploy(String id) throws IOException {
-        EngineDataBean bean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
-        bean.getDeployedProcesses().remove(id);
-        dao.save(bean);
-        dao.remove(DeploymentBean.class,id);
+        dbManager.undeployProcess(id);
     }
 
     public String getDiagramPath(String id) {
@@ -126,7 +98,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public boolean stop() throws IOException {
-        dao.close(); //in this step session will be closed
+        dbManager.closeSession();//in this step session will be closed
         cleanup();
         System.out.println("[Info] Storage Service stopped.");
         return true;
