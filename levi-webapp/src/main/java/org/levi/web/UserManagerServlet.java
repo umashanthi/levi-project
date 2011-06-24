@@ -31,16 +31,16 @@ public class UserManagerServlet extends HttpServlet {
         // Retrieve the action
         String action = request.getParameter("action");
         if (action == null) {         // list users and groups -- default action
-            List<HObject> beanList = dao.getObjects(UserBean.class);
-            List<UserBean> userBeanList = new ArrayList<UserBean>();
-            for (HObject bean : beanList) {
+            // List<UserBean> beanList = dao.getUserObjects();
+            List<UserBean> userBeanList = dao.getUserObjects();
+            /*for (HObject bean : beanList) {
                 userBeanList.add((UserBean) bean);
-            }
-            beanList = dao.getObjects(GroupBean.class);
-            List<GroupBean> groupBeanList = new ArrayList<GroupBean>();
-            for (HObject bean : beanList) {
+            }*/
+            //beanList = dao.getGroupObjects();
+            List<GroupBean> groupBeanList = dao.getGroupObjects();
+            /* for (HObject bean : beanList) {
                 groupBeanList.add((GroupBean) bean);
-            }
+            }*/
             request.setAttribute("usersList", userBeanList);
             request.setAttribute("groupList", groupBeanList);
             //response.sendRedirect("usermanagement.jsp");

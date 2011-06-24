@@ -131,6 +131,9 @@ Released : 20090303
             <li class="current_page_item"><a href="index.jsp">Home</a></li>
             <li><a href="tasks">Tasks</a></li>
             <li><a href="processes">Processes</a></li>
+            <%if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true") && session.getAttribute("username").equals("admin")) {%>
+            <li><a href="usrmng">User Management</a></li>
+            <%} %>
             <li></li>
             <li></li>
             <li>
@@ -158,6 +161,7 @@ Released : 20090303
 
     <div><br></div>
     <%
+        if(session.getAttribute("processList")!=null && session.getAttribute("deployments")!=null ){
         List<String> processesList = (List<String>) session.getAttribute("processList");
         List<DeploymentBean> deployments = (List<DeploymentBean>) session.getAttribute("deployments");
 
@@ -239,7 +243,7 @@ Released : 20090303
         %>
     </table>
 
-    <% %>
+    <%} %>
 
 
     <% } else { %>

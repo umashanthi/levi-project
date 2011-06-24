@@ -62,6 +62,9 @@ public class EngineData implements Serializable {
 
     public List<DeploymentBean> getDeploymentBeans() {
         HibernateDao dao = new HibernateDao();
+        if (dao.getObject(EngineDataBean.class, "1") == null) {
+            return new ArrayList<DeploymentBean>();
+        }
         EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
         Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
         List<DeploymentBean> deployments = new ArrayList<DeploymentBean>();
@@ -80,6 +83,9 @@ public class EngineData implements Serializable {
 
     public List<String> getDeploymentIds() {
         HibernateDao dao = new HibernateDao();
+        if (dao.getObject(EngineDataBean.class, "1") == null) {
+            return new ArrayList<String>();
+        }
         EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
         Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
         List<String> deploymentIds = new ArrayList<String>();

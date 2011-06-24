@@ -56,11 +56,12 @@ public class ListTasksServlet extends HttpServlet {
                 response.sendRedirect("tasks.jsp?unassigned=true");
             } else {
                 // retrieve tasks assigned to this user
-                HibernateDao dao = new HibernateDao();
+               /* HibernateDao dao = new HibernateDao();
                 UserBean userBean = (UserBean) dao.getObject(UserBean.class, username);
                 assert userBean != null;
-                List<TaskBean> userTaskList = userBean.getAssigned();
-                dao.close();
+              //  List<TaskBean> userTaskList = userBean.getAssigned();*/
+                List<TaskBean> userTaskList = dbManager.getUserTaskList(username);
+              //  dao.close();
                 request.getSession().setAttribute("userTaskList", userTaskList);
                 response.sendRedirect("tasks.jsp");
             }

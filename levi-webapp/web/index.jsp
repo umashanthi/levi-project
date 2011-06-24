@@ -39,6 +39,9 @@ Released : 20090303
             <li class="current_page_item"><a href="index.jsp">Home</a></li>
             <li><a href="tasks">Tasks</a></li>
             <li><a href="processes">Processes</a></li>
+            <%if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true") && session.getAttribute("username").equals("admin")) {%>
+            <li><a href="usrmng">User Management</a></li>
+            <%} %>
             <li></li>
             <li></li>
             <li>
