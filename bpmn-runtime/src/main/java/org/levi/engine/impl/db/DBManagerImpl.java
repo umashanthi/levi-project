@@ -43,15 +43,16 @@ public class DBManagerImpl implements DBManager {
         UserBean userBean = null;
         if (dao.getObject(UserBean.class, user.getUserId()) != null) {
             userBean = (UserBean) dao.getObject(UserBean.class, user.getUserId());
-            dao.update(Impl2Bean.getUserBean(user, userBean,true));
+            dao.update(Impl2Bean.getUserBean(user, userBean, true));
         } else {
             userBean = new UserBean();
-            dao.save(Impl2Bean.getUserBean(user, userBean,false));
+            dao.save(Impl2Bean.getUserBean(user, userBean, false));
         }
-        for (Group group : user.getUserGroups()) {
-            addUserToGroup(user.getUserId(), group.getGroupId());
+        if (user.getUserGroups() != null) {
+            for (Group group : user.getUserGroups()) {
+                addUserToGroup(user.getUserId(), group.getGroupId());
+            }
         }
-
     }
 
     public void saveGroup(GroupBean group) {
@@ -62,10 +63,10 @@ public class DBManagerImpl implements DBManager {
         GroupBean groupBean = null;
         if (dao.getObject(GroupBean.class, group.getGroupId()) != null) { // group Exists
             groupBean = (GroupBean) dao.getObject(GroupBean.class, group.getGroupId());
-            dao.update(Impl2Bean.getGroupBean(group, groupBean,true));
+            dao.update(Impl2Bean.getGroupBean(group, groupBean, true));
         } else {
             groupBean = new GroupBean();
-            dao.save(Impl2Bean.getGroupBean(group, groupBean,false));
+            dao.save(Impl2Bean.getGroupBean(group, groupBean, false));
         }
     }
 
@@ -80,8 +81,12 @@ public class DBManagerImpl implements DBManager {
     public void addUserToGroup(String userId, String groupId) {
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
-        group.getMembers().add(user);
-        dao.update(group);
+        //group.getMembers().add(user);
+        if (!user.getUserGroups().contains(group)) {
+            user.getUserGroups().add(group);
+        }
+        dao.update(user);
+        //dao.update(group);
     }
 
     public void deleteUser(String userId) {

@@ -98,7 +98,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     public boolean stop() throws IOException {
-        dbManager.closeSession();//in this step session will be closed
+        //dbManager.closeSession();//in this step session will be closed
         cleanup();
         System.out.println("[Info] Storage Service stopped.");
         return true;
