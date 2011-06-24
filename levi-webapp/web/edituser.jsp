@@ -80,13 +80,15 @@ Released : 20090303
         if (isLogged != null && isLogged.toString().equals("true")) { %>
     <h3><a href="usrmng"> User Management </a> > Edit User</h3>
 
-    <form name="adduser" action="usrmng?action=adduser" method="POST">
+    <form name="adduser" action="usrmng?action=editUser" method="POST">
         <%
             UserBean userBean = (UserBean) request.getAttribute("user");
             // retrieve the user's group names
             List<String> userGroupList = new ArrayList<String>();
+            if(userBean.getUserGroups()!=null){
             for (GroupBean group : userBean.getUserGroups()) {
                 userGroupList.add(group.getGroupName());
+            }
             }
         %>
         <table border="0" width="60%" cellpadding="5" cellspacing="0">
@@ -120,7 +122,7 @@ Released : 20090303
                 </td>
             </tr>
             <tr>
-                <td><input type="submit" value="Add User"/></td>
+                <td><input type="submit" value="Edit User"/></td>
                 <td><input type="reset" value="Cancel"/></td>
             </tr>
         </table>

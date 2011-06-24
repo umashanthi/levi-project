@@ -58,29 +58,33 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             dbManager.saveGroup(group);
 
             User user = new UserImpl();
-            user.setUserId(username);
-            user.setPassword(password);
             List<Group> userGroups = new ArrayList<Group>();
-            userGroups.add(group);
-            user.setUserGroups(userGroups);
-            dbManager.saveUser(user);
+            if (dbManager.getUser(username) == null) {
+                user.setUserId(username);
+                user.setPassword(password);
 
-            user = new UserImpl();
-            user.setUserId("admin");
-            user.setPassword("admin");
-            userGroups = new ArrayList<Group>();
-            userGroups.add(group);
-            user.setUserGroups(userGroups);
-            dbManager.saveUser(user);
-
-            user = new UserImpl();
-            user.setUserId("john");
-            user.setPassword("john");
-            userGroups = new ArrayList<Group>();
-            userGroups.add(group);
-            user.setUserGroups(userGroups);
-            dbManager.saveUser(user);
-
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
+                dbManager.saveUser(user);
+            }
+            if (dbManager.getUser("admin") == null) {
+                user = new UserImpl();
+                user.setUserId("admin");
+                user.setPassword("admin");
+                userGroups = new ArrayList<Group>();
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
+                dbManager.saveUser(user);
+            }
+            if (dbManager.getUser("john") == null) {
+                user = new UserImpl();
+                user.setUserId("john");
+                user.setPassword("john");
+                userGroups = new ArrayList<Group>();
+                userGroups.add(group);
+                user.setUserGroups(userGroups);
+                dbManager.saveUser(user);
+            }
             // Couldn't redirect to the target. Redirect to the site's home page.
             response.sendRedirect("index.jsp");
         }

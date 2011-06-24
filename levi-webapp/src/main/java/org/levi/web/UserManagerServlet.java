@@ -62,7 +62,7 @@ public class UserManagerServlet extends HttpServlet {
             user.setUserId(username);
             user.setPassword(password);
             dbManager.saveUser(user);
-
+            response.sendRedirect("usrmng");
         } else if (action.equals("editUser")) {
             String username = request.getParameter("username");
             // retrieve user details from user bean
