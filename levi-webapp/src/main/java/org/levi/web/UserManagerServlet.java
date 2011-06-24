@@ -1,6 +1,11 @@
 package org.levi.web;
 
 
+import org.levi.engine.db.DBManager;
+import org.levi.engine.identity.Group;
+import org.levi.engine.identity.User;
+import org.levi.engine.impl.identity.GroupImpl;
+import org.levi.engine.impl.identity.UserImpl;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
@@ -27,20 +32,13 @@ public class UserManagerServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HibernateDao dao = new HibernateDao();
         // Retrieve the action
         String action = request.getParameter("action");
+        assert request.getSession().getAttribute("dbManager") != null;
+        DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
         if (action == null) {         // list users and groups -- default action
-            // List<UserBean> beanList = dao.getUserObjects();
-            List<UserBean> userBeanList = dao.getUserObjects();
-            /*for (HObject bean : beanList) {
-                userBeanList.add((UserBean) bean);
-            }*/
-            //beanList = dao.getGroupObjects();
-            List<GroupBean> groupBeanList = dao.getGroupObjects();
-            /* for (HObject bean : beanList) {
-                groupBeanList.add((GroupBean) bean);
-            }*/
+            List<UserBean> userBeanList = dbManager.getUserList();
+            List<GroupBean> groupBeanList = dbManager.getGroupList();
             request.setAttribute("usersList", userBeanList);
             request.setAttribute("groupList", groupBeanList);
             //response.sendRedirect("usermanagement.jsp");
@@ -48,11 +46,11 @@ public class UserManagerServlet extends HttpServlet {
         } else if (action.equals("addgroup")) {  // add group
             String groupName = request.getParameter("groupname");
             String description = request.getParameter("description");
-            GroupBean groupBean = new GroupBean();
-            groupBean.setGroupId(groupName); // TODO: Change to ID???
-            groupBean.setGroupName(groupName);
-            groupBean.setGroupDescription(description);
-            dao.save(groupBean);
+            Group group = new GroupImpl();
+            group.setGroupId(groupName);
+            group.setGroupName(groupName);
+            group.setGroupDescription(description);
+            dbManager.saveGroup(group);
             response.sendRedirect("usrmng");
 
         } else if (action.equals("adduser")) {    // add user
@@ -60,15 +58,15 @@ public class UserManagerServlet extends HttpServlet {
             String password = request.getParameter("password");
             // retrieve selected groups for this user
             // get the group name lists, get the request parameter for checkbox & radio, , get groups, and add groups to the user bean
-            UserBean userBean = new UserBean();
-            userBean.setUserId(username);
-            userBean.setPassword(password);
-            dao.save(userBean);
+            User user = new UserImpl();
+            user.setUserId(username);
+            user.setPassword(password);
+            dbManager.saveUser(user);
 
         } else if (action.equals("editUser")) {
             String username = request.getParameter("username");
             // retrieve user details from user bean
-            UserBean userBean = (UserBean) dao.getObject(UserBean.class, username);
+            UserBean userBean = dbManager.getUser(username);
             assert userBean != null;
             request.setAttribute("user", userBean);
             request.getRequestDispatcher("edituser.jsp").forward(request, response); // TODO: Check whether this works

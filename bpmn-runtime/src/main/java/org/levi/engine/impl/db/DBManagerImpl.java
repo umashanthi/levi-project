@@ -3,6 +3,8 @@ package org.levi.engine.impl.db;
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
+import org.levi.engine.identity.Group;
+import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -11,7 +13,9 @@ import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.utils.Bean2Impl;
+import org.levi.engine.utils.Impl2Bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBManagerImpl implements DBManager {
@@ -33,8 +37,28 @@ public class DBManagerImpl implements DBManager {
         dao.save(user);
     }
 
+    public void saveUser(User user) {
+        UserBean userBean = null;
+        if (dao.getObject(UserBean.class, user.getUserId()) != null) {
+            dao.update(Impl2Bean.getUserBean(user));
+        } else {
+            dao.save(Impl2Bean.getUserBean(user));
+        }
+
+
+    }
+
     public void saveGroup(GroupBean group) {
         dao.save(group);
+    }
+
+    public void saveGroup(Group group) {
+        GroupBean groupBean = null;
+        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) {
+            dao.update(Impl2Bean.getGroupBean(group));
+        } else {
+            dao.save(Impl2Bean.getGroupBean(group));
+        }
     }
 
     public UserBean getUser(String userId) {
@@ -242,10 +266,10 @@ public class DBManagerImpl implements DBManager {
         dao.close();
     }
 
-    public void undeployProcess(String processId){
+    public void undeployProcess(String processId) {
         EngineDataBean bean = getEngineDataBean();
         bean.getDeployedProcesses().remove(processId);
         dao.save(bean);
-        dao.remove(DeploymentBean.class,processId);
+        dao.remove(DeploymentBean.class, processId);
     }
 }
