@@ -73,7 +73,5 @@ public class UserManagerServlet extends HttpServlet {
             request.setAttribute("user", userBean);
             request.getRequestDispatcher("edituser.jsp").forward(request, response); // TODO: Check whether this works
         }
-
-
     }
 }

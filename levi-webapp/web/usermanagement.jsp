@@ -36,7 +36,6 @@ Released : 20090303
     <meta name="keywords" content=""/>
     <meta name="Premium Series" content=""/>
     <link href="default.css" rel="stylesheet" type="text/css" media="screen"/>
-
 </head>
 
 <body>
@@ -67,12 +66,8 @@ Released : 20090303
             <%} else { %>
             <a href="login.jsp">Login</a></li>
             <% }%>
-
-
         </ul>
-
     </div>
-
 </div>
 <!-- end header -->
 <div id="body">
