@@ -58,8 +58,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     private void init() {
-        //TODO
-        HibernateDao dao = new HibernateDao();
         dbManager=new DBManagerImpl();
     }
 
