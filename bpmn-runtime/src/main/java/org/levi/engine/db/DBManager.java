@@ -4,6 +4,7 @@ import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;

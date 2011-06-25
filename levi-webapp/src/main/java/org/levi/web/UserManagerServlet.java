@@ -38,6 +38,11 @@ public class UserManagerServlet extends HttpServlet {
         DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
         if (action == null) {         // list users and groups -- default action
             List<UserBean> userBeanList = dbManager.getUserList();
+            List<HObject> users=dbManager.getObjects(UserBean.class);
+            userBeanList.clear();
+            for(HObject obj:users){
+                userBeanList.add((UserBean)obj);
+            }
             List<GroupBean> groupBeanList = dbManager.getGroupList();
             request.setAttribute("usersList", userBeanList);
             request.setAttribute("groupList", groupBeanList);
@@ -56,20 +61,49 @@ public class UserManagerServlet extends HttpServlet {
         } else if (action.equals("adduser")) {    // add user
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            // retrieve selected groups for this user
-            // get the group name lists, get the request parameter for checkbox & radio, , get groups, and add groups to the user bean
             User user = new UserImpl();
             user.setUserId(username);
             user.setPassword(password);
+            user.setUserGroups(null);
             dbManager.saveUser(user);
+            // retrieve selected groups for this user
+            // get the group name lists, get the request parameter for checkbox & radio, , get groups, and add groups to the user bean
+            List<GroupBean> groupBeanList=dbManager.getGroupList();
+            for(GroupBean grp:groupBeanList){
+                if(request.getParameter(grp.getGroupId())!=null){
+                    dbManager.addUserToGroup(username,grp.getGroupId());
+                }
+                else{
+                    dbManager.removeUserFromGroup(username,grp.getGroupId());
+                }
+            }
+
             response.sendRedirect("usrmng");
         } else if (action.equals("editUser")) {
-            String username = request.getParameter("username");
+             String username = request.getParameter("username");
             // retrieve user details from user bean
             UserBean userBean = dbManager.getUser(username);
             assert userBean != null;
             request.setAttribute("user", userBean);
             request.getRequestDispatcher("edituser.jsp").forward(request, response); // TODO: Check whether this works
+        }
+        else if(action.equals("updateUser")){
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            User user = new UserImpl();
+            user.setUserId(username);
+            user.setPassword(password);
+            dbManager.saveUser(user);
+            List<GroupBean> groupBeanList=dbManager.getGroupList();
+            for(GroupBean grp:groupBeanList){
+                if(request.getParameter(grp.getGroupId())!=null){
+                    dbManager.addUserToGroup(username,grp.getGroupId());
+                }
+                else{
+                    dbManager.removeUserFromGroup(username,grp.getGroupId());
+                }
+            }
+            response.sendRedirect("usrmng");
         }
     }
 }

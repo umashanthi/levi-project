@@ -5,6 +5,7 @@ import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -103,7 +104,9 @@ public class DBManagerImpl implements DBManager {
     public void removeUserFromGroup(String userId, String groupId) {
         GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        group.getMembers().remove(user);
+        if (group.getMembers().contains(user)) {
+            group.getMembers().remove(user);
+        }
     }
 
     /**
@@ -288,7 +291,7 @@ public class DBManagerImpl implements DBManager {
         dao.remove(DeploymentBean.class, processId);
     }
 
-    public void persistProcessInstance(ProcessInstance processInstance){
+    public void persistProcessInstance(ProcessInstance processInstance) {
         DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
         assert deploymentBean != null;
         ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
@@ -328,17 +331,17 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    public String getProcessDefinition(String processId){
+    public String getProcessDefinition(String processId) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
         return processInstanceBean.getDeployedProcess().getDefinitionsId();
     }
 
-    public List<String> getCompletedTasks(String processId){
+    public List<String> getCompletedTasks(String processId) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
         return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
     }
 
-    public List<String> getRunningTasks(String processId){
+    public List<String> getRunningTasks(String processId) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
         return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
     }
