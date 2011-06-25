@@ -10,6 +10,7 @@ import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
@@ -23,9 +24,11 @@ import java.util.List;
 public class DBManagerImpl implements DBManager {
 
     HibernateDao dao;
+    HqlManager qlManager;
 
     public DBManagerImpl() {
         dao = new HibernateDao();
+        qlManager = new HqlManager();
     }
 
     /**
@@ -203,11 +206,13 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<UserBean> getUserList() {
-        return dao.getUserObjects();
+        //return dao.getUserObjects();
+        return qlManager.getUserObjects();
     }
 
     public List<GroupBean> getGroupList() {
-        return dao.getGroupObjects();
+        //return dao.getGroupObjects();
+        return qlManager.getGroupObjects();
     }
 
     public void assignTask(String taskId, String userId) {

@@ -81,8 +81,8 @@ Released : 20090303
         <% List<UserBean> userBeanList = (List<UserBean>) request.getAttribute("usersList");
             for (UserBean userBean : userBeanList) {
                 String userGroups = "";
-                for (GroupBean group : userBean.getUserGroups()) {
-                    userGroups += group.getGroupName() + " , ";
+                for (GroupBean group1 : userBean.getUserGroups()) {
+                    userGroups += group1.getGroupName() + " , ";
                 }
         %>
         <tr>

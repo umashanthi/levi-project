@@ -42,8 +42,8 @@
     <annotation>
       <documentation>
         User Task attribute to set the potential owners of a user task.
-        The provided group(s) will be candidate for performing the user task.
-        In case of multiple group ids, a comma-separated list must be provided.
+        The provided group1(s) will be candidate for performing the user task.
+        In case of multiple group1 ids, a comma-separated list must be provided.
         Also supports expressions that evaluate to a String or Collection&lt;String&gt;.
       </documentation>
     </annotation>

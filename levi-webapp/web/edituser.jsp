@@ -83,11 +83,11 @@ Released : 20090303
     <form name="adduser" action="usrmng?action=editUser" method="POST">
         <%
             UserBean userBean = (UserBean) request.getAttribute("user");
-            // retrieve the user's group names
+            // retrieve the user's group1 names
             List<String> userGroupList = new ArrayList<String>();
             if(userBean.getUserGroups()!=null){
-            for (GroupBean group : userBean.getUserGroups()) {
-                userGroupList.add(group.getGroupName());
+            for (GroupBean group1 : userBean.getUserGroups()) {
+                userGroupList.add(group1.getGroupName());
             }
             }
         %>

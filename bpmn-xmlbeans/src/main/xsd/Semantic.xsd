@@ -821,7 +821,7 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 
-	<xsd:element name="group" type="tGroup" substitutionGroup="artifact"/>
+	<xsd:element name="group1" type="tGroup" substitutionGroup="artifact"/>
 	<xsd:complexType name="tGroup">
 		<xsd:complexContent>
 			<xsd:extension base="tArtifact">
