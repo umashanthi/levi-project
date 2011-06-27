@@ -38,11 +38,6 @@ public class UserManagerServlet extends HttpServlet {
         DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
         if (action == null) {         // list users and groups -- default action
             List<UserBean> userBeanList = dbManager.getUserList();
-            List<HObject> users=dbManager.getObjects(UserBean.class);
-            userBeanList.clear();
-            for(HObject obj:users){
-                userBeanList.add((UserBean)obj);
-            }
             List<GroupBean> groupBeanList = dbManager.getGroupList();
             request.setAttribute("usersList", userBeanList);
             request.setAttribute("groupList", groupBeanList);

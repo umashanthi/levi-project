@@ -88,17 +88,10 @@ Released : 20090303
             UserBean userBean = (UserBean) request.getAttribute("user");
             // retrieve the user's group1 names
             List<String> userGroupList = new ArrayList<String>();
-<<<<<<< HEAD
-            if(userBean.getUserGroups()!=null){
-            for (GroupBean group1 : userBean.getUserGroups()) {
-                userGroupList.add(group1.getGroupName());
-            }
-=======
             if (userBean.getUserGroups() != null) {
                 for (GroupBean group : userBean.getUserGroups()) {
                     userGroupList.add(group.getGroupName());
                 }
->>>>>>> 9f59a8dc0f93172164182ea48f22f99283eaf915
             }
             List<GroupBean> groupBeanList = dbManager.getGroupList();
         %>
