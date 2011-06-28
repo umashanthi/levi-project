@@ -4,13 +4,17 @@ package org.levi.persistance;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessEngineBean;
+import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -92,23 +96,15 @@ public class PersistTest {
         manager.assignTask("task1","1");
         manager.assignTask("task2","1");
 
-        List<TaskBean> tasks = dao.getAssignedTasks("1");
-        Iterator<TaskBean> itr = tasks.iterator();
-
-        while(itr.hasNext()){
-            System.out.println(itr.next().getId());
+        for(TaskBean task:dao.getAssignedTasks("1")){
+             System.out.println(task.getId());
         }
 
         manager.unassignTask("task1","1");
         manager.removeTask("task1", "1");
 
-
-        List<UserBean> list = dao.getUserObjects();
-
-        Iterator<UserBean> i = list.iterator();
-
-        while(i.hasNext()){
-            System.out.println(i.next().getFirstName());
+        for(UserBean user:dao.getUserObjects()){
+             System.out.println(user.getFirstName());
         }
 
         /*
@@ -127,23 +123,40 @@ public class PersistTest {
         //System.out.println(enginedata.getId());
         //System.out.println(enginedata.getDeployedProcesses().get("ssd").getDefinitionsId());
 
-        dao.close();
+
 
         HqlManager mgr= new HqlManager();
         mgr.getUserObjects();
 
-        Iterator<UserBean> iu =  mgr.getUserObjects().iterator();
-
-        while(iu.hasNext()){
-            System.out.println(iu.next().getFirstName());
+        for(UserBean user : mgr.getUserObjects()){
+             System.out.println(user.getFirstName());
         }
 
-        Iterator<GroupBean> ig =  mgr.getGroupObjects().iterator();
-
-        while(ig.hasNext()){
-            System.out.println(ig.next().getGroupName());
+        for(GroupBean group:mgr.getGroupObjects()){
+            System.out.println(group.getGroupName());
         }
 
+
+        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
+        processInstanceBean.setProcessId("process1");
+
+        Map<String, TaskBean> map = new HashMap<String, TaskBean>();
+
+        map.put("task1",task1);
+        map.put("task2",task2);
+
+        processInstanceBean.setRunningTasks(map);
+
+        manager.saveProcessInstance(processInstanceBean);
+
+        List<String> running = manager.getRunningTasks("process1");
+        System.out.println("Getting running tasks...");
+
+         for(String s:running){
+             System.out.println(s);
+         }
+
+        dao.close();
 
     }
 }
