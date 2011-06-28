@@ -338,12 +338,16 @@ public class DBManagerImpl implements DBManager {
 
     public List<String> getCompletedTasks(String processId) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        if(processInstanceBean.getCompletedTasks()!=null)
         return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
+        else return new ArrayList<String>();
     }
 
     public List<String> getRunningTasks(String processId) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        if(processInstanceBean.getRunningTasks()!=null)
         return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
+        else return new ArrayList<String>();
     }
 
     public void closeSession() {
