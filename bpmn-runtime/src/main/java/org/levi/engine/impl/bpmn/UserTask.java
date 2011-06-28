@@ -74,6 +74,7 @@ public class UserTask extends RunnableFlowNode {
             starteventbean.setFromPath(task.getInputForm());
             dao.save(starteventbean);
         }
+        dao.close();
     }
 
     public void run() {

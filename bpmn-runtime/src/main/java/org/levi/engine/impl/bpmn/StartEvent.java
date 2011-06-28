@@ -53,6 +53,7 @@ public class StartEvent extends Event {
         starteventbean.setAssignee(processInstanceBean.getStartUser());
         starteventbean.setFormName(this.startEvent.getInputForm());
         dao.save(starteventbean);
+        dao.close();
     }
 
 

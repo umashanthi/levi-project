@@ -28,6 +28,7 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         TaskBean taskBean = (TaskBean) dao.getObject(TaskBean.class, taskId);
         assert taskBean != null;
         String processInsId = taskBean.getProcesseInstance().getProcessId();
+        dao.close();
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
         /* Retrieve DBManager from session */

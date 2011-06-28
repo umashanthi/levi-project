@@ -125,4 +125,5 @@ public interface DBManager {
 
     List<String> getRunningTasks(String processId);
 
+    void closeSession();
 }

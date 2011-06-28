@@ -22,11 +22,17 @@ import java.util.List;
  */
 public class HibernateDao {
 
+    Session session;
+
     public HibernateDao() {
+        session = SessionFactoryUtil.getSession();
+    }
+
+    public Session getSession() {
+        return session;
     }
 
     public void save(HObject hobj) {
-        Session session = SessionFactoryUtil.getSession();
         try {
             Transaction tx = session.beginTransaction();
             session.save(hobj);
@@ -35,55 +41,47 @@ public class HibernateDao {
         } catch (ConstraintViolationException e) {
             System.out.println("[error] Constrained violated");
         }
-        session.close();
     }
 
     public Object getObject(Class hibCls, String id) {
-        Session session = SessionFactoryUtil.getSession();
+        Transaction tx = session.beginTransaction();
         Object obj = session.get(hibCls, id);
-        session.close();
+        tx.commit();
         return obj;
     }
 
     public Object remove(Class hibCls, String id) {
-        Session session = SessionFactoryUtil.getSession();
         Transaction tx = session.beginTransaction();
         Object obj = session.get(hibCls, id);
         session.delete(obj);
         tx.commit();
-        session.close();
         return obj;
     }
 
     public void update(HObject hobj) {
-        Session session = SessionFactoryUtil.getSession();
         Transaction tx = session.beginTransaction();
         session.saveOrUpdate(hobj);
         tx.commit();
-        session.close();
     }
 
     public List<UserBean> getUserObjects() {
-        Session session = SessionFactoryUtil.getSession();
         List objects = session.createCriteria(UserBean.class).list();
-        session.close();
         return objects;
     }
 
     public List<GroupBean> getGroupObjects() {
-        Session session = SessionFactoryUtil.getSession();
-        List<GroupBean> groups = session.createCriteria(GroupBean.class).list();
-        session.close();
-        return groups;
+        List objects = session.createCriteria(GroupBean.class).list();
+        return objects;
     }
 
     public List<TaskBean> getAssignedTasks(String userId) {
-        Session session = SessionFactoryUtil.getSession();
         Criteria criteria = session.createCriteria(TaskBean.class);
         criteria.add(Restrictions.eq("active", true));
-        List<TaskBean> tasks=  criteria.list();
+        return criteria.list();
+    }
+
+    public void close() {
         session.close();
-        return tasks;
     }
 
 }

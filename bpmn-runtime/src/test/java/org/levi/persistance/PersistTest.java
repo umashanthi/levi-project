@@ -156,5 +156,7 @@ public class PersistTest {
              System.out.println(s);
          }
 
+        dao.close();
+
     }
 }

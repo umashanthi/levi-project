@@ -349,4 +349,8 @@ public class DBManagerImpl implements DBManager {
         return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
         else return new ArrayList<String>();
     }
+
+    public void closeSession() {
+        dao.close();
+    }
 }
