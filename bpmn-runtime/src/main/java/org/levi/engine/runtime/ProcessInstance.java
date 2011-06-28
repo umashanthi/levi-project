@@ -274,7 +274,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
             dao.update(user);*/
             dbManager.unassignTask(task.getTaskId(),task.getAssignee().getUserId());
         }
-        dao.close();
     }
 
     public synchronized List<String> getRunningTaskIds() {
@@ -317,7 +316,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 throw new RuntimeException("Incomplete Runtime soup. Cannot pause the process instance.");
             }
             addRunning(taskId);
-            dao.close();
         }
     }
 
