@@ -51,6 +51,7 @@ public class GroupBean extends HObject{
         @ManyToMany - One group can have many users
      */
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_group", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")}, uniqueConstraints = @UniqueConstraint(columnNames = {"userId","groupId"}))
     public List<UserBean> getMembers() {
         return members;
     }

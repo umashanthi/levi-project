@@ -1,6 +1,7 @@
 package org.levi.engine.persistence.hibernate;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -63,25 +64,24 @@ public class HibernateDao {
         tx.commit();
     }
 
-    public List<UserBean> getUserObjects(){
+    public List<UserBean> getUserObjects() {
         List objects = session.createCriteria(UserBean.class).list();
         return objects;
     }
 
-    public List<GroupBean> getGroupObjects(){
+    public List<GroupBean> getGroupObjects() {
         List objects = session.createCriteria(GroupBean.class).list();
         return objects;
     }
 
-    public void close() {
-        session.close();
-    }
-
-    public List<TaskBean> getAssignedTasks(String userId){
+    public List<TaskBean> getAssignedTasks(String userId) {
         Criteria criteria = session.createCriteria(TaskBean.class);
         criteria.add(Restrictions.eq("active", true));
         return criteria.list();
     }
 
+    public void close() {
+        session.close();
+    }
 
 }

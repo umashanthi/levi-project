@@ -1,12 +1,6 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="org.levi.engine.ProcessEngine" %>
-<%@ page import="java.io.File" %>
-<%@ page import="org.apache.commons.io.FileUtils" %>
-<%@ page import="org.levi.engine.Deployment" %>
-<%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
 <%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
 <%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
+<%@ page import="java.util.List" %>
 
 
 <%--
@@ -87,8 +81,8 @@ Released : 20090303
         <% List<UserBean> userBeanList = (List<UserBean>) request.getAttribute("usersList");
             for (UserBean userBean : userBeanList) {
                 String userGroups = "";
-                for (GroupBean group : userBean.getUserGroups()) {
-                    userGroups += group.getGroupName() + " , ";
+                for (GroupBean group1 : userBean.getUserGroups()) {
+                    userGroups += group1.getGroupName() + " , ";
                 }
         %>
         <tr>

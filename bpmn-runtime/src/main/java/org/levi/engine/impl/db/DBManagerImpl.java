@@ -5,25 +5,31 @@ import org.levi.engine.EngineData;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.utils.Impl2Bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBManagerImpl implements DBManager {
 
     HibernateDao dao;
+    HqlManager qlManager;
 
     public DBManagerImpl() {
         dao = new HibernateDao();
+        qlManager = new HqlManager();
     }
 
     /**
@@ -40,12 +46,17 @@ public class DBManagerImpl implements DBManager {
     public void saveUser(User user) {
         UserBean userBean = null;
         if (dao.getObject(UserBean.class, user.getUserId()) != null) {
-            dao.update(Impl2Bean.getUserBean(user));
+            userBean = (UserBean) dao.getObject(UserBean.class, user.getUserId());
+            dao.update(Impl2Bean.getUserBean(user, userBean, true));
         } else {
-            dao.save(Impl2Bean.getUserBean(user));
+            userBean = new UserBean();
+            dao.save(Impl2Bean.getUserBean(user, userBean, false));
         }
-
-
+        if (user.getUserGroups() != null) {
+            for (Group group : user.getUserGroups()) {
+                addUserToGroup(user.getUserId(), group.getGroupId());
+            }
+        }
     }
 
     public void saveGroup(GroupBean group) {
@@ -54,10 +65,12 @@ public class DBManagerImpl implements DBManager {
 
     public void saveGroup(Group group) {
         GroupBean groupBean = null;
-        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) {
-            dao.update(Impl2Bean.getGroupBean(group));
+        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) { // group Exists
+            groupBean = (GroupBean) dao.getObject(GroupBean.class, group.getGroupId());
+            dao.update(Impl2Bean.getGroupBean(group, groupBean, true));
         } else {
-            dao.save(Impl2Bean.getGroupBean(group));
+            groupBean = new GroupBean();
+            dao.save(Impl2Bean.getGroupBean(group, groupBean, false));
         }
     }
 
@@ -72,7 +85,12 @@ public class DBManagerImpl implements DBManager {
     public void addUserToGroup(String userId, String groupId) {
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
-        group.getMembers().add(user);
+        //group.getMembers().add(user);
+        if (!user.getUserGroups().contains(group)) {
+            user.getUserGroups().add(group);
+        }
+        dao.update(user);
+        //dao.update(group);
     }
 
     public void deleteUser(String userId) {
@@ -86,7 +104,9 @@ public class DBManagerImpl implements DBManager {
     public void removeUserFromGroup(String userId, String groupId) {
         GroupBean group = (GroupBean) dao.getObject(GroupBean.class, groupId);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        group.getMembers().remove(user);
+        if (group.getMembers().contains(user)) {
+            group.getMembers().remove(user);
+        }
     }
 
     /**
@@ -189,11 +209,13 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<UserBean> getUserList() {
-        return dao.getUserObjects();
+        //return dao.getUserObjects();
+        return qlManager.getUserObjects();
     }
 
     public List<GroupBean> getGroupList() {
-        return dao.getGroupObjects();
+        //return dao.getGroupObjects();
+        return qlManager.getGroupObjects();
     }
 
     public void assignTask(String taskId, String userId) {
@@ -262,14 +284,73 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    public void closeSession() {
-        dao.close();
-    }
-
     public void undeployProcess(String processId) {
         EngineDataBean bean = getEngineDataBean();
         bean.getDeployedProcesses().remove(processId);
         dao.save(bean);
         dao.remove(DeploymentBean.class, processId);
+    }
+
+    public void persistProcessInstance(ProcessInstance processInstance) {
+        DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
+        assert deploymentBean != null;
+        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
+        processInstanceBean.setProcessId(processInstance.getProcessId());
+        processInstanceBean.setDeployedProcess(deploymentBean);
+        UserBean userBean = new UserBean();
+        userBean.setUserId(processInstance.getStartUserId());
+        UserBean user = (UserBean) dao.getObject(UserBean.class, processInstance.getStartUserId());
+        if (user != null) {
+            processInstanceBean.setStartUser(user);
+        } else {
+            processInstanceBean.setStartUser(userBean);
+        }
+
+        processInstanceBean.setStartTime(new Date());
+        processInstanceBean.setVariables(processInstance.getVariables());
+        processInstanceBean.setStartEventId(processInstance.getObjectModel().getStartEvent().getId());
+        processInstanceBean.setRunning(true);
+
+        dao.save(processInstanceBean);
+        if (user != null) {
+            user.addStartedProcessInstances(processInstanceBean);
+            dao.update(user);
+        } else {
+            userBean.addStartedProcessInstances(processInstanceBean);
+            dao.save(userBean);
+        }
+        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
+        if (engineDataBean != null) {
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.update(engineDataBean);
+        } else {
+            engineDataBean = new EngineDataBean();
+            engineDataBean.setId("1");
+            engineDataBean.addProcessInstance(processInstanceBean);
+            dao.save(engineDataBean);
+        }
+    }
+
+    public String getProcessDefinition(String processId) {
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        return processInstanceBean.getDeployedProcess().getDefinitionsId();
+    }
+
+    public List<String> getCompletedTasks(String processId) {
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        if(processInstanceBean.getCompletedTasks()!=null)
+        return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
+        else return new ArrayList<String>();
+    }
+
+    public List<String> getRunningTasks(String processId) {
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
+        if(processInstanceBean.getRunningTasks()!=null)
+        return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
+        else return new ArrayList<String>();
+    }
+
+    public void closeSession() {
+        dao.close();
     }
 }

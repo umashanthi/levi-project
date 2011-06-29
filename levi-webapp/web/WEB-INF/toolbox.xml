@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<toolbox>
+  <tool>
+   <key>date</key>
+   <scope>application</scope>
+   <class>org.apache.velocity.tools.generic.DateTool</class>
+ </tool>
+<tool>
+  <key>math</key>
+  <scope>application</scope>
+  <class>org.apache.velocity.tools.generic.MathTool</class>
+</tool>
+<tool>
+  <key>link</key>
+  <scope>request</scope>
+  <class>org.apache.velocity.tools.view.tools.LinkTool</class>
+</tool>
+ <tool>
+   <key>cookie</key>
+   <scope>request</scope>
+   <class>org.apache.velocity.tools.view.tools.CookieTool</class>
+ </tool>
+<tool>
+  <key>params</key>
+  <scope>request</scope>
+  <class>org.apache.velocity.tools.view.tools.ParameterParser</class>
+</tool>
+
+   <data type="number">
+    <key>version</key>
+    <value>1.1</value>
+  </data>
+  <data type="boolean">
+    <key>isSimple</key>
+    <value>true</value>
+  </data>
+  <data type="string">
+    <key>foo</key>
+    <value>this is foo.</value>
+  </data>
+  <data type="string">
+    <key>bar</key>
+    <value>this is bar.</value>
+  </data>
+  <tool>
+    <key>map</key>
+    <class>java.util.HashMap</class>
+  </tool>
+</toolbox>

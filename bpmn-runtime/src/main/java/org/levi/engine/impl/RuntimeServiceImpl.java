@@ -1,19 +1,13 @@
 package org.levi.engine.impl;
 
-import org.hibernate.Hibernate;
 import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.LeviException;
 import org.levi.engine.RuntimeService;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
-import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
-import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 
 import java.io.IOException;
@@ -31,7 +25,7 @@ public class RuntimeServiceImpl implements RuntimeService {
             throw new LeviException("EngineData is null.");
         }
         this.engineData = engineData;
-        
+        dbManager = new DBManagerImpl();
     }
 
     public boolean start() {
@@ -81,54 +75,10 @@ public class RuntimeServiceImpl implements RuntimeService {
 
         // record this as a running process
         engineData.addProcessInstance(processInstance.getProcessId(), processInstance);
-        persistProcessInstance(processInstance);
+        dbManager.persistProcessInstance(processInstance);
         System.out.println("Started process  " + processInstance.getProcessId() + " " + definitionsId);
         processInstance.execute();
         return processInstance.getProcessId();
-    }
-
-    private void persistProcessInstance(ProcessInstance processInstance) {
-        HibernateDao dao = new HibernateDao();
-        // Retrieving DeploymentBean for this process
-        DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
-        assert deploymentBean != null;
-        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
-        processInstanceBean.setProcessId(processInstance.getProcessId());
-        processInstanceBean.setDeployedProcess(deploymentBean);
-        UserBean userBean = new UserBean();
-        userBean.setUserId(processInstance.getStartUserId());
-        UserBean user = (UserBean) dao.getObject(UserBean.class, processInstance.getStartUserId());
-        if (user != null) {
-            processInstanceBean.setStartUser(user);
-        } else {
-            processInstanceBean.setStartUser(userBean);
-        }
-
-        processInstanceBean.setStartTime(new Date());
-        processInstanceBean.setVariables(processInstance.getVariables());
-        processInstanceBean.setStartEventId(processInstance.getObjectModel().getStartEvent().getId());
-        processInstanceBean.setRunning(true);
-
-        dao.save(processInstanceBean);
-        if (user != null) {
-            user.addStartedProcessInstances(processInstanceBean);
-            dao.update(user);
-        } else {
-            userBean.addStartedProcessInstances(processInstanceBean);
-            dao.save(userBean);
-        }
-        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
-        if (engineDataBean != null) {
-            engineDataBean.addProcessInstance(processInstanceBean);
-            dao.update(engineDataBean);
-        } else {
-            engineDataBean = new EngineDataBean();
-            engineDataBean.setId("1");
-            engineDataBean.addProcessInstance(processInstanceBean);
-            dao.save(engineDataBean);
-        }
-        dao.close();
-
     }
 
     public void stopProcess(String processId) {
@@ -157,16 +107,7 @@ public class RuntimeServiceImpl implements RuntimeService {
             throw new RuntimeException("Process with id " + processId + " already running.");
         }*/
         System.out.println("Resuming process instance.");
-        // use the processId to load the process data from the db
-        // create a new process instance
-        // call resume on it.
-        /* Retrieve ProcessInstanceBean for given processInstance */
-        HibernateDao dao = new HibernateDao();
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
-
-        // check if a deployment is available for this process id
-        String definitionsId = processInstanceBean.getDeployedProcess().getDefinitionsId();// "ExclusiveGatewayTest2";             //TODO: Uma: <-- retrieve this from DB giving the processInstanceId
-
+        String definitionsId = dbManager.getProcessDefinition(processId);
         Deployment deployment = engineData.getDeployment(definitionsId);
         if (deployment == null) {
             throw new LeviException("No deployment found for : " + definitionsId);
@@ -192,11 +133,11 @@ public class RuntimeServiceImpl implements RuntimeService {
             throw new LeviException("Retrieved process definition is null");
         }
 
-        ArrayList<String> completed = new ArrayList(processInstanceBean.getCompletedTasks().keySet());              //TODO Uma: <-get completed & running ids from dbv
+        List<String> completed = dbManager.getCompletedTasks(processId);
         //completed.add("theStart");
-        ArrayList<String> running = new ArrayList(processInstanceBean.getRunningTasks().keySet());
+        List<String> running = dbManager.getRunningTasks(processId);
         //running.add("theTask2");
-        dao.close();
+        
         ProcessInstance p = new ProcessInstance.Builder(processDefinition)
                 .completedIds(completed)
                 .runningIds(running)

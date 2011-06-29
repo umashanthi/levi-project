@@ -7,6 +7,7 @@
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
 <%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
 <%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
+<%@ page import="org.levi.engine.db.DBManager" %>
 
 
 <%--
@@ -80,14 +81,19 @@ Released : 20090303
         if (isLogged != null && isLogged.toString().equals("true")) { %>
     <h3><a href="usrmng"> User Management </a> > Edit User</h3>
 
-    <form name="adduser" action="usrmng?action=adduser" method="POST">
+    <form name="updateUser" action="usrmng?action=updateUser" method="POST">
         <%
+            assert request.getSession().getAttribute("dbManager") != null;
+            DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
             UserBean userBean = (UserBean) request.getAttribute("user");
-            // retrieve the user's group names
+            // retrieve the user's group1 names
             List<String> userGroupList = new ArrayList<String>();
-            for (GroupBean group : userBean.getUserGroups()) {
-                userGroupList.add(group.getGroupName());
+            if (userBean.getUserGroups() != null) {
+                for (GroupBean group : userBean.getUserGroups()) {
+                    userGroupList.add(group.getGroupName());
+                }
             }
+            List<GroupBean> groupBeanList = dbManager.getGroupList();
         %>
         <table border="0" width="60%" cellpadding="5" cellspacing="0">
             <tr>
@@ -101,26 +107,21 @@ Released : 20090303
             <tr>
                 <td colspan="2">Select Groups :</td>
             </tr>
+            <% for(GroupBean grp:groupBeanList){ %>
             <tr>
                 <td>
-                    <input type="checkbox" name="group" <% if (userGroupList.contains("Administration")) {%>
-                           checked="true" <%}%>/>Administration
+                    <input type="checkbox" name="<%=grp.getGroupId()%>" <% if (userGroupList.contains(grp.getGroupId())) {%>
+                           checked="true" <%}%>/><%=grp.getGroupName()%>
                 </td>
                 <td>
-                    <input type="radio" name="group-role"> Admin
-                    <input type="radio" name="group-role"> User
+                    <input type="radio" name="<%=grp.getGroupId()%>-group-role"> Admin
+                    <input type="radio" name="<%=grp.getGroupId()%>-group-role"> User
                 </td>
             </tr>
+            <%} %>
+
             <tr>
-                <td><input type="checkbox" name="group"/>Accounting
-                </td>
-                <td>
-                    <input type="radio" name="group-role"> Admin
-                    <input type="radio" name="group-role"> User
-                </td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Add User"/></td>
+                <td><input type="submit" value="Edit User"/></td>
                 <td><input type="reset" value="Cancel"/></td>
             </tr>
         </table>

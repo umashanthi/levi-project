@@ -9,17 +9,14 @@ package org.levi.web;
  */
 
 import org.apache.velocity.Template;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
-import org.hibernate.Hibernate;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class FormGeneratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request,

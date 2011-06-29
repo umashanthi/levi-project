@@ -4,12 +4,14 @@ import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.runtime.ProcessInstance;
 
 import java.util.List;
 
@@ -108,11 +110,20 @@ public interface DBManager {
 
     void persistDeployment(Deployment deployment);
 
-    void closeSession();
 
     void undeployProcess(String processId);
 
     void saveGroup(Group group);
 
     void saveUser(User user);
+
+    void persistProcessInstance(ProcessInstance processInstance);
+
+    String getProcessDefinition(String processId);
+
+    List<String> getCompletedTasks(String processId);
+
+    List<String> getRunningTasks(String processId);
+
+    void closeSession();
 }

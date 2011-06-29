@@ -5,6 +5,8 @@
 <%@ page import="org.apache.commons.io.FileUtils" %>
 <%@ page import="org.levi.engine.Deployment" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
+<%@ page import="org.levi.engine.db.DBManager" %>
 
 
 <%--
@@ -75,7 +77,11 @@ Released : 20090303
 <!-- end header -->
 <div id="body">
     <% Object isLogged = session.getAttribute("logged");
-        if (isLogged != null && isLogged.toString().equals("true")) { %>
+        if (isLogged != null && isLogged.toString().equals("true")) {
+       assert request.getSession().getAttribute("dbManager") != null;
+            DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
+            List<GroupBean> groupBeanList = dbManager.getGroupList();
+    %>
     <h3><a href="usrmng"> User Management </a> > Add User</h3>
 
     <form name="adduser" action="usrmng?action=adduser" method="POST">
@@ -91,23 +97,17 @@ Released : 20090303
             <tr>
                 <td colspan="2">Select Groups :</td>
             </tr>
+            <% for(GroupBean grp:groupBeanList){ %>
             <tr>
                 <td>
-                    <input type="checkbox" name="group"/>Administration
+                    <input type="checkbox" name="<%=grp.getGroupId()%>"/><%=grp.getGroupName()%>
                 </td>
                 <td>
-                    <input type="radio" name="group-role"> Admin
-                    <input type="radio" name="group-role"> User
+                    <input type="radio" name="<%=grp.getGroupId()%>-group-role" value="Admin"> Admin
+                    <input type="radio" name="<%=grp.getGroupId()%>-group-role" value="User"> User
                 </td>
             </tr>
-            <tr>
-                <td><input type="checkbox" name="group"/>Accounting
-                </td>
-                <td>
-                    <input type="radio" name="group-role"> Admin
-                    <input type="radio" name="group-role"> User
-                </td>
-            </tr>
+            <%} %>
             <tr>
                 <td><input type="submit" value="Add User"/></td>
                 <td><input type="reset" value="Cancel"/></td>
