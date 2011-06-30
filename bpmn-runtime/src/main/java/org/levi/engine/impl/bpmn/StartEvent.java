@@ -46,6 +46,7 @@ public class StartEvent extends Event {
     private void persistStartEvent(StartEvent startEvent) {
         HibernateDao dao = new HibernateDao();
         TaskBean starteventbean = new TaskBean();
+        starteventbean.setActive(true);
         starteventbean.setId(startEvent.getId());
         starteventbean.setTaskId(startEvent.getId());
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
