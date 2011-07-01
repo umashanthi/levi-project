@@ -26,6 +26,8 @@ public class HqlManager {
     }
 
     public List<UserBean> getUserObjects(){
+        session.close();
+        session = SessionFactoryUtil.getSession();
         List<UserBean> users = session.createQuery("from UserBean").list();
         return users;
 
