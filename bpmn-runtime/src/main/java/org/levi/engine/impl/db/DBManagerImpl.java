@@ -89,15 +89,15 @@ public class DBManagerImpl implements DBManager {
 
         int id = -1;
         List<GroupBean> grps = user.getUserGroups();
-        for(GroupBean grp: grps){
-            if(grp.getGroupId().equals(group.getGroupId())){
+        for (GroupBean grp : grps) {
+            if (grp.getGroupId().equals(group.getGroupId())) {
                 id = grps.indexOf(grp);
                 break;
             }
 
         }
 
-        if(id == -1){
+        if (id == -1) {
             user.getUserGroups().add(group);
         }
         dao.update(user);
@@ -121,14 +121,14 @@ public class DBManagerImpl implements DBManager {
         int id = -1;
 
         List<GroupBean> grps = user.getUserGroups();
-        for(GroupBean grp : grps){
-            if(grp.getGroupId().equals(group.getGroupId())){
+        for (GroupBean grp : grps) {
+            if (grp.getGroupId().equals(group.getGroupId())) {
                 id = grps.indexOf(grp);
                 break;
             }
         }
-        
-        if(id != -1){
+
+        if (id != -1) {
             user.getUserGroups().remove(id);
         }
         dao.update(user);
@@ -187,8 +187,8 @@ public class DBManagerImpl implements DBManager {
     public List<TaskBean> getUserTaskList(String userId) {
         List<TaskBean> list = new ArrayList<TaskBean>();
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        for(TaskBean task:user.getAssigned()){
-            if(task.isActive()){
+        for (TaskBean task : user.getAssigned()) {
+            if (task.isActive()) {
                 list.add(task);
             }
         }
@@ -230,7 +230,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public TaskBean getTaskBean(String taskId) {
-        TaskBean task = (TaskBean) dao.getObject(UserBean.class, taskId);
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         return task;
     }
 
@@ -249,7 +249,7 @@ public class DBManagerImpl implements DBManager {
         return qlManager.getGroupObjects();
     }
 
-    public List<String> getGroupIdList(){
+    public List<String> getGroupIdList() {
         return qlManager.getGroupIds();
     }
 
@@ -264,7 +264,7 @@ public class DBManagerImpl implements DBManager {
 
     public void unassignTask(String taskId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
-        if(task != null){
+        if (task != null) {
             task.setActive(false);
             dao.update(task);
         }
@@ -377,8 +377,8 @@ public class DBManagerImpl implements DBManager {
         dao.close();
         dao = new HibernateDao();
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
-        if(processInstanceBean.getCompletedTasks()!=null)
-        return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
+        if (processInstanceBean.getCompletedTasks() != null)
+            return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
         else return new ArrayList<String>();
     }
 
@@ -386,8 +386,8 @@ public class DBManagerImpl implements DBManager {
         dao.close();
         dao = new HibernateDao();
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
-        if(processInstanceBean.getRunningTasks()!=null)
-        return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
+        if (processInstanceBean.getRunningTasks() != null)
+            return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));
         else return new ArrayList<String>();
     }
 
@@ -423,9 +423,9 @@ public class DBManagerImpl implements DBManager {
         dao.save(starteventbean);
     }
 
-    public void addRunningTask(String taskId){
+    public void addRunningTask(String taskId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
-        if(task != null){
+        if (task != null) {
             ProcessInstanceBean processInstanceBean = task.getProcesseInstance();
             processInstanceBean.addToRunningTask(task);
             //TODO this addToRunningTask(task) should implement here
@@ -433,9 +433,9 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    public void removeRunningTask(String taskId){
+    public void removeRunningTask(String taskId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
-        if(task != null){
+        if (task != null) {
             ProcessInstanceBean processInstanceBean = task.getProcesseInstance();
             processInstanceBean.removeFromRunningTask(task);
             //TODO this removeFromRunningTask(task) should implement here
@@ -443,9 +443,9 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    public void addCompletedTask(String taskId){
+    public void addCompletedTask(String taskId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
-        if(task != null){
+        if (task != null) {
             ProcessInstanceBean processInstanceBean = task.getProcesseInstance();
             processInstanceBean.addToCompletedTask(task);
             //TODO this addToCompletedTask(task) should implement here

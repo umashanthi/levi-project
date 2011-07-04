@@ -21,8 +21,10 @@ public class FormGeneratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request,
                                   HttpServletResponse response, Context context) {
         /* Retrieve request parameters */
+        /* Retrieve DBManager from session */
         assert request.getSession().getAttribute("dbManager") != null;
         DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
+        /* Retrieve TaskBean object for the given taskId */
         assert request.getParameter("taskId") != null;
         String taskId = request.getParameter("taskId");
         TaskBean taskBean = dbManager.getTaskBean(taskId);
@@ -30,15 +32,6 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         String processInsId = taskBean.getProcesseInstance().getProcessId();
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
-        /* Retrieve DBManager from session */
-<<<<<<< HEAD
-        assert request.getSession().getAttribute("dbManager") != null;
-        //DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
-=======
-
->>>>>>> 5dbcecbe37d94a6cf3d016f11d29b8a0d59f9ea7
-        /* Retrieve TaskBean object for the given taskId */
-        //  TaskBean taskBean = dbManager.getTaskBean(taskId);
         /* get the template */
         Template template = null;
         context.put("username", request.getSession().getAttribute("username"));
