@@ -4,7 +4,7 @@
     <session-factory>
         <!-- Default Netbeans generated parameters -->
         <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
-        <property name="hibernate.connection.url">jdbc:derby://localhost:1527/hibernate</property>
+        <property name="hibernate.connection.url">jdbc:derby://localhost:1527/levi12;create=true</property>
         <property name="hibernate.connection.username">derbyuser</property>
         <!-- Additional parameters -->
         <property name="hibernate.connection.pool_size">10</property>

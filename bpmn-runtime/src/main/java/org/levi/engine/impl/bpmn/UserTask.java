@@ -59,20 +59,21 @@ public class UserTask extends RunnableFlowNode {
 
     private void persistUserTask(UserTask userTask) {
         HibernateDao dao = new HibernateDao();
-        TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
-        if (starteventbean == null) {
-            starteventbean = new TaskBean();
-            starteventbean.setId(userTask.getId());
-            starteventbean.setTaskId(userTask.getId());
+        TaskBean userTaskBean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
+        if (userTaskBean == null) {
+            userTaskBean = new TaskBean();
+            userTaskBean.setId(userTask.getId());
+            userTaskBean.setTaskId(userTask.getId());
+            userTaskBean.setActive(true);
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-            starteventbean.setProcesseInstance(processInstanceBean);
+            userTaskBean.setProcesseInstance(processInstanceBean);
             UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            starteventbean.setAssignee(user);
-            starteventbean.setFormName(task.getName());
-            starteventbean.setTaskName(task.getName());
-            starteventbean.setHasUserForm(hasInputForm());
-            starteventbean.setFromPath(task.getInputForm());
-            dao.save(starteventbean);
+            userTaskBean.setAssignee(user);
+            userTaskBean.setFormName(task.getName());
+            userTaskBean.setTaskName(task.getName());
+            userTaskBean.setHasUserForm(hasInputForm());
+            userTaskBean.setFromPath(task.getInputForm());
+            dao.save(userTaskBean);
         }
         dao.close();
     }

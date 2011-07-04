@@ -160,8 +160,14 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
+        List<TaskBean> list = new ArrayList<TaskBean>();
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        return user.getAssigned();
+        for(TaskBean task:user.getAssigned()){
+            if(task.isActive()){
+                list.add(task);
+            }
+        }
+        return list;
     }
 
     public List<ProcessInstanceBean> getRunningProcessesInstancesList() {
@@ -337,6 +343,8 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<String> getCompletedTasks(String processId) {
+        dao.close();
+        dao = new HibernateDao();
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
         if(processInstanceBean.getCompletedTasks()!=null)
         return (new ArrayList(processInstanceBean.getCompletedTasks().keySet()));
@@ -344,6 +352,8 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<String> getRunningTasks(String processId) {
+        dao.close();
+        dao = new HibernateDao();
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processId);
         if(processInstanceBean.getRunningTasks()!=null)
         return (new ArrayList(processInstanceBean.getRunningTasks().keySet()));

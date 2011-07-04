@@ -44,9 +44,9 @@ public class HibernateDao {
     }
 
     public Object getObject(Class hibCls, String id) {
-        Transaction tx = session.beginTransaction();
+        session.close();
+        session = SessionFactoryUtil.getSession();
         Object obj = session.get(hibCls, id);
-        tx.commit();
         return obj;
     }
 
@@ -55,6 +55,7 @@ public class HibernateDao {
         Object obj = session.get(hibCls, id);
         session.delete(obj);
         tx.commit();
+        session.flush();
         return obj;
     }
 
@@ -62,6 +63,7 @@ public class HibernateDao {
         Transaction tx = session.beginTransaction();
         session.saveOrUpdate(hobj);
         tx.commit();
+        session.flush();
     }
 
     public List<UserBean> getUserObjects() {

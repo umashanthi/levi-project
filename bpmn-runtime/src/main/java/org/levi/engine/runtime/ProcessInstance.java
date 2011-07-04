@@ -272,6 +272,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
            /* UserBean user = task.getAssignee();
             user.removeFromAssignedList(task);
             dao.update(user);*/
+            if(dbManager==null){
+                dbManager = new DBManagerImpl();
+            }
             dbManager.unassignTask(task.getTaskId(),task.getAssignee().getUserId());
         }
         dao.close();
