@@ -1,6 +1,8 @@
 package org.levi.engine;
 
 import org.hibernate.Hibernate;
+import org.levi.engine.db.DBManager;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -58,9 +60,17 @@ public class EngineData implements Serializable {
 
     public Map<String, Deployment> getDeployments() {
         return deployments;
+    }    
+
+    public void setDeploymentPIds(List<String> deploymentPIds) {
+        if (deploymentPIds == null) {
+            throw new NullPointerException("deploymentPIds is null");
+        }
+        this.deploymentPIds = deploymentPIds;
     }
 
     public List<DeploymentBean> getDeploymentBeans() {
+        //TODO this method needs to be removed
         HibernateDao dao = new HibernateDao();
         if (dao.getObject(EngineDataBean.class, "1") == null) {
             return new ArrayList<DeploymentBean>();
@@ -74,26 +84,9 @@ public class EngineData implements Serializable {
         return deployments;
     }
 
-    public void setDeploymentPIds(List<String> deploymentPIds) {
-        if (deploymentPIds == null) {
-            throw new NullPointerException("deploymentPIds is null");
-        }
-        this.deploymentPIds = deploymentPIds;
-    }
-
     public List<String> getDeploymentIds() {
-        HibernateDao dao = new HibernateDao();
-        if (dao.getObject(EngineDataBean.class, "1") == null) {
-            return new ArrayList<String>();
-        }
-        EngineDataBean engineDataBean = (EngineDataBean) dao.getObject(EngineDataBean.class, "1");
-        Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
-        List<String> deploymentIds = new ArrayList<String>();
-        for (String id : deployedProcesses.keySet()) {
-            deploymentIds.add(((DeploymentBean) deployedProcesses.get(id)).getDefinitionsId());
-        }
-        //return deploymentPIds;
-        return deploymentIds;
+        DBManager dbManager = new DBManagerImpl();
+        return dbManager.getDeploymentIds();
     }
 
     public boolean removeDeployment(Deployment d) {

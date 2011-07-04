@@ -4,6 +4,8 @@ import org.levi.engine.Deployment;
 import org.levi.engine.EngineData;
 import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
+import org.levi.engine.impl.bpmn.StartEvent;
+import org.levi.engine.impl.bpmn.UserTask;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -98,9 +100,11 @@ public interface DBManager {
 
     List<GroupBean> getGroupList();
 
+    List<String> getGroupIdList();
+
     void assignTask(String taskId, String userId);
 
-    void unassignTask(String taskId, String userId);
+    void unassignTask(String taskId);
 
     void removeTask(String taskId, String userId);
 
@@ -124,6 +128,18 @@ public interface DBManager {
     List<String> getCompletedTasks(String processId);
 
     List<String> getRunningTasks(String processId);
+
+    void persistUserTask(UserTask userTask);
+
+    void persistStartEvent(StartEvent startEvent);
+
+    void addRunningTask(String taskId);
+
+    void removeRunningTask(String taskId);
+
+    void addCompletedTask(String taskId);
+
+    List<String> getDeploymentIds();
 
     void closeSession();
 }

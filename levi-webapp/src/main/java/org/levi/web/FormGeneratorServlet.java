@@ -33,7 +33,7 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         String taskFormPath = request.getParameter("formPath");
         /* Retrieve DBManager from session */
         assert request.getSession().getAttribute("dbManager") != null;
-        DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
+        //DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
         /* Retrieve TaskBean object for the given taskId */
         //  TaskBean taskBean = dbManager.getTaskBean(taskId);
         /* get the template */

@@ -4,7 +4,6 @@ package org.levi.persistance;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessEngineBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
@@ -100,7 +99,7 @@ public class PersistTest {
              System.out.println(task.getId());
         }
 
-        manager.unassignTask("task1","1");
+        manager.unassignTask("task1");
         manager.removeTask("task1", "1");
 
         for(UserBean user:dao.getUserObjects()){
