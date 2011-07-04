@@ -12,7 +12,6 @@ import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
 import org.levi.engine.db.DBManager;
-import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,18 +21,17 @@ public class FormGeneratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request,
                                   HttpServletResponse response, Context context) {
         /* Retrieve request parameters */
+        assert request.getSession().getAttribute("dbManager") != null;
+        DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
         assert request.getParameter("taskId") != null;
         String taskId = request.getParameter("taskId");
-        HibernateDao dao = new HibernateDao();
-        TaskBean taskBean = (TaskBean) dao.getObject(TaskBean.class, taskId);
+        TaskBean taskBean = dbManager.getTaskBean(taskId);
         assert taskBean != null;
         String processInsId = taskBean.getProcesseInstance().getProcessId();
-        dao.close();
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
         /* Retrieve DBManager from session */
-        assert request.getSession().getAttribute("dbManager") != null;
-        DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
+
         /* Retrieve TaskBean object for the given taskId */
         //  TaskBean taskBean = dbManager.getTaskBean(taskId);
         /* get the template */

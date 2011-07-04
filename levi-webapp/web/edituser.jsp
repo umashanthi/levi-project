@@ -1,13 +1,8 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="org.levi.engine.ProcessEngine" %>
-<%@ page import="java.io.File" %>
-<%@ page import="org.apache.commons.io.FileUtils" %>
-<%@ page import="org.levi.engine.Deployment" %>
-<%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
-<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
-<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
 <%@ page import="org.levi.engine.db.DBManager" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.GroupBean" %>
+<%@ page import="org.levi.engine.persistence.hibernate.user.hobj.UserBean" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 
 
 <%--
@@ -107,10 +102,11 @@ Released : 20090303
             <tr>
                 <td colspan="2">Select Groups :</td>
             </tr>
-            <% for(GroupBean grp:groupBeanList){ %>
+            <% for (GroupBean grp : groupBeanList) { %>
             <tr>
                 <td>
-                    <input type="checkbox" name="<%=grp.getGroupId()%>" <% if (userGroupList.contains(grp.getGroupId())) {%>
+                    <input type="checkbox"
+                           name="<%=grp.getGroupId()%>" <% if (userGroupList.contains(grp.getGroupId())) {%>
                            checked="true" <%}%>/><%=grp.getGroupName()%>
                 </td>
                 <td>
