@@ -9,7 +9,7 @@ import org.omg.spec.bpmn.x20100524.model.TExpression;
  * @author Ishan Jayawardena
  */
 public class ScriptConditionExpression implements ConditionExpression {
-     public static final String DEFAULT_CONDITION_LANGUAGE = "javascript";
+    public static final String DEFAULT_CONDITION_LANGUAGE = "javascript";
 
     private final String conditionExpression;
     
@@ -20,7 +20,7 @@ public class ScriptConditionExpression implements ConditionExpression {
     public boolean evaluate(ProcessInstance processInstance) {
         System.out.println("Evaluating Script Condition.");
         ScriptEngines scriptEngines = ScriptEngines.getInstance();
-        Object result = null;
+        Object result;
         result = scriptEngines.evaluate(
                 conditionExpression,
                 DEFAULT_CONDITION_LANGUAGE,
