@@ -1,6 +1,5 @@
 package org.levi.web;
 
-import org.hibernate.Hibernate;
 import org.levi.engine.ProcessEngine;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.identity.Group;
@@ -9,9 +8,6 @@ import org.levi.engine.impl.ProcessEngineImpl;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.impl.identity.GroupImpl;
 import org.levi.engine.impl.identity.UserImpl;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
-import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;

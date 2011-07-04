@@ -1,10 +1,6 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="org.levi.engine.ProcessEngine" %>
-<%@ page import="java.io.File" %>
-<%@ page import="org.apache.commons.io.FileUtils" %>
-<%@ page import="org.levi.engine.Deployment" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
+<%@ page import="java.util.List" %>
 
 
 <%--
@@ -161,9 +157,9 @@ Released : 20090303
 
     <div><br></div>
     <%
-        if(session.getAttribute("processList")!=null && session.getAttribute("deployments")!=null ){
-        List<String> processesList = (List<String>) session.getAttribute("processList");
-        List<DeploymentBean> deployments = (List<DeploymentBean>) session.getAttribute("deployments");
+        if (session.getAttribute("processList") != null && session.getAttribute("deployments") != null) {
+            List<String> processesList = (List<String>) session.getAttribute("processList");
+            List<DeploymentBean> deployments = (List<DeploymentBean>) session.getAttribute("deployments");
 
     %>
 
