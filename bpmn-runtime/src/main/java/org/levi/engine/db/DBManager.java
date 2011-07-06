@@ -141,5 +141,7 @@ public interface DBManager {
 
     List<String> getDeploymentIds();
 
+    public String getPotentialGroup(String taskId);
+
     void closeSession();
 }
