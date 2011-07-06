@@ -467,6 +467,11 @@ public class DBManagerImpl implements DBManager {
         return deploymentIds;
     }
 
+    public String getPotentialGroup(String taskId){
+        TaskBean task = (TaskBean)dao.getObject(TaskBean.class, taskId);
+        return task.getPotentialGroup().getGroupId();
+    }
+
     public void closeSession() {
         dao.close();
     }
