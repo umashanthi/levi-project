@@ -137,7 +137,7 @@ Released : 20090303
             </td>
             <td>
                 <% if (task.isHasUserForm()) {
-                    String taskId = task.getId();
+                    String taskId = task.getTaskId();
                     String taskFormName = task.getFormName();
                     String taskFromPath = task.getFromPath(); %>
 

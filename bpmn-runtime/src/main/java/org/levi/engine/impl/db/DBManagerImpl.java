@@ -7,7 +7,6 @@ import org.levi.engine.identity.Group;
 import org.levi.engine.identity.User;
 import org.levi.engine.impl.bpmn.StartEvent;
 import org.levi.engine.impl.bpmn.UserTask;
-import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
@@ -217,7 +216,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
-        return null;  // This method should return the list of tasks for this group which are unassigned
+        return dao.getAssignedTasks(groupId);
     }
 
     public List<TaskBean> getActiveTasks(String processId) {
@@ -235,8 +234,17 @@ public class DBManagerImpl implements DBManager {
     }
 
     // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
-    public boolean claimUserTask(String taskId, String processInstanceId, String username) {
-        return false;
+    public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
+        TaskBean task = (TaskBean) dao.getTask(taskId, processInstanceId);
+        if(task.isAssigned()){
+            return false;
+        }
+        task.setActive(true);
+        dao.update(task);
+        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+        user.getAssigned().add(task);
+        dao.update(user);
+        return true;
     }
 
     public List<UserBean> getUserList() {
@@ -395,7 +403,7 @@ public class DBManagerImpl implements DBManager {
         TaskBean userTaskBean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
         if (userTaskBean == null) {   //TODO what is the purpose of such validation
             userTaskBean = new TaskBean();
-            userTaskBean.setId(userTask.getId());
+            userTaskBean.setTaskId(userTask.getId());
             userTaskBean.setTaskId(userTask.getId());
             userTaskBean.setActive(true);
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, userTask.getProcessInstance().getProcessId());
@@ -414,7 +422,7 @@ public class DBManagerImpl implements DBManager {
     public void persistStartEvent(StartEvent startEvent) {
         TaskBean starteventbean = new TaskBean();
         starteventbean.setActive(true);
-        starteventbean.setId(startEvent.getId());
+        starteventbean.setTaskId(startEvent.getId());
         starteventbean.setTaskId(startEvent.getId());
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, startEvent.getProcessInstance().getProcessId());
         starteventbean.setProcesseInstance(processInstanceBean);

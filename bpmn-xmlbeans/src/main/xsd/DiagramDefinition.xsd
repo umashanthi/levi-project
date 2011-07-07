@@ -35,7 +35,7 @@
           <xsd:element maxOccurs="unbounded" minOccurs="0" ref="dd:styleDefinition"/>
           <xsd:element maxOccurs="unbounded" minOccurs="0" ref="dd:childDefinition"/>
         </xsd:sequence>
-        <xsd:attribute name="id" type="xsd:NCName" use="required"/>
+        <xsd:attribute name="taskId" type="xsd:NCName" use="required"/>
         <xsd:attribute name="abstract" type="xsd:boolean"/>
         <xsd:attribute name="superDefinition" type="xsd:QName"/>
         <xsd:attribute name="contextType" type="xsd:QName"/>

@@ -81,8 +81,21 @@ public class HibernateDao {
         return criteria.list();
     }
 
+    public List<TaskBean> getUnassignedTasks(String groupId) {
+        Criteria criteria = session.createCriteria(TaskBean.class);
+        criteria.add(Restrictions.eq("potentialGroup", groupId));
+        criteria.add(Restrictions.eq("isAssigned",false));
+        return criteria.list();
+    }
+
+    public TaskBean getTask(String taskId, String processInstanceId){
+        Criteria criteria = session.createCriteria(TaskBean.class);
+        criteria.add(Restrictions.eq("taskId", taskId));
+        criteria.add(Restrictions.eq("processeInstance", processInstanceId));
+        return (TaskBean)criteria.list();
+    }
+
     public void close() {
         session.close();
     }
-
 }

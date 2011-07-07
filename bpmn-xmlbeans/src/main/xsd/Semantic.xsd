@@ -95,7 +95,7 @@
 			<xsd:element ref="documentation" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element ref="extensionElements" minOccurs="0" maxOccurs="1" /> 
 		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:ID" use="optional"/>
+		<xsd:attribute name="taskId" type="xsd:ID" use="optional"/>
 		<xsd:anyAttribute namespace="##other" processContents="lax"/>
 	</xsd:complexType>
 	
@@ -105,7 +105,7 @@
 			<xsd:element ref="documentation" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element ref="extensionElements" minOccurs="0" maxOccurs="1" /> 
 		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:ID" use="optional"/>
+		<xsd:attribute name="taskId" type="xsd:ID" use="optional"/>
 		<xsd:anyAttribute namespace="##other" processContents="lax"/>
 	</xsd:complexType>
 
@@ -558,7 +558,7 @@
 		<xsd:sequence>
 			<xsd:any namespace="##any" processContents="lax" minOccurs="0"/>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:ID" use="optional"/>
+		<xsd:attribute name="taskId" type="xsd:ID" use="optional"/>
 		<xsd:attribute name="textFormat" type="xsd:string" default="text/plain"/>
 	</xsd:complexType>
 	

@@ -11,7 +11,6 @@ import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -82,12 +81,12 @@ public class PersistTest {
         dao.save(group2);
 
         TaskBean task1 = new TaskBean();
-        task1.setId("task1");
+        task1.setTaskId("task1");
 
         dao.save(task1);
 
         TaskBean task2 = new TaskBean();
-        task2.setId("task2");
+        task2.setTaskId("task2");
 
         dao.save(task2);
 
@@ -96,7 +95,7 @@ public class PersistTest {
         manager.assignTask("task2","1");
 
         for(TaskBean task:dao.getAssignedTasks("1")){
-             System.out.println(task.getId());
+             System.out.println(task.getTaskId());
         }
 
         manager.unassignTask("task1");
@@ -110,7 +109,7 @@ public class PersistTest {
         DeploymentBean deploymentBean = new DeploymentBean();
         deploymentBean.setDefinitionsId("ssd");
         EngineDataBean engineDataBean = new EngineDataBean();
-        engineDataBean.setId("1");
+        engineDataBean.setTaskId("1");
         engineDataBean.set_dateCreated(new Date());
         engineDataBean.addDeployment(deploymentBean);
         dao.save(deploymentBean);
@@ -119,7 +118,7 @@ public class PersistTest {
 
 
         //EngineDataBean enginedata = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
-        //System.out.println(enginedata.getId());
+        //System.out.println(enginedata.getTaskId());
         //System.out.println(enginedata.getDeployedProcesses().get("ssd").getDefinitionsId());
 
 

@@ -70,7 +70,7 @@ public class UserTask extends RunnableFlowNode {
         System.out.println("UserTask run(): Waiting for the form reply...");
         //WaitedTaskChannel channel = newChannel(WaitedTaskChannel.class, "channel");
         //WaitedTask task = new WaitedTask(channel);
-        //processInstance.addWaitedTask(getId(), task);
+        //processInstance.addWaitedTask(getTaskId(), task);
         //instance(task);
         // todo:
         if (hasInputForm()) {

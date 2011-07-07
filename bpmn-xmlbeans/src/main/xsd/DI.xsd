@@ -24,7 +24,7 @@
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:ID" />
+		<xsd:attribute name="taskId" type="xsd:ID" />
 		<xsd:anyAttribute namespace="##other" processContents="lax" />
 	</xsd:complexType>
 	
@@ -32,7 +32,7 @@
 		<xsd:attribute name="name" type="xsd:string" />
 		<xsd:attribute name="documentation" type="xsd:string" />
 		<xsd:attribute name="resolution" type="xsd:double" />
-		<xsd:attribute name="id" type="xsd:ID" />
+		<xsd:attribute name="taskId" type="xsd:ID" />
 	</xsd:complexType>
 	
 	<xsd:complexType abstract="true" name="Node">
@@ -94,7 +94,7 @@
 	</xsd:complexType>
 	
 	<xsd:complexType abstract="true" name="Style">
-		<xsd:attribute name="id" type="xsd:ID" />
+		<xsd:attribute name="taskId" type="xsd:ID" />
 	</xsd:complexType>
 	
 </xsd:schema>

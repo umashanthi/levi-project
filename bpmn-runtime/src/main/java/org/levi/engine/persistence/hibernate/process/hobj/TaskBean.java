@@ -17,8 +17,7 @@ import java.util.Map;
 @Table(name = "task")
 @SecondaryTables(value = {@SecondaryTable(name = "task_owner"),@SecondaryTable(name = "task_assignee"),@SecondaryTable(name = "task_process_instance")})
 public class TaskBean extends HObject{
-    private String id;// primary key
-    private String taskId;
+    private String taskId;// primary key
     //private String processInstanceId;
     private GroupBean potentialGroup;
     private ProcessInstanceBean processeInstance;
@@ -39,14 +38,6 @@ public class TaskBean extends HObject{
     private boolean isEndEvent;
 
     @Id
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTaskId() {
         return taskId;
     }
@@ -164,7 +155,7 @@ public class TaskBean extends HObject{
 
     @CollectionOfElements
 	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinTable( name="task_properties",joinColumns={ @JoinColumn(name="id")})
+	@JoinTable( name="task_properties",joinColumns={ @JoinColumn(name="taskId")})
     public Map<String, String> getProperties() {
         return properties;
     }

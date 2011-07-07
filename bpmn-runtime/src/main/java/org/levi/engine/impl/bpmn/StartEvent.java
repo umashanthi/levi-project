@@ -69,7 +69,7 @@ public class StartEvent extends Event {
         } else {
             resumeTask();
         }
-        //processInstance.addRunning(getId());
+        //processInstance.addRunning(getTaskId());
         //resumeTask();
     }
 
