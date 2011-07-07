@@ -1563,5 +1563,22 @@
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
+	
+	<xsd:element name="field">
+    <xsd:annotation>
+      <xsd:documentation>
+        Extension Element for all Tasks to inject values into the fields.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+    <xsd:choice minOccurs="0" maxOccurs="1">
+      	<xsd:element name="string" type="xsd:string" />
+      	<xsd:element name="expression" type="tExpression" />
+      </xsd:choice>
+      <xsd:attribute name="name" type="xsd:string" use="required"/>
+      <xsd:attribute name="stringValue" type="xsd:string" use="optional" />
+      <xsd:attribute name="expression" type="xsd:string" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
 
 </xsd:schema>
