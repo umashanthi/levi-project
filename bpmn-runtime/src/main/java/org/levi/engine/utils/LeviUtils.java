@@ -74,5 +74,13 @@ public class LeviUtils {
         }
         return 0;
     }
+
+    public static String getFileExtension(String path) {
+        return null;
+    }
+
+    public static String getFileName(String path) {
+        return path.substring(path.lastIndexOf('/')+1, path.length());
+    }
 }
 

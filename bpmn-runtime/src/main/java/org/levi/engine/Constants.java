@@ -22,6 +22,9 @@ public class Constants {
     public static final String ENGINE_CONFIG_PATH = EMPTY;
     public static final String LEVI_VERSION = "0.0.1";
 
+    public static final String VELOCITY_TEMPLATES = LEVI_HOME + "/velocity/templates/";
+    public static final String VELOCITY_EXTENSION = ".vm";
+
     private Constants() {
         throw new AssertionError("Constants class is not intended to be instantiated");
     }
