@@ -18,6 +18,7 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.utils.Impl2Bean;
+import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
 import java.util.*;
@@ -216,7 +217,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
-        return dao.getAssignedTasks(groupId);
+        return dao.getUnassignedTasks(groupId);
     }
 
     public List<TaskBean> getActiveTasks(String processId) {
@@ -236,7 +237,7 @@ public class DBManagerImpl implements DBManager {
     // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
     public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
         TaskBean task = (TaskBean) dao.getTask(taskId, processInstanceId);
-        if(task.isAssigned()){
+        if (task.isAssigned()) {
             return false;
         }
         task.setActive(true);
@@ -409,8 +410,13 @@ public class DBManagerImpl implements DBManager {
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, userTask.getProcessInstance().getProcessId());
             userTaskBean.setProcesseInstance(processInstanceBean);
             TUserTask task = userTask.getTTask();
-            UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            userTaskBean.setAssignee(user);
+            String potentialOwner = ((TPotentialOwner) (task.getResourceRoleArray()[0])).getResourceAssignmentExpression().getExpression().getDomNode().getChildNodes().item(0).getNodeValue();
+            GroupBean potentialGroup = (GroupBean) dao.getObject(GroupBean.class, potentialOwner);
+            if (potentialGroup != null) {
+                userTaskBean.setPotentialGroup(potentialGroup);
+            }
+            /*UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
+            userTaskBean.setAssignee(user);*/
             userTaskBean.setFormName(task.getName());
             userTaskBean.setTaskName(task.getName());
             userTaskBean.setHasUserForm(userTask.hasInputForm());
@@ -475,8 +481,8 @@ public class DBManagerImpl implements DBManager {
         return deploymentIds;
     }
 
-    public String getPotentialGroup(String taskId){
-        TaskBean task = (TaskBean)dao.getObject(TaskBean.class, taskId);
+    public String getPotentialGroup(String taskId) {
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         return task.getPotentialGroup().getGroupId();
     }
 
