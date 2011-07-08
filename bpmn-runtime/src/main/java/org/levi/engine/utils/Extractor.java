@@ -1,6 +1,7 @@
 package org.levi.engine.utils;
 
 import org.levi.engine.Constants;
+import org.levi.engine.LeviException;
 import org.levi.engine.impl.StorageServiceImpl;
 
 import java.io.*;
@@ -30,12 +31,12 @@ public final class Extractor {
             //TODO in the storage service, after checking for duplicates, these dirs must be deleted
             boolean result = (new File(destDir)).mkdir();
             if (!result) {
-                return null;
+                throw new LeviException("Could not extract " + larPath + ". " + destDir + " already exists.");
             }
             String topLevelDir = destDir + entry.getName();
             result = (new File(topLevelDir)).mkdir();
             if (!result) {
-                return null;
+                throw new LeviException("Could not extract " + larPath + ". " + topLevelDir + " already exists.");
             }
             exData.setExtractPath(topLevelDir);
         }
@@ -54,6 +55,10 @@ public final class Extractor {
             if (file.endsWith(Constants.BPMN_FILE_EXTENSION)) {
                 exData.addBPMNFile(file);
             } else {
+                if (file.endsWith(Constants.VELOCITY_EXTENSION)) {
+                    file = Constants.VELOCITY_TEMPLATES + LeviUtils.getFileName(entry.getName());
+                    System.out.println("file: " + file);
+                }
                 exData.addOtherFile(file);
             }
             FileOutputStream fos = new FileOutputStream(file);

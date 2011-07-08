@@ -67,7 +67,12 @@ public class ProcessEngineImpl implements ProcessEngine {
             }
             System.out.println("Created Lom directory at " + Constants.LOM_PATH);
         }
-
+        File velocityPath = new File(Constants.VELOCITY_TEMPLATES);
+        if (!velocityPath.exists()) {
+            if (!velocityPath.mkdirs()) {
+                throw new LeviException("Could not create velocity template directory at " + Constants.VELOCITY_TEMPLATES);
+            }
+        }
         //TODO this is a short fix for the database schema recreating problem
         //TODO the problem: restart the server will recreate the db schema
         SessionFactoryUtil.exportSchema();
