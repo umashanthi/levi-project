@@ -236,16 +236,21 @@ public class DBManagerImpl implements DBManager {
 
     // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
     public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
-        TaskBean task = (TaskBean) dao.getTask(taskId, processInstanceId);
-        if (task.isAssigned()) {
+        TaskBean task = dao.getTask(taskId, processInstanceId);
+        if (task != null) {
+            if (task.isAssigned()) {
+                return false;
+            }
+            task.setAssigned(true);
+            dao.update(task);
+            UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
+            user.getAssigned().add(task);
+            dao.update(user);
+            return true;
+        } else {
+            // throw exception
             return false;
         }
-        task.setActive(true);
-        dao.update(task);
-        UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
-        user.getAssigned().add(task);
-        dao.update(user);
-        return true;
     }
 
     public List<UserBean> getUserList() {

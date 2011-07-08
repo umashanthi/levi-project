@@ -29,7 +29,7 @@ public class TaskActionServlet extends HttpServlet {
             assert request.getParameter("username") != null;
             String username = request.getParameter("username");
             assert request.getParameter("taskId") != null;
-            String taskId = request.getParameter("taksId");
+            String taskId = request.getParameter("taskId");
             assert request.getParameter("processInstanceId") != null;
             String processInstanceId = request.getParameter("processInstanceId");
             assert request.getSession().getAttribute("dbManager") != null;
