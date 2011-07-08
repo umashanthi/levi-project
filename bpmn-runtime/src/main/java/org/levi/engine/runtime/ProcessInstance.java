@@ -38,10 +38,14 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
-            throw new LeviException("Cannot create a process instance. OM is null.");
+            throw new LeviException("Cannot create a process instance. Process definition is null.");
         }
         this.processDefinition = processDefinition;
-        this.variables = variables;
+        if (variables == null) {
+            this.variables = LeviUtils.newHashMap();
+        } else {
+            this.variables = variables;
+        }
         flowNodeFac = new FlowNodeFactory(this.processDefinition, this);
         // todo; is the following processId ok?
         processDefId = processDefinition.getDefinitionsName();
@@ -83,7 +87,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
 
         public Builder variables(Map<String, Object> variables) {
-            this.variables = variables;
+            if (variables != null) {
+                this.variables = variables;
+            } else {
+                this.variables = LeviUtils.newHashMap();
+            }
             return this;
         }
 
@@ -192,7 +200,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
             throw new LeviException("Cannot save a variable with a null name");
         }
         if (variables == null) {
-            return null;
+            throw new NullPointerException("Process variables map is null.");
         }
         return variables.put(name, value);
     }

@@ -9,21 +9,18 @@ import org.omg.spec.bpmn.x20100524.model.TSendTask;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * Created by IntelliJ IDEA.
- * User: keheliya
- * Date: 7/1/11
- * Time: 12:17 PM
- * For Levi - The Native BPMN 2.0 Execution Engine
- */
-public class SendTask extends RunnableFlowNode {
+import java.util.Date;
 
+public class SendTask extends RunnableFlowNode {
     private final TSendTask task;
     private final ProcessInstance processInstance;
     private final boolean hasInputForm = true;
+    private String from;
+    private String to;
+    private String subject;
+    private String content;
 
     public static class Builder {
-        private FlowNodeFactory flowNodeFac;
         private TSendTask task;
         private ProcessInstance process;
 
@@ -62,30 +59,37 @@ public class SendTask extends RunnableFlowNode {
 
     private void persistSendTask(SendTask sendTask) {
         HibernateDao dao = new HibernateDao();
+        // todo remove later
+        processInstance.setVariable("recipient", "Ishan");
+        processInstance.setVariable("orderId", new Integer(1234));
+        processInstance.setVariable("male", true);
+        processInstance.setVariable("recipientName", "Eranda");
+        processInstance.setVariable("now", new Date());
         TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
         if (starteventbean == null) {
             starteventbean = new TaskBean();
             Node exElems = task.getExtensionElements().getDomNode();
             NodeList children = exElems.getChildNodes();
             for (int i = 0; i < children.getLength(); ++i) {
-                System.out.println("Iteration:" + i);
                 Node field = children.item(i);
+                if (field.getNodeType() != Node.ELEMENT_NODE) {
+                    continue;
+                }
+                if (!"field".equals(field.getNodeName())) {
+                    throw new RuntimeException("Unknown element '" + field.getNodeName()
+                            +"' inside sendTask.");
+                }
                 Node nameAttribute = field.getAttributes().getNamedItem("name");
                 String key = nameAttribute.getNodeValue();
-
-                //TODO check from,to,subject,content
+                // key must be one of {from, to, subject, content}. we must handle this
+                // from the xsd.
+                if (!("from".equals(key) || "to".equals(key)
+                        || "subject".equals(key) || "content".equals(key))) {
+                    throw new RuntimeException("Field name must be one of {from, to, subject, content}. " + key);
+                }
                 Node stringValueAttribute = field.getAttributes().getNamedItem("stringValue");
                 Node expressionAttribute = field.getAttributes().getNamedItem("expression");
-//                if ((stringValueAttribute==null&& expressionAttribute==null) || (stringValueAttribute!=null && expressionAttribute!=null))
-//                {
-//                    throw new RuntimeException("Include StringValue or Expression") ;
-//                }
-//                else if   (stringValueAttribute!=null)
-//                {}
-//                else
-//                {}
-//
-                String value;
+                String value = null;
                 if (stringValueAttribute != null) {
                     if (expressionAttribute != null) {
                         throw new RuntimeException("Cant have values for both StringValue or Expression attributes");
@@ -93,25 +97,29 @@ public class SendTask extends RunnableFlowNode {
                     value = stringValueAttribute.getNodeValue();
                 } else if (expressionAttribute != null) {
                     FormalExpression fe = new FormalExpression(expressionAttribute.getNodeValue());
-                    value = (String) fe.evaluate(processInstance);
-                } else if (field.hasChildNodes()) {
-                    Node content = field.getChildNodes().item(0);
-                    String strType = content.getNodeName();
-                    if (strType == "expression") {
-                        value = content.getNodeValue();
-                        //TODO Evaluating using velocity
-                    } else if (strType == "string") {
-                        value = content.getNodeValue();
-                    } else
-                        throw new RuntimeException("Content Node must have string or expression sub elements");
-
-                } else
-                    throw new RuntimeException("If Field node has no StringValue or Expression it must be content node");
-
+                    value = fe.evaluateString(processInstance);
+                    System.out.println("value: " + value);
+                } else { // both stringValue and expression attrbts are null. Then this field elem must have an expression elem
+                    NodeList elems = field.getChildNodes();
+                    for (int e = 0; e < elems.getLength(); ++e) {
+                        Node expression = elems.item(e);
+                        if (expression.getNodeType() != Node.ELEMENT_NODE) {
+                            continue;
+                        }
+                        if (!("expression".equals(expression.getNodeName())
+                                || "string".equals(expression.getNodeName()))) {
+                            throw new RuntimeException("Unknown element '" + expression.getNodeName()
+                                    + "' inside field.");
+                        }
+                        FormalExpression fe = new FormalExpression(expression.getFirstChild().getNodeValue());
+                        value = fe.evaluateString(processInstance);
+                        System.out.println("value: " + value);
+                    }
+                }
+                if (key == null || value == null) {
+                    throw new RuntimeException("Malformed sendTask.");
+                }
                 processInstance.setVariable(key, value);
-                System.out.println("SendTask persistSendTask(): Setting variables.");
-
-
             }
             starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
