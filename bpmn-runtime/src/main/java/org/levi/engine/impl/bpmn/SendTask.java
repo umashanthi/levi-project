@@ -20,7 +20,7 @@ public class SendTask extends RunnableFlowNode {
 
     private final TSendTask task;
     private final ProcessInstance processInstance;
-    private final boolean hasInputForm=true;
+    private final boolean hasInputForm = true;
 
     public static class Builder {
         private FlowNodeFactory flowNodeFac;
@@ -56,7 +56,7 @@ public class SendTask extends RunnableFlowNode {
 
         // todo check and write the input form data.
         //if (hasInputForm()) {
-            persistSendTask(this);
+        persistSendTask(this);
         //}
     }
 
@@ -68,14 +68,14 @@ public class SendTask extends RunnableFlowNode {
             Node exElems = task.getExtensionElements().getDomNode();
             NodeList children = exElems.getChildNodes();
             for (int i = 0; i < children.getLength(); ++i) {
-                 System.out.println("Iteration:"+i);
+                System.out.println("Iteration:" + i);
                 Node field = children.item(i);
-                Node nameAttribute=field.getAttributes().getNamedItem("name");
+                Node nameAttribute = field.getAttributes().getNamedItem("name");
                 String key = nameAttribute.getNodeValue();
 
                 //TODO check from,to,subject,content
-                Node stringValueAttribute=field.getAttributes().getNamedItem("stringValue");
-                Node expressionAttribute=field.getAttributes().getNamedItem("expression");
+                Node stringValueAttribute = field.getAttributes().getNamedItem("stringValue");
+                Node expressionAttribute = field.getAttributes().getNamedItem("expression");
 //                if ((stringValueAttribute==null&& expressionAttribute==null) || (stringValueAttribute!=null && expressionAttribute!=null))
 //                {
 //                    throw new RuntimeException("Include StringValue or Expression") ;
@@ -88,36 +88,32 @@ public class SendTask extends RunnableFlowNode {
                 String value;
                 if (stringValueAttribute != null) {
                     if (expressionAttribute != null) {
-                       throw new RuntimeException("Cant have values for both StringValue or Expression attributes") ;
+                        throw new RuntimeException("Cant have values for both StringValue or Expression attributes");
                     }
-                    value=stringValueAttribute.getNodeValue() ;
-                } else  if (expressionAttribute != null) {
+                    value = stringValueAttribute.getNodeValue();
+                } else if (expressionAttribute != null) {
                     FormalExpression fe = new FormalExpression(expressionAttribute.getNodeValue());
-                   value=(String)fe.evaluate(processInstance);
-                } else if(field.hasChildNodes()){
+                    value = (String) fe.evaluate(processInstance);
+                } else if (field.hasChildNodes()) {
                     Node content = field.getChildNodes().item(0);
                     String strType = content.getNodeName();
-                    if(strType=="expression")
-                    {
-                        value=content.getNodeValue();
+                    if (strType == "expression") {
+                        value = content.getNodeValue();
                         //TODO Evaluating using velocity
-                    }
-                    else if (strType=="string")
-                    {
-                        value=content.getNodeValue();
-                    }
-                    else
-                      throw new RuntimeException("Content Node must have string or expression sub elements") ;
+                    } else if (strType == "string") {
+                        value = content.getNodeValue();
+                    } else
+                        throw new RuntimeException("Content Node must have string or expression sub elements");
 
                 } else
-                    throw new RuntimeException("If Field node has no StringValue or Expression it must be content node") ;
+                    throw new RuntimeException("If Field node has no StringValue or Expression it must be content node");
 
-                processInstance.setVariable(key,value);
+                processInstance.setVariable(key, value);
                 System.out.println("SendTask persistSendTask(): Setting variables.");
 
 
             }
-            starteventbean.setId(sendTask.getId());
+            starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
             starteventbean.setProcesseInstance(processInstanceBean);
@@ -125,7 +121,7 @@ public class SendTask extends RunnableFlowNode {
             //starteventbean.setAssignee(user);
             starteventbean.setFormName(task.getName());
             starteventbean.setTaskName(task.getName());
-           // starteventbean.setHasUserForm(hasInputForm());
+            // starteventbean.setHasUserForm(hasInputForm());
             //starteventbean.setFromPath(task.getInputForm());
             dao.save(starteventbean);
         }
@@ -137,12 +133,12 @@ public class SendTask extends RunnableFlowNode {
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
 
-        String to= (String) processInstance.getVariable("to");
-                System.out.println("SendTask persistSendTask(): Recipent:" + to);
-          String subject= (String) processInstance.getVariable("subject");
-                System.out.println("SendTask persistSendTask(): Subject:" + subject);
-        String content= (String) processInstance.getVariable("content");
-                System.out.println("SendTask persistSendTask(): Content:" + content);
+        String to = (String) processInstance.getVariable("to");
+        System.out.println("SendTask persistSendTask(): Recipent:" + to);
+        String subject = (String) processInstance.getVariable("subject");
+        System.out.println("SendTask persistSendTask(): Subject:" + subject);
+        String content = (String) processInstance.getVariable("content");
+        System.out.println("SendTask persistSendTask(): Content:" + content);
 
         // write them to the db
         //System.out.println("SendTask run(): Wrote details to the db.");
