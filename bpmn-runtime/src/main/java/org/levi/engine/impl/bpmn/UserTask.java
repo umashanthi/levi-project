@@ -1,14 +1,8 @@
 package org.levi.engine.impl.bpmn;
 
-
-import com.sun.jmx.snmp.tasks.Task;
-import org.hibernate.Hibernate;
-import org.hibernate.engine.HibernateIterator;
 import org.levi.engine.bpmn.RunnableFlowNode;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.db.DBManager;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
@@ -53,29 +47,14 @@ public class UserTask extends RunnableFlowNode {
         hasInputForm = task.getInputForm() != null;
         // todo check and write the input form data.
         if (hasInputForm()) {
-            persistUserTask(this);
+            persistUserTask();
         }
     }
 
-    private void persistUserTask(UserTask userTask) {
-        HibernateDao dao = new HibernateDao();
-        TaskBean userTaskBean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
-        if (userTaskBean == null) {
-            userTaskBean = new TaskBean();
-            userTaskBean.setId(userTask.getId());
-            userTaskBean.setTaskId(userTask.getId());
-            userTaskBean.setActive(true);
-            ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-            userTaskBean.setProcesseInstance(processInstanceBean);
-            UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            userTaskBean.setAssignee(user);
-            userTaskBean.setFormName(task.getName());
-            userTaskBean.setTaskName(task.getName());
-            userTaskBean.setHasUserForm(hasInputForm());
-            userTaskBean.setFromPath(task.getInputForm());
-            dao.save(userTaskBean);
-        }
-        dao.close();
+    private void persistUserTask() {
+        //TODO rename this to Persist() 
+        DBManager manager = new DBManagerImpl();
+        manager.persistUserTask(this);
     }
 
     public void run() {
@@ -91,7 +70,7 @@ public class UserTask extends RunnableFlowNode {
         System.out.println("UserTask run(): Waiting for the form reply...");
         //WaitedTaskChannel channel = newChannel(WaitedTaskChannel.class, "channel");
         //WaitedTask task = new WaitedTask(channel);
-        //processInstance.addWaitedTask(getId(), task);
+        //processInstance.addWaitedTask(getTaskId(), task);
         //instance(task);
         // todo:
         if (hasInputForm()) {
@@ -116,6 +95,14 @@ public class UserTask extends RunnableFlowNode {
 
     public String getId() {
         return task.getId();
+    }
+
+    public TUserTask getTTask(){
+        return task;
+    }
+
+    public ProcessInstance getProcessInstance(){
+        return processInstance;
     }
 
     public void resumeTask() {

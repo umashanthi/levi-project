@@ -26,8 +26,7 @@ public class HqlManager {
     }
 
     public List<UserBean> getUserObjects(){
-        session.close();
-        session = SessionFactoryUtil.getSession();
+        refresh();
         List<UserBean> users = session.createQuery("from UserBean").list();
         return users;
 
@@ -36,11 +35,23 @@ public class HqlManager {
     }
 
     public List<GroupBean> getGroupObjects(){
+        refresh();
         List<GroupBean> groups = session.createQuery("from GroupBean").list();
         return groups;
 
         //List<GroupBean> groups = session.createSQLQuery("select * from groups").addEntity(GroupBean.class).list();
         //return groups;
+    }
+
+    public List<String> getGroupIds(){
+        refresh();
+        List<String> groupIds = session.createQuery("select groupId from GroupBean").list();
+        return groupIds;
+    }
+
+    private void refresh(){
+        session.close();
+        session = SessionFactoryUtil.getSession();
     }
 
     public void close() {

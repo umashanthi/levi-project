@@ -60,12 +60,13 @@ public class UserManagerServlet extends HttpServlet {
             dbManager.saveUser(user);
             // retrieve selected groups for this user
             // get the group name lists, get the request parameter for checkbox & radio, , get groups, and add groups to the user bean
-            List<GroupBean> groupBeanList = dbManager.getGroupList();
-            for (GroupBean grp : groupBeanList) {
-                if (request.getParameter(grp.getGroupId()) != null) {
-                    dbManager.addUserToGroup(username, grp.getGroupId());
-                } else {
-                    dbManager.removeUserFromGroup(username, grp.getGroupId());
+            List<String> groupIdList=dbManager.getGroupIdList();
+            for(String grpId:groupIdList){
+                if(request.getParameter(grpId)!=null){
+                    dbManager.addUserToGroup(username,grpId);
+                }
+                else{
+                    dbManager.removeUserFromGroup(username,grpId);
                 }
             }
 
@@ -84,12 +85,13 @@ public class UserManagerServlet extends HttpServlet {
             user.setUserId(username);
             user.setPassword(password);
             dbManager.saveUser(user);
-            List<GroupBean> groupBeanList = dbManager.getGroupList();
-            for (GroupBean grp : groupBeanList) {
-                if (request.getParameter(grp.getGroupId()) != null) {
-                    dbManager.addUserToGroup(username, grp.getGroupId());
-                } else {
-                    dbManager.removeUserFromGroup(username, grp.getGroupId());
+            List<String> groupIdList=dbManager.getGroupIdList();
+            for(String grpId:groupIdList){
+                if(request.getParameter(grpId)!=null){
+                    dbManager.addUserToGroup(username,grpId);
+                }
+                else{
+                    dbManager.removeUserFromGroup(username,grpId);
                 }
             }
             response.sendRedirect("usrmng");

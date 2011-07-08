@@ -18,14 +18,13 @@ import java.util.*;
  */
 public class RuntimeServiceImpl implements RuntimeService {
     private EngineData engineData;
-    private DBManager dbManager;
+    private DBManager dbManager = new DBManagerImpl();
 
     public RuntimeServiceImpl(EngineData engineData) {
         if (engineData == null) {
             throw new LeviException("EngineData is null.");
         }
-        this.engineData = engineData;
-        dbManager = new DBManagerImpl();
+        this.engineData = engineData;        
     }
 
     public boolean start() {

@@ -3,6 +3,8 @@ package org.levi.web;
 import org.levi.engine.ProcessEngine;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,13 +38,14 @@ public class ListTasksServlet extends HttpServlet {
             DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
             if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
                 // get unassigned tasks for this user's groups
-                List<String> groupIds = dbManager.getGroupIds(username);
-                assert groupIds != null;
+                UserBean user = dbManager.getUser(username);
+                List<GroupBean> userGroups = user.getUserGroups();
+                assert userGroups != null;
                 //TODO: later change this impl to get tasks for each group separately
                 List<TaskBean> unassignedTaskList = new ArrayList<TaskBean>();
-                if (groupIds.size() > 0) {
-                    for (String groupId : groupIds) {
-                        List<TaskBean> taskList = dbManager.getUnassignedTasks(groupId);
+                if (userGroups.size() > 0) {
+                    for (GroupBean group : userGroups) {
+                        List<TaskBean> taskList = dbManager.getUnassignedTasks(group.getGroupId());
                         for (TaskBean task : taskList) {
                             unassignedTaskList.add(task);
                         }

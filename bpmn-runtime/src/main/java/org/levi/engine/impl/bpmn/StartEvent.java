@@ -1,9 +1,8 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.Event;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.db.DBManager;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 
@@ -44,22 +43,22 @@ public class StartEvent extends Event {
     }
 
     private void persistStartEvent(StartEvent startEvent) {
-        HibernateDao dao = new HibernateDao();
-        TaskBean starteventbean = new TaskBean();
-        starteventbean.setActive(true);
-        starteventbean.setId(startEvent.getId());
-        starteventbean.setTaskId(startEvent.getId());
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-        starteventbean.setProcesseInstance(processInstanceBean);
-        starteventbean.setAssignee(processInstanceBean.getStartUser());
-        starteventbean.setFormName(this.startEvent.getInputForm());
-        dao.save(starteventbean);
-        dao.close();
+        //TODO rename this to Persist()
+        DBManager manager = new DBManagerImpl();
+        manager.persistStartEvent(this);
     }
 
 
     public String getId() {
         return startEvent.getId();
+    }
+
+    public TStartEvent getTStartEvent(){
+        return startEvent;
+    }
+
+    public ProcessInstance getProcessInstance(){
+        return processInstance;
     }
 
     public void run() {
@@ -70,7 +69,7 @@ public class StartEvent extends Event {
         } else {
             resumeTask();
         }
-        //processInstance.addRunning(getId());
+        //processInstance.addRunning(getTaskId());
         //resumeTask();
     }
 

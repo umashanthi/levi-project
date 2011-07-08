@@ -38,8 +38,8 @@
 	</xsl:template>
 
 	<xsl:template name="BaseElementTemplate">
-		<xsl:if test="@id">
-			<xsl:attribute name="id"> <xsl:value-of select="@id" /> </xsl:attribute>
+		<xsl:if test="@taskId">
+			<xsl:attribute name="taskId"> <xsl:value-of select="@taskId" /> </xsl:attribute>
 		</xsl:if>
 
 		<xsl:for-each select="extensionValues">

@@ -10,8 +10,6 @@ import org.levi.engine.impl.bpmn.FlowNodeFactory;
 import org.levi.engine.impl.bpmn.WaitedTask;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.impl.db.DBManagerImpl;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
@@ -36,7 +34,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private boolean hasStartForm;
     private String startUserId;
 
-    private DBManager dbManager;
+    private DBManager dbManager=new DBManagerImpl();
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
@@ -55,10 +53,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
         resumeSignals = LeviUtils.newArrayList();
         setIsRunning(false);
         hasStartForm = false;
-    }
-
-    private void init() {
-        dbManager=new DBManagerImpl();
     }
 
     public void claim(String uid, String itemId) {
@@ -246,38 +240,20 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
     }
 
-    public void addCompleted(String id) {
-        HibernateDao dao = new HibernateDao();
-        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, id);
-        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
-        if (task != null) {
-            processInstanceBean = task.getProcesseInstance();
-        }
+    public void addCompleted(String taskId) {
         synchronized (runningTaskIds) {
-            if (!runningTaskIds.contains(id)) {
-                throw new LeviException("No running element found for the processId " + id);
+            if (!runningTaskIds.contains(taskId)) {
+                throw new LeviException("No running element found for the processId " + taskId);
             }
-            runningTaskIds.remove(id);
-            if (task != null)
-                processInstanceBean.removeFromRunningTask(task);
+            runningTaskIds.remove(taskId);
+            dbManager.removeRunningTask(taskId);
         }
         synchronized (completedTaskIds) {
-            completedTaskIds.add(id);
-            if (task != null)
-                processInstanceBean.addToCompletedTask(task);
+            completedTaskIds.add(taskId);
+            dbManager.addCompletedTask(taskId);
+        }
+        dbManager.unassignTask(taskId);
 
-        }
-        if (task != null) {
-           dao.update(processInstanceBean);
-           /* UserBean user = task.getAssignee();
-            user.removeFromAssignedList(task);
-            dao.update(user);*/
-            if(dbManager==null){
-                dbManager = new DBManagerImpl();
-            }
-            dbManager.unassignTask(task.getTaskId(),task.getAssignee().getUserId());
-        }
-        dao.close();
     }
 
     public synchronized List<String> getRunningTaskIds() {
@@ -291,10 +267,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
     public void pause(String taskId) {
         // todo check for the # runningTaskIds before actually pausing.
         if (checkPauseSignal(taskId)) {
-            HibernateDao dao = new HibernateDao();
-            TaskBean taskBean = (TaskBean) dao.getObject(TaskBean.class, taskId);
-            assert taskBean != null;
-            ProcessInstanceBean processInstanceBean = taskBean.getProcesseInstance();
             setIsRunning(false);
             System.out.println("Running  :   " + runningTaskIds.toString());
             System.out.println("Completed: " + completedTaskIds.toString());
@@ -307,20 +279,16 @@ public class ProcessInstance extends BPMNJacobRunnable {
             if (soup.isComplete()) {
                 TaskBean taskBeanObj;
                 for (String id : runningTaskIds) {
-                    taskBeanObj = (TaskBean) dao.getObject(TaskBean.class, id);
-                    processInstanceBean.addToRunningTask(taskBeanObj);  // adding all running task beans to the processInstance
+                    dbManager.addRunningTask(id);
                 }
                 for (String id : completedTaskIds) {
-                    taskBeanObj = (TaskBean) dao.getObject(TaskBean.class, id);
-                    processInstanceBean.addToCompletedTask(taskBeanObj);  // adding all completed task beans to the processInstance
+                    dbManager.addCompletedTask(id);
                 }
-                dao.update(processInstanceBean);
                 System.out.println("Writing the processs to the database.");
             } else {
                 throw new RuntimeException("Incomplete Runtime soup. Cannot pause the process instance.");
             }
             addRunning(taskId);
-            dao.close();
         }
     }
 

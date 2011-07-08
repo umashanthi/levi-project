@@ -77,8 +77,8 @@ public class ProcessInstanceBean extends HObject {
     }
     */
 
-    @OneToMany(targetEntity = TaskBean.class,fetch = FetchType.EAGER)
-    @MapKey(name = "id")
+    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
+    @MapKey(name = "taskId")
     @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
@@ -99,8 +99,8 @@ public class ProcessInstanceBean extends HObject {
     }
     */
 
-    @OneToMany(targetEntity = TaskBean.class,fetch = FetchType.EAGER)
-    @MapKey(name = "id")
+    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
+    @MapKey(name = "taskId")
     @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
@@ -166,7 +166,7 @@ public class ProcessInstanceBean extends HObject {
             completedTasks = new HashMap<String, TaskBean>();
         }
         if (taskBean != null)
-            completedTasks.put(taskBean.getId(), taskBean);
+            completedTasks.put(taskBean.getTaskId(), taskBean);
     }
 
     public void addToRunningTask(TaskBean taskBean) {
@@ -174,15 +174,15 @@ public class ProcessInstanceBean extends HObject {
             runningTasks = new HashMap<String, TaskBean>();
         }
         if (taskBean != null)
-            runningTasks.put(taskBean.getId(), taskBean);
+            runningTasks.put(taskBean.getTaskId(), taskBean);
     }
 
     public void removeFromRunningTask(TaskBean taskBean) {
         if (runningTasks == null) {
             return;
         }
-        if (runningTasks.containsKey(taskBean.getId())) {
-            runningTasks.remove(taskBean.getId());
+        if (runningTasks.containsKey(taskBean.getTaskId())) {
+            runningTasks.remove(taskBean.getTaskId());
         }
     }
 }

@@ -17,7 +17,7 @@
 			<xsd:element ref="bpmndi:BPMNDiagram" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element ref="relationship" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="xsd:ID" use="optional"/>
+		<xsd:attribute name="taskId" type="xsd:ID" use="optional"/>
 		<xsd:attribute name="name" type="xsd:string"/>
 		<xsd:attribute name="targetNamespace" type="xsd:anyURI" use="required"/>
 		<xsd:attribute name="expressionLanguage" type="xsd:anyURI" use="optional" default="http://www.w3.org/1999/XPath"/>

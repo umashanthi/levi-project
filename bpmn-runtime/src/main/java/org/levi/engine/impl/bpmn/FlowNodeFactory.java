@@ -71,7 +71,7 @@ public class FlowNodeFactory {
     // this method is used to insert a
     public static void insertToken(RunnableFlowNode flowNode, String sfId) {
         if (flowNode instanceof Gateway) {
-            ((Gateway)flowNode).insertToken(sfId);
+            ((Gateway) flowNode).insertToken(sfId);
         }
     }
 
@@ -84,17 +84,21 @@ public class FlowNodeFactory {
         RunnableFlowNode flowNode = getNode(e.getId());
         if (flowNode == null) {
             if (e instanceof TScriptTask) {
-                flowNode = new ScriptTask.Builder((TScriptTask)e)
+                flowNode = new ScriptTask.Builder((TScriptTask) e)
                         .processInstance(process)
                         .build();
             } else if (e instanceof TUserTask) {
-                flowNode = new UserTask.Builder((TUserTask)e)
+                flowNode = new UserTask.Builder((TUserTask) e)
                         .processInstance(process)
                         .build();
             } else if (e instanceof TGateway) {
-                flowNode = makeGateway((TGateway)e);
+                flowNode = makeGateway((TGateway) e);
             } else if (e instanceof TEndEvent) {
-                flowNode = new EndEvent.Builder((TEndEvent)e)
+                flowNode = new EndEvent.Builder((TEndEvent) e)
+                        .processInstance(process)
+                        .build();
+            } else if (e instanceof TSendTask) {
+                flowNode = new SendTask.Builder((TSendTask) e)
                         .processInstance(process)
                         .build();
             } else {
@@ -134,11 +138,11 @@ public class FlowNodeFactory {
 
     private synchronized RunnableFlowNode makeGateway(TGateway g) {
         if (g instanceof TExclusiveGateway) {
-            return new ExclusiveGateway.Builder((TExclusiveGateway)g)
+            return new ExclusiveGateway.Builder((TExclusiveGateway) g)
                     .processInstance(process)
                     .build();
         } else if (g instanceof TParallelGateway) {
-            return new ParallelGateway.Builder((TParallelGateway)g)
+            return new ParallelGateway.Builder((TParallelGateway) g)
                     .processInstance(process)
                     .build();
         } else if (g instanceof TInclusiveGateway) {

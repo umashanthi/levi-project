@@ -176,7 +176,7 @@ Released : 20090303
 
         <%for (DeploymentBean process : deployments) { %>
         <tr>
-            <form action="<%--startProcess?id=<%=process.toString()--%>" method="post">
+            <form action="<%--startProcess?taskId=<%=process.toString()--%>" method="post">
                 <td>
                     <%=process.getDefinitionsId()%>
                 </td>
