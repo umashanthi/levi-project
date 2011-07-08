@@ -94,15 +94,18 @@ Released : 20090303
     </div>
     <table>
         <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
+        %>
+        <tr>
+            <h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3>
+        </tr>
+        <%
             if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
                 // display unassigned tasks
                 assert request.getSession().getAttribute("unassignedTasks") != null;
                 List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
                 if (unassignedTaskList.size() > 0) {
                     for (TaskBean task : unassignedTaskList) { %>
-        <tr>
-            <h3><a href="tasks">Unassigned Tasks </a></h3>
-        </tr>
+
         <tr>
             <form name="claimTaskForm" action="" method="post">
                 <td>
@@ -119,7 +122,7 @@ Released : 20090303
             }
         } else { %>
         <tr>
-            <h3><a href="tasks?unassigned=true">My Tasks </a></h3></tr>
+            <h3><a href="tasks">My Tasks </a></h3></tr>
         <tr>
             <%
 
