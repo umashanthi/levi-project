@@ -1,6 +1,7 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
+import org.levi.engine.mail.MailClient;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
@@ -9,12 +10,13 @@ import org.omg.spec.bpmn.x20100524.model.TSendTask;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 
 public class SendTask extends RunnableFlowNode {
     private final TSendTask task;
     private final ProcessInstance processInstance;
-    private final boolean hasInputForm = true;
+    private final boolean hasInputForm = false;
     private String from;
     private String to;
     private String subject;
@@ -60,7 +62,7 @@ public class SendTask extends RunnableFlowNode {
     private void persistSendTask(SendTask sendTask) {
         HibernateDao dao = new HibernateDao();
         // todo remove later
-        processInstance.setVariable("recipient", "Ishan");
+        processInstance.setVariable("recipient", "eranda");
         processInstance.setVariable("orderId", new Integer(1234));
         processInstance.setVariable("male", true);
         processInstance.setVariable("recipientName", "Eranda");
@@ -163,9 +165,13 @@ public class SendTask extends RunnableFlowNode {
         if (hasInputForm()) {
             System.out.println("SendTask hasInputForm. Pause.");
             processInstance.pause(getId());
-        } //else {
-        //    resumeTask();
-        //}
+        } else {
+            try {
+                resumeTask();
+            } catch (MessagingException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
         /*
         object(new WaitedTaskChannelListener(channel) {
             @Override
@@ -184,10 +190,18 @@ public class SendTask extends RunnableFlowNode {
         return task.getId();
     }
 
-    public void resumeTask() {
+    public void resumeTask() throws MessagingException {
         // todo this is what must happen when
         // processInstance.getVariables().putAll(vars);
         System.out.println("Resuming send task id " + getId());
+          MailClient marketingClient = new MailClient("marketing", "localhost");
+        String to = (String) processInstance.getVariable("to");
+        System.out.println("SendTask persistSendTask(): Recipent:" + to);
+        String subject = (String) processInstance.getVariable("subject");
+        System.out.println("SendTask persistSendTask(): Subject:" + subject);
+        String content = (String) processInstance.getVariable("content");
+        System.out.println("SendTask persistSendTask(): Content:" + content);
+        marketingClient.sendMessage(to+"@localhost", subject,  content);
         instance(processInstance.executeNext(this));
         processInstance.addCompleted(getId());
 

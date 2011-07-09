@@ -18,8 +18,8 @@ public class JamesConfigTest
     //MailClient umaClient = new MailClient("uma", "localhost");
 
     // CLEAR EVERYBODY'S INBOX
-    erandaClient.checkInbox(MailClient.CLEAR_MESSAGES);
-    ishanClient.checkInbox(MailClient.CLEAR_MESSAGES);
+    //erandaClient.checkInbox(MailClient.CLEAR_MESSAGES);
+    //ishanClient.checkInbox(MailClient.CLEAR_MESSAGES);
     //umaClient.checkInbox(MailClient.CLEAR_MESSAGES);
     Thread.sleep(500); // Let the server catch up
 
