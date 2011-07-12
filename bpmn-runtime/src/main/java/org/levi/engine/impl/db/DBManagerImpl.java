@@ -242,10 +242,11 @@ public class DBManagerImpl implements DBManager {
                 return false;
             }
             task.setAssigned(true);
-            dao.update(task);
             UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
             user.getAssigned().add(task);
             dao.update(user);
+            task.setAssignee(user);
+            dao.update(task);
             return true;
         } else {
             // throw exception
