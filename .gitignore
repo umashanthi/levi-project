@@ -1,0 +1,24 @@
+# for those of us using git internally
+# before committing in the central svn repository.
+
+*.class
+*.pyc
+*.iml
+*.ipr
+*.iws
+*.zip
+*.jar
+*.svn
+*.orig
+*.rej
+*~
+*.log
+.classpath
+.project
+.metadata
+bin
+target
+reports
+test-output
+target/
+out/ #currently the webapp's output directory is out - this should be changed later

@@ -1,15 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.levi.bpmn.rutime</groupId>
-  <artifactId>levi-bpmn-runtime</artifactId>
-  <parent>
-    <groupId>org.levi.bpmn</groupId>
-  <artifactId>levi</artifactId>
-  <version>0.0.1</version>
-  </parent>
-
-
-  
+    <groupId>org.levi.bpmn.bpmn-runtime</groupId>
+    <artifactId>bpmn-runtime</artifactId>
+    <name>bpmn-runtime</name>
+    <version>0.0.1</version>
+    <parent>
+        <groupId>org.levi.bpmn</groupId>
+        <artifactId>levi-project</artifactId>
+        <version>0.0.1</version>
+    </parent>
+    <packaging>jar</packaging>
+    <dependencies>     
+        <dependency>
+            <groupId>org.omg.spec.bpmn.x20100524.model</groupId>
+            <artifactId>BPMN20</artifactId>
+            <version>0.0.2</version>
+            <scope>compile</scope>
+        </dependency>      
+    </dependencies>
 </project>
