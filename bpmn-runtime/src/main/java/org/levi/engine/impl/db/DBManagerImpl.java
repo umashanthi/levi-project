@@ -446,7 +446,8 @@ public class DBManagerImpl implements DBManager {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, startEvent.getProcessInstance().getProcessId());
         starteventbean.setProcesseInstance(processInstanceBean);
         starteventbean.setAssignee(processInstanceBean.getStartUser());
-        starteventbean.setFormName(startEvent.getTStartEvent().getInputForm());
+        starteventbean.setFormName(startEvent.getName());
+        starteventbean.setFromPath(startEvent.getTStartEvent().getInputForm());
         dao.save(starteventbean);
     }
 
