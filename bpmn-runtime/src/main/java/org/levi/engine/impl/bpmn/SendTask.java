@@ -16,11 +16,8 @@ import java.util.Date;
 public class SendTask extends RunnableFlowNode {
     private final TSendTask task;
     private final ProcessInstance processInstance;
-    private final boolean hasInputForm = false;
-    private String from;
-    private String to;
-    private String subject;
-    private String content;
+    // private String from;
+
 
     public static class Builder {
         private TSendTask task;
@@ -63,7 +60,7 @@ public class SendTask extends RunnableFlowNode {
         HibernateDao dao = new HibernateDao();
         // todo remove later
         processInstance.setVariable("recipient", "eranda");
-        processInstance.setVariable("orderId", new Integer(1234));
+        processInstance.setVariable("orderId", 1234);
         processInstance.setVariable("male", true);
         processInstance.setVariable("recipientName", "Eranda");
         processInstance.setVariable("now", new Date());
@@ -169,7 +166,7 @@ public class SendTask extends RunnableFlowNode {
             try {
                 resumeTask();
             } catch (MessagingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
         /*
@@ -209,6 +206,7 @@ public class SendTask extends RunnableFlowNode {
 
     // todo
     public boolean hasInputForm() {
+        boolean hasInputForm = false;
         return hasInputForm;
     }
 }
