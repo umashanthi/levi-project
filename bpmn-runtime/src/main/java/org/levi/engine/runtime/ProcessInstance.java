@@ -15,6 +15,7 @@ import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
 import javax.mail.MessagingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
     private boolean hasStartForm;
     private String startUserId;
 
-    private DBManager dbManager=new DBManagerImpl();
+    private DBManager dbManager = new DBManagerImpl();
 
     public ProcessInstance(ProcessDefinition processDefinition, Map<String, Object> variables) {
         if (processDefinition == null) {
@@ -190,12 +191,26 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     public Map<String, Object> getVariables() {
+        variables = LeviUtils.newHashMap();
+        Map<String, String> processVariables = dbManager.getVariables(this.getProcessId());
+        if (processVariables != null) {
+            for (String key : processVariables.keySet()) {
+                variables.put(key, processVariables.get(key));
+            }
+        }
         return variables;
     }
 
     public Object getVariable(String name) {
         if (name == null) {
             throw new LeviException("Variable name is null.");
+        }
+        variables = LeviUtils.newHashMap();
+        Map<String, String> processVariables = dbManager.getVariables(this.getProcessId());
+        if (processVariables != null) {
+            for (String key : processVariables.keySet()) {
+                variables.put(key, processVariables.get(key));
+            }
         }
         return variables.get(name);
     }
@@ -207,7 +222,13 @@ public class ProcessInstance extends BPMNJacobRunnable {
         if (variables == null) {
             throw new NullPointerException("Process variables map is null.");
         }
-        return variables.put(name, value);
+        Object output = variables.put(name, value);
+        Map<String, String> processVariables = LeviUtils.newHashMap();
+        for (String key : this.variables.keySet()) {
+            processVariables.put(key, this.variables.get(key).toString());
+        }
+        dbManager.setVariables(this.getProcessId(), processVariables);
+        return output;
     }
 
     public void setVariables(Map<String, Object> variables) {
@@ -215,6 +236,12 @@ public class ProcessInstance extends BPMNJacobRunnable {
             throw new NullPointerException("Variables map is null.");
         }
         this.variables.putAll(variables);
+        Map<String, String> processVariables = LeviUtils.newHashMap();
+        for (String key : this.variables.keySet()) {
+            processVariables.put(key, this.variables.get(key).toString());
+        }
+        dbManager.setVariables(this.getProcessId(), processVariables);
+
     }
 
     public RunnableFlowNode executeNext(RunnableFlowNode currentFlowNode) {
