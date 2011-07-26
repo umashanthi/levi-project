@@ -503,6 +503,8 @@ public class DBManagerImpl implements DBManager {
         ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
         if(processVariableBean == null){
             processVariableBean = new ProcessVariableBean();
+            processVariableBean.setProcessId(processId);
+
         }
         processVariableBean.setVariables(variables);
         dao.update(processVariableBean);
