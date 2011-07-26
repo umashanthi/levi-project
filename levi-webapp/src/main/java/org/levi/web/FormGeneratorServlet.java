@@ -11,11 +11,14 @@ package org.levi.web;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.tools.view.VelocityViewServlet;
+import org.levi.engine.ProcessEngine;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.utils.LeviUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class FormGeneratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request,
@@ -32,12 +35,21 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         String processInsId = taskBean.getProcesseInstance().getProcessId();
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
+        /* retrieve process variables */
+        ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
+        Map<String, Object> processVariables = engine.getVariables(processInsId);
         /* get the template */
         Template template = null;
         context.put("username", request.getSession().getAttribute("username"));
-        context.put("title", "Vacation Request");
         context.put("processId", processInsId);
-        context.put("report", "XXXXX");
+        /* Put process variables to the context */
+        if (processVariables != null) {
+            for (String key : processVariables.keySet()) {
+                if (processVariables.get(key) != null) {
+                    context.put(key, processVariables.get(key).toString());
+                }
+            }
+        }
         try {
 
             template = getTemplate(taskFormPath);   // <-- taskFormPath should be the input parameter

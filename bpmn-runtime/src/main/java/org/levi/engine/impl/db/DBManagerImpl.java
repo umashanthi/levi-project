@@ -417,10 +417,17 @@ public class DBManagerImpl implements DBManager {
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, userTask.getProcessInstance().getProcessId());
             userTaskBean.setProcesseInstance(processInstanceBean);
             TUserTask task = userTask.getTTask();
-            String potentialOwner = ((TPotentialOwner) (task.getResourceRoleArray()[0])).getResourceAssignmentExpression().getExpression().getDomNode().getChildNodes().item(0).getNodeValue();
-            GroupBean potentialGroup = (GroupBean) dao.getObject(GroupBean.class, potentialOwner);
-            if (potentialGroup != null) {
-                userTaskBean.setPotentialGroup(potentialGroup);
+            if (task.getAssignee() != null) {
+                UserBean assignee = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
+                if (assignee != null) {
+                    userTaskBean.setAssignee(assignee);
+                }
+            } else {
+                String potentialOwner = ((TPotentialOwner) (task.getResourceRoleArray()[0])).getResourceAssignmentExpression().getExpression().getDomNode().getChildNodes().item(0).getNodeValue();
+                GroupBean potentialGroup = (GroupBean) dao.getObject(GroupBean.class, potentialOwner);
+                if (potentialGroup != null) {
+                    userTaskBean.setPotentialGroup(potentialGroup);
+                }
             }
             /*UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
             userTaskBean.setAssignee(user);*/
@@ -436,11 +443,12 @@ public class DBManagerImpl implements DBManager {
         TaskBean starteventbean = new TaskBean();
         starteventbean.setActive(true);
         starteventbean.setTaskId(startEvent.getId());
-        starteventbean.setTaskId(startEvent.getId());
+        starteventbean.setTaskName(startEvent.getName());
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, startEvent.getProcessInstance().getProcessId());
         starteventbean.setProcesseInstance(processInstanceBean);
         starteventbean.setAssignee(processInstanceBean.getStartUser());
-        starteventbean.setFormName(startEvent.getTStartEvent().getInputForm());
+        starteventbean.setFormName(startEvent.getName());
+        starteventbean.setFromPath(startEvent.getTStartEvent().getInputForm());
         dao.save(starteventbean);
     }
 
