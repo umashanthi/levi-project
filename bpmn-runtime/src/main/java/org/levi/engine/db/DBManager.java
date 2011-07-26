@@ -16,6 +16,7 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the interface to classes which handles the back end database management of Levi Engine
@@ -142,6 +143,10 @@ public interface DBManager {
     List<String> getDeploymentIds();
 
     public String getPotentialGroup(String taskId);
+
+    public void setVariables(String processId, Map<String, String> variables);
+
+    public Map<String, String> getVariables(String processId);
 
     void closeSession();
 }

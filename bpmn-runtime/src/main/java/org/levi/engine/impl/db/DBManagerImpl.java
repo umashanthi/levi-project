@@ -8,10 +8,7 @@ import org.levi.engine.identity.User;
 import org.levi.engine.impl.bpmn.StartEvent;
 import org.levi.engine.impl.bpmn.UserTask;
 import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
-import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.process.hobj.*;
 import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -499,6 +496,21 @@ public class DBManagerImpl implements DBManager {
     public String getPotentialGroup(String taskId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         return task.getPotentialGroup().getGroupId();
+    }
+
+
+    public void setVariables(String processId, Map<String, String> variables){
+        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
+        if(processVariableBean == null){
+            processVariableBean = new ProcessVariableBean();
+        }
+        processVariableBean.setVariables(variables);
+        dao.update(processVariableBean);
+    }
+
+    public Map<String, String> getVariables(String processId){
+        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
+        return processVariableBean.getVariables();
     }
 
     public void closeSession() {

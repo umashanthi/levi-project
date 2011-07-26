@@ -1,13 +1,14 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.hibernate.annotations.CollectionOfElements;
+import org.levi.engine.persistence.hibernate.HObject;
 
 import javax.persistence.*;
 import java.util.Map;
 
 @Entity
 @Table(name = "process_instance_variables")     
-public class ProcessVariableBean {
+public class ProcessVariableBean extends HObject{
 
     private String processId;
     private Map<String, String> variables;
