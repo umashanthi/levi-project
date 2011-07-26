@@ -18,6 +18,7 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.Bean2Impl;
 import org.levi.engine.utils.Impl2Bean;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TPotentialOwner;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
@@ -185,7 +186,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUserTaskList(String userId) {
-        List<TaskBean> list = new ArrayList<TaskBean>();
+        List<TaskBean> list = LeviUtils.newArrayList();
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
         for (TaskBean task : user.getAssigned()) {
             if (task.isActive()) {
