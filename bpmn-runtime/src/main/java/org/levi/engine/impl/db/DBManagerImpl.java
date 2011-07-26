@@ -500,12 +500,17 @@ public class DBManagerImpl implements DBManager {
 
 
     public void setVariables(String processId, Map<String, String> variables){
-        ProcessVariableBean pvbean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
-        
+        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
+        if(processVariableBean == null){
+            processVariableBean = new ProcessVariableBean();
+        }
+        processVariableBean.setVariables(variables);
+        dao.update(processVariableBean);
     }
 
     public Map<String, String> getVariables(String processId){
-        return null;
+        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
+        return processVariableBean.getVariables();
     }
 
     public void closeSession() {
