@@ -13,12 +13,12 @@
         <version>0.0.1</version>
     </parent>
     <packaging>jar</packaging>
-    <dependencies>
+    <dependencies>     
         <dependency>
             <groupId>org.omg.spec.bpmn.x20100524.model</groupId>
             <artifactId>BPMN20</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>      
     </dependencies>
 </project>

@@ -53,11 +53,15 @@ public class StartEvent extends Event {
         return startEvent.getId();
     }
 
-    public TStartEvent getTStartEvent(){
+    public String getName() {
+        return startEvent.getName();
+    }
+
+    public TStartEvent getTStartEvent() {
         return startEvent;
     }
 
-    public ProcessInstance getProcessInstance(){
+    public ProcessInstance getProcessInstance() {
         return processInstance;
     }
 

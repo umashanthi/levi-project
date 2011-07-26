@@ -2,6 +2,7 @@ package org.levi.web;
 
 import org.levi.engine.ProcessEngine;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -56,7 +57,7 @@ public class SubmitUserTaskFormServlet extends HttpServlet {
         String processId = request.getParameter("processId");
         assert processId != null;
         //retrieve the input data from form
-        Map<String, Object> processVariables = new HashMap<String, Object>();
+        Map<String, Object> processVariables = LeviUtils.newHashMap();
         Map<String, String[]> requestParamMap = request.getParameterMap();
         for (String key : requestParamMap.keySet()) {
             processVariables.put(key, requestParamMap.get(key)[0]);

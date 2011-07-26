@@ -85,20 +85,17 @@ public class MailClient
     {
       System.out.println("No messages in inbox");
     }
-    for (int i = 0; i < msgs.length; i++)
-    {
-      MimeMessage msg = (MimeMessage)msgs[i];
-      if (show)
-      {
-       // System.out.println("    From: " + msg.getFrom()[0]);
-        System.out.println(" Subject: " + msg.getSubject());
-        System.out.println(" Content: " + msg.getContent());
+      for (Message msg1 : msgs) {
+          MimeMessage msg = (MimeMessage) msg1;
+          if (show) {
+              // System.out.println("    From: " + msg.getFrom()[0]);
+              System.out.println(" Subject: " + msg.getSubject());
+              System.out.println(" Content: " + msg.getContent());
+          }
+          if (clear) {
+              msg.setFlag(Flags.Flag.DELETED, true);
+          }
       }
-      if (clear)
-      {
-        msg.setFlag(Flags.Flag.DELETED, true);
-      }
-    }
     inbox.close(true);
     store.close();
     System.out.println();

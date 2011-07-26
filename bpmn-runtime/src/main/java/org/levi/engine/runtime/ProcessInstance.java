@@ -16,6 +16,7 @@ import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSequenceFlow;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Map;
 
@@ -178,7 +179,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 if (resumeSignals.size() > 1) {
                     throw new RuntimeException("More than one resume signals found.");
                 }
-                flowNodeFac.getNextNode(resumeSignals.get(0)).resumeTask();
+                try {
+                    flowNodeFac.getNextNode(resumeSignals.get(0)).resumeTask();
+                } catch (MessagingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 //instance(node);
                 //soup.enqueueReaction(new Continuation(node, m, null));
                 //vpu.addReaction(node, m, null, "description");
@@ -301,7 +306,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
         System.out.println("Retrieved process data from the database.");
         if (checkResumeSignal(taskId)) {
             if (isRunning()) {
-                flowNodeFac.getNextNode(taskId).resumeTask();
+                try {
+                    flowNodeFac.getNextNode(taskId).resumeTask();
+                } catch (MessagingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             } else {
                 execute();
             }

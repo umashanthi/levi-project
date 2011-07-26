@@ -147,8 +147,14 @@ Released : 20090303
                 <input type="button" value="Start Form"
                        onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
 
-                <%} else {%>
-                <input type="button" value="Start Task" onclick="">
+                <%
+                } else {
+                    String taskId = task.getTaskId();
+                    String taskFormName = task.getFormName();
+                    String taskFromPath = task.getFromPath();
+                %>
+                <input type="button" value="Start Task"
+                       onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
                 <%}%>
             </td>
             <%--</form>--%>
