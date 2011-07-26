@@ -1,9 +1,6 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
-import org.levi.engine.persistence.hibernate.HibernateDao;
-import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
-import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TSendTask;
 import org.w3c.dom.Node;
@@ -58,86 +55,69 @@ public class SendTask extends RunnableFlowNode {
     }
 
     private void persistSendTask(SendTask sendTask) {
-        HibernateDao dao = new HibernateDao();
         // todo remove later
         processInstance.setVariable("recipient", "Ishan");
         processInstance.setVariable("orderId", new Integer(1234));
         processInstance.setVariable("male", true);
         processInstance.setVariable("recipientName", "Eranda");
         processInstance.setVariable("now", new Date());
-        TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
-        if (starteventbean == null) {
-            starteventbean = new TaskBean();
-            Node exElems = task.getExtensionElements().getDomNode();
-            NodeList children = exElems.getChildNodes();
-            for (int i = 0; i < children.getLength(); ++i) {
-                Node field = children.item(i);
-                if (field.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-                if (!"field".equals(field.getNodeName())) {
-                    throw new RuntimeException("Unknown element '" + field.getNodeName()
-                            +"' inside sendTask.");
-                }
-                Node nameAttribute = field.getAttributes().getNamedItem("name");
-                String key = nameAttribute.getNodeValue();
-                // key must be one of {from, to, subject, content}. we must handle this
-                // from the xsd.
-                if (!("from".equals(key) || "to".equals(key)
-                        || "subject".equals(key) || "content".equals(key))) {
-                    throw new RuntimeException("Field name must be one of {from, to, subject, content}. " + key);
-                }
-                Node stringValueAttribute = field.getAttributes().getNamedItem("stringValue");
-                Node expressionAttribute = field.getAttributes().getNamedItem("expression");
-                String value = null;
-                if (stringValueAttribute != null) {
-                    if (expressionAttribute != null) {
-                        throw new RuntimeException("Cant have values for both StringValue or Expression attributes");
-                    }
-                    value = stringValueAttribute.getNodeValue();
-                } else if (expressionAttribute != null) {
-                    FormalExpression fe = new FormalExpression(expressionAttribute.getNodeValue());
-                    value = fe.evaluateString(processInstance);
-                    System.out.println("value: " + value);
-                } else { // both stringValue and expression attrbts are null. Then this field elem must have an expression elem
-                    NodeList elems = field.getChildNodes();
-                    for (int e = 0; e < elems.getLength(); ++e) {
-                        Node expression = elems.item(e);
-                        if (expression.getNodeType() != Node.ELEMENT_NODE) {
-                            continue;
-                        }
-                        if (!("expression".equals(expression.getNodeName())
-                                || "string".equals(expression.getNodeName()))) {
-                            throw new RuntimeException("Unknown element '" + expression.getNodeName()
-                                    + "' inside field.");
-                        }
-                        FormalExpression fe = new FormalExpression(expression.getFirstChild().getNodeValue());
-                        value = fe.evaluateString(processInstance);
-                        System.out.println("value: " + value);
-                    }
-                }
-                if (key == null || value == null) {
-                    throw new RuntimeException("Malformed sendTask.");
-                }
-                processInstance.setVariable(key, value);
+
+        Node exElems = task.getExtensionElements().getDomNode();
+        NodeList children = exElems.getChildNodes();
+        for (int i = 0; i < children.getLength(); ++i) {
+            Node field = children.item(i);
+            if (field.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
             }
-            starteventbean.setTaskId(sendTask.getId());
-            starteventbean.setTaskId(sendTask.getId());
-            ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-            starteventbean.setProcesseInstance(processInstanceBean);
-            //UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            //starteventbean.setAssignee(user);
-            starteventbean.setFormName(task.getName());
-            starteventbean.setTaskName(task.getName());
-            // starteventbean.setHasUserForm(hasInputForm());
-            //starteventbean.setFromPath(task.getInputForm());
-            dao.save(starteventbean);
+            if (!"field".equals(field.getNodeName())) {
+                throw new RuntimeException("Unknown element '" + field.getNodeName()
+                        + "' inside sendTask.");
+            }
+            Node nameAttribute = field.getAttributes().getNamedItem("name");
+            String key = nameAttribute.getNodeValue();
+            // key must be one of {from, to, subject, content}. we must handle this
+            // from the xsd.
+            if (!("from".equals(key) || "to".equals(key)
+                    || "subject".equals(key) || "content".equals(key))) {
+                throw new RuntimeException("Field name must be one of {from, to, subject, content}. " + key);
+            }
+            Node stringValueAttribute = field.getAttributes().getNamedItem("stringValue");
+            Node expressionAttribute = field.getAttributes().getNamedItem("expression");
+            String value = null;
+            if (stringValueAttribute != null) {
+                if (expressionAttribute != null) {
+                    throw new RuntimeException("Cant have values for both StringValue or Expression attributes");
+                }
+                value = stringValueAttribute.getNodeValue();
+            } else if (expressionAttribute != null) {
+                FormalExpression fe = new FormalExpression(expressionAttribute.getNodeValue());
+                value = fe.evaluateString(processInstance);
+            } else { // both stringValue and expression attrbts are null. Then this field elem must have an expression elem
+                NodeList elems = field.getChildNodes();
+                for (int e = 0; e < elems.getLength(); ++e) {
+                    Node expression = elems.item(e);
+                    if (expression.getNodeType() != Node.ELEMENT_NODE) {
+                        continue;
+                    }
+                    if (!("expression".equals(expression.getNodeName())
+                            || "string".equals(expression.getNodeName()))) {
+                        throw new RuntimeException("Unknown element '" + expression.getNodeName()
+                                + "' inside field.");
+                    }
+                    FormalExpression fe = new FormalExpression(expression.getFirstChild().getNodeValue());
+                    value = fe.evaluateString(processInstance);
+                }
+            }
+            if (key == null || value == null) {
+                throw new RuntimeException("Malformed sendTask.");
+            }
+            System.out.println("[" + key + " -> " + value + "]");
+            processInstance.setVariable(key, value);
         }
-        dao.close();
     }
 
     public void run() {
-        processInstance.addRunning(getId());
+        processInstance.run(getId());
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
 
@@ -189,7 +169,7 @@ public class SendTask extends RunnableFlowNode {
         // processInstance.getVariables().putAll(vars);
         System.out.println("Resuming send task id " + getId());
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
 
     }
 

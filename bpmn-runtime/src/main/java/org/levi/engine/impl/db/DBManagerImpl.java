@@ -359,7 +359,7 @@ public class DBManagerImpl implements DBManager {
 
         processInstanceBean.setStartTime(new Date());
         processInstanceBean.setVariables(processInstance.getVariables());
-        processInstanceBean.setStartEventId(processInstance.getObjectModel().getStartEvent().getId());
+        processInstanceBean.setStartEventId(processInstance.getProcessDefinition().getStartEvent().getId());
         processInstanceBean.setRunning(true);
 
         dao.save(processInstanceBean);
