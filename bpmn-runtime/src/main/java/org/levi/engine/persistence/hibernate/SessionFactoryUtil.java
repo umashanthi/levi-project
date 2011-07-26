@@ -50,6 +50,7 @@ public class SessionFactoryUtil {
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);
         config.addAnnotatedClass(EngineDataBean.class);
+        config.addAnnotatedClass(ProcessVariableBean.class);
         config.configure("persistence.xml");
     }
 
