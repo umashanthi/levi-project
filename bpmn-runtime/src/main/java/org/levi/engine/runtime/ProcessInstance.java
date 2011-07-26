@@ -192,6 +192,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
     public Map<String, Object> getVariables() {
         variables = LeviUtils.newHashMap();
+        if (this.getProcessId() == null) {
+            return LeviUtils.newHashMap();
+        }
         Map<String, String> processVariables = dbManager.getVariables(this.getProcessId());
         if (processVariables != null) {
             for (String key : processVariables.keySet()) {
