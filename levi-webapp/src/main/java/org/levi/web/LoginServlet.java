@@ -87,7 +87,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
 
             UserBean userBean = dbManager.getUser(username);
             String userGroupsString = "";
-            if (user.getUserGroups() != null && user.getUserGroups().size() > 0) {
+            if (userBean.getUserGroups() != null && userBean.getUserGroups().size() > 0) {
                 for (GroupBean grp : userBean.getUserGroups()) {
                     userGroupsString += grp.getGroupName() + " , ";
                 }

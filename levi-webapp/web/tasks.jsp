@@ -66,12 +66,11 @@ Released : 20090303
 
 
         <p>The Native BPMN 2.0 Execution Engine</p>
-
-        <div id="name">You are logged in as <span><%
-            if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
-                out.print(session.getAttribute("username").toString());
-
-        %> </span>as a member of <span><% out.print(session.getAttribute("userGroupList").toString()); %></span></div>
+        <%
+            if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
+        <div id="name">You are logged in as <span>
+               <% out.print(session.getAttribute("username").toString()); %> </span>as a member of <span><%
+            out.print(session.getAttribute("userGroupList").toString()); %></span></div>
         <%}%>
 
     </div>
