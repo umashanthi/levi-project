@@ -139,7 +139,6 @@ public class SendTask extends RunnableFlowNode {
         processInstance.run(getId());
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
-
         String to = (String) processInstance.getVariable(getId()+"_to");
         System.out.println("SendTask persistSendTask(): Recipent:" + to);
         String subject = (String) processInstance.getVariable(getId()+"_subject");
@@ -192,11 +191,11 @@ public class SendTask extends RunnableFlowNode {
         // processInstance.getVariables().putAll(vars);
         System.out.println("Resuming send task id " + getId());
           MailClient marketingClient = new MailClient("marketing", "localhost");
-        String to = (String) processInstance.getVariable("to");
+        String to = (String) processInstance.getVariable(getId()+"_to");
         System.out.println("SendTask persistSendTask(): Recipent:" + to);
-        String subject = (String) processInstance.getVariable("subject");
+        String subject = (String) processInstance.getVariable(getId()+"_subject");
         System.out.println("SendTask persistSendTask(): Subject:" + subject);
-        String content = (String) processInstance.getVariable("content");
+        String content = (String) processInstance.getVariable(getId()+"_content");
         System.out.println("SendTask persistSendTask(): Content:" + content);
         marketingClient.sendMessage(to+"@localhost", subject,  content);
         instance(processInstance.executeNext(this));
