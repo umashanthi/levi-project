@@ -92,7 +92,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                     userGroupsString += grp.getGroupName() + " , ";
                 }
             }
-            request.getSession().setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 1));
+            session.setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
             response.sendRedirect("index.jsp");
         }
 

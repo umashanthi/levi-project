@@ -84,7 +84,7 @@ Released : 20090303
                 for (GroupBean group1 : userBean.getUserGroups()) {
                     userGroups += group1.getGroupName() + " , ";
                 }
-                userGroups = userGroups.substring(0, userGroups.length() - 1);
+                userGroups = userGroups.substring(0, userGroups.length() - 2);
                 session.getAttribute("userGroupList");
         %>
         <tr>

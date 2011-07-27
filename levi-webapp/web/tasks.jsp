@@ -70,9 +70,9 @@ Released : 20090303
         <div id="name">You are logged in as <span><%
             if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
                 out.print(session.getAttribute("username").toString());
-            }
-        %> </span>as a member of <span>group1</span></div>
 
+        %> </span>as a member of <span><% out.print(session.getAttribute("userGroupList").toString()); %></span></div>
+        <%}%>
 
     </div>
     <div id="menu">
