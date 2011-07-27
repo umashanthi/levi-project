@@ -59,10 +59,10 @@ public class SendTask extends RunnableFlowNode {
     private void persistSendTask(SendTask sendTask) {
         HibernateDao dao = new HibernateDao();
         // todo remove later
-        processInstance.setVariable("recipient", "eranda");
-        processInstance.setVariable("orderId", 1234);
-        processInstance.setVariable("male", true);
-        processInstance.setVariable("recipientName", "Eranda");
+//        processInstance.setVariable("recipient", "eranda");
+//        processInstance.setVariable("orderId", 1234);
+//        processInstance.setVariable("male", true);
+//        processInstance.setVariable("recipientName", "Eranda");
         processInstance.setVariable("now", new Date());
         TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
         if (starteventbean == null) {
@@ -118,7 +118,7 @@ public class SendTask extends RunnableFlowNode {
                 if (key == null || value == null) {
                     throw new RuntimeException("Malformed sendTask.");
                 }
-                processInstance.setVariable(key, value);
+                processInstance.setVariable(getId()+"_"+key, value);
             }
             starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
@@ -140,11 +140,11 @@ public class SendTask extends RunnableFlowNode {
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
 
-        String to = (String) processInstance.getVariable("to");
+        String to = (String) processInstance.getVariable(getId()+"_to");
         System.out.println("SendTask persistSendTask(): Recipent:" + to);
-        String subject = (String) processInstance.getVariable("subject");
+        String subject = (String) processInstance.getVariable(getId()+"_subject");
         System.out.println("SendTask persistSendTask(): Subject:" + subject);
-        String content = (String) processInstance.getVariable("content");
+        String content = (String) processInstance.getVariable(getId()+"_content");
         System.out.println("SendTask persistSendTask(): Content:" + content);
 
         // write them to the db
