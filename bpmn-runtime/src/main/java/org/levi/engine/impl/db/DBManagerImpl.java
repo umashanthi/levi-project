@@ -215,7 +215,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
-        return dao.getUnassignedTasks(groupId);
+        return qlManager.getUnassignedTasks(groupId);
     }
 
     public List<TaskBean> getActiveTasks(String processId) {
