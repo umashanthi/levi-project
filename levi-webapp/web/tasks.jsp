@@ -96,32 +96,6 @@ Released : 20090303
         <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
         %>
         <tr>
-            <h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3>
-        </tr>
-        <%
-            if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
-                // display unassigned tasks
-                assert request.getSession().getAttribute("unassignedTasks") != null;
-                List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
-                if (unassignedTaskList.size() > 0) {
-                    for (TaskBean task : unassignedTaskList) { %>
-
-        <tr>
-            <form name="claimTaskForm" action="" method="post">
-                <td>
-                    <%=task.getTaskName()%>
-                </td>
-                <td>
-                    <input type="button" value="Claim Task"
-                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=task.getTaskId()%>','<%=task.getProcesseInstance().getProcessId()%>');return false">
-                </td>
-            </form>
-        </tr>
-        <%
-                }
-            }
-        } else { %>
-        <tr>
             <h3><a href="tasks">My Tasks </a></h3></tr>
         <tr>
             <%
@@ -157,14 +131,46 @@ Released : 20090303
                        onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
                 <%}%>
             </td>
-            <%--</form>--%>
+            <%
+                    }
+                }
+            %>
         </tr>
-        <% }
-        }
-        }
-        } else {
+    </table>
+    <table>
+        <br>
+        <br>
+        <tr>
+            <h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3>
+        </tr>
+        <%
+            //         if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
+            // display unassigned tasks
+            assert request.getSession().getAttribute("unassignedTasks") != null;
+            List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
+            if (unassignedTaskList.size() > 0) {
+                for (TaskBean unassignedTask : unassignedTaskList) { %>
 
-            //nothing
+        <tr>
+            <form name="claimTaskForm" action="" method="post">
+                <td>
+                    <%=unassignedTask.getTaskName()%>
+                </td>
+                <td>
+                    <input type="button" value="Claim Task"
+                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=unassignedTask.getTaskId()%>','<%=unassignedTask.getProcesseInstance().getProcessId()%>');return false">
+                </td>
+            </form>
+        </tr>
+        <%
+                }
+            }
+
+            //     } else { %>
+
+        <% } else {
+
+            response.sendRedirect("login.jsp?error=not-logged");
         }%>
     </table>
 

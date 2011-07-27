@@ -215,7 +215,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
-        return dao.getUnassignedTasks(groupId);
+        return qlManager.getUnassignedTasks(groupId);
     }
 
     public List<TaskBean> getActiveTasks(String processId) {
@@ -499,9 +499,9 @@ public class DBManagerImpl implements DBManager {
     }
 
 
-    public void setVariables(String processId, Map<String, String> variables){
-        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
-        if(processVariableBean == null){
+    public void setVariables(String processId, Map<String, String> variables) {
+        ProcessVariableBean processVariableBean = (ProcessVariableBean) dao.getObject(ProcessVariableBean.class, processId);
+        if (processVariableBean == null) {
             processVariableBean = new ProcessVariableBean();
             processVariableBean.setProcessId(processId);
 
@@ -510,8 +510,11 @@ public class DBManagerImpl implements DBManager {
         dao.update(processVariableBean);
     }
 
-    public Map<String, String> getVariables(String processId){
-        ProcessVariableBean processVariableBean = (ProcessVariableBean)dao.getObject(ProcessVariableBean.class, processId);
+    public Map<String, String> getVariables(String processId) {
+        ProcessVariableBean processVariableBean = (ProcessVariableBean) dao.getObject(ProcessVariableBean.class, processId);
+        if (processVariableBean == null) {
+            return LeviUtils.newHashMap();
+        }
         return processVariableBean.getVariables();
     }
 
