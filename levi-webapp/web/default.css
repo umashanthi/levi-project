@@ -87,6 +87,12 @@ img.right {
     color: #8C0209;
 }
 
+#logo #name {
+    float: right;
+    margin: 0;
+    color: #8C0209;
+}
+
 #logo span {
     color: #000000;
 }
