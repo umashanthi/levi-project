@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -19,7 +19,7 @@
     </div>
     <div id="menu">
         <ul id="main">
-           <li class="current_page_item"><a href="index.jsp">Home</a></li>
+            <li class="current_page_item"><a href="index.jsp">Home</a></li>
             <li><a href="#">Tasks</a></li>
             <li><a href="processes">Processes</a></li>
             <%if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true") && session.getAttribute("username").equals("admin")) {%>
@@ -63,9 +63,12 @@
         </table>
     </form>
     <%
-    // if login  attempt was unsuccessful, show error message to user
-        if(request.getParameter("isLoginSuccess")!=null && request.getParameter("isLoginSuccess").equals("false")) {%>
-        <h3>Username or password is invalid. Please try again</h3>
+        // if login  attempt was unsuccessful, show error message to user
+        if (request.getParameter("isLoginSuccess") != null && request.getParameter("isLoginSuccess").equals("false")) {%>
+    <h3>Username or password is invalid. Please try again</h3>
+    <% }
+        if (request.getParameter("error") != null && request.getParameter("error").equals("not-logged")) {%>
+    <h3>Please login first</h3>
     <% }
     %>
 </div>
