@@ -93,7 +93,7 @@ public class UserManagerServlet extends HttpServlet {
                 }
             }
             /* */
-            UserBean userBean = dbManager.getUser(request.getParameter("username"));
+            UserBean userBean = dbManager.getUser(request.getSession().getAttribute("username").toString());
             String userGroupsString = "";
             if (userBean.getUserGroups() != null && userBean.getUserGroups().size() > 0) {
                 for (GroupBean grp : userBean.getUserGroups()) {
