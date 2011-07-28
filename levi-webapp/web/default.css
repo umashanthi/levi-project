@@ -9,7 +9,7 @@ body {
     padding: 0;
     background: #787878;
     text-align: justify;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: Arial, Georgia, "Times New Roman", Times, serif;
     font-size: 12px;
     color: #616161;
 }
@@ -84,7 +84,26 @@ img.right {
 #logo h1, #logo p {
     float: left;
     margin: 0;
+    font-family: 'Tienne', Arial;
     color: #8C0209;
+}
+
+#logo #name {
+        text-align: right;
+    margin: 0;
+    color: #000000; /*border-bottom: 3px double #8C0209;*/
+/*border-top: 1px solid #8C0209;*/
+    background-color: #EBECE4;
+    padding-top: 0.5%; /*padding-left: 1%;*/
+    padding-bottom: 0.5%;
+    padding-right: 1%;
+}
+
+#logo #name span {
+
+    margin: 0;
+    color: #8C0209;
+    font-weight: bold;
 }
 
 #logo span {
@@ -93,16 +112,15 @@ img.right {
 
 #logo h1 {
     padding: 25px 0 0 0;
-    letter-spacing: -1px;
-    text-transform: lowercase;
+    letter-spacing: -1px; /*text-transform: lowercase;*/
     font-weight: normal;
     font-size: 3em;
 }
 
 #logo p {
-    text-transform: uppercase;
+/* text-transform: lowercase;*/
     padding: 47px 0 0 3px;
-    font-size: 10px;
+    font-size: 20px;
     color: #110E0F;
 }
 
@@ -141,9 +159,10 @@ img.right {
     text-decoration: none;
     text-transform: capitalize;
     background: url(images/img03.jpg) no-repeat right top;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: Arial, Georgia, "Times New Roman", Times, serif;
     font-size: 12px;
     color: #FFFFFF;
+    font-weight: bold;
 }
 
 #menu a:hover {

@@ -42,7 +42,13 @@ Released : 20090303
     <div id="logo">
         <h1><a href="#"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;</a></h1>
 
-        <p>The native bpmn2.0 execution engine</p>
+        <p>The Native BPMN 2.0 Execution Engine</p>
+        <%
+            if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
+        <div id="name">You are logged in as <span>
+               <% out.print(session.getAttribute("username").toString()); %> </span>as a member of <span><%
+            out.print(session.getAttribute("userGroupList").toString()); %></span></div>
+        <%}%>
     </div>
     <div id="menu">
         <ul id="main">
@@ -84,6 +90,8 @@ Released : 20090303
                 for (GroupBean group1 : userBean.getUserGroups()) {
                     userGroups += group1.getGroupName() + " , ";
                 }
+                userGroups = userGroups.substring(0, userGroups.length() - 2);
+                session.getAttribute("userGroupList");
         %>
         <tr>
             <td><%=userBean.getUserId()%>
