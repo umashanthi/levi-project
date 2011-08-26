@@ -44,13 +44,14 @@ public final class ExclusiveGateway extends Gateway {
     }
 
     public List<TSequenceFlow> evaluate() {
-        System.out.println("Evaluating Exclusive Gateway: " + getName());
+        //System.out.println("Evaluating Exclusive Gateway: " + getName());
         output.clear();
         compare();
         //Ignore the multiple input and multiple output Gateways since they are not recommended.
         TSequenceFlow defaultSequenceFlow = null;
         if (isDiverging() || (incomingSeqFlowSet.size() == 1)) {
-            for (TSequenceFlow sf : outgoingSeqFlowSet) {
+            for (int i = 0; i < outgoingSeqFlowSet.size(); ++i) {
+                TSequenceFlow sf = outgoingSeqFlowSet.get(i);
                 if (defaultSequenceFlowId != null && defaultSequenceFlowId.equals(sf.getId())) {
                     defaultSequenceFlow = sf;
                     continue;
@@ -64,7 +65,7 @@ public final class ExclusiveGateway extends Gateway {
             }
             if (output.isEmpty()) {
                 if (defaultSequenceFlow != null) {
-                    System.out.println("Set default SequenceFlow");
+                    //System.out.println("Set default SequenceFlow");
                     output.add(defaultSequenceFlow);
                 } else {
                     throw new LeviException("None of the conditions were satisfied.");
@@ -80,7 +81,8 @@ public final class ExclusiveGateway extends Gateway {
 
     private void compare() {
         assert incomingTokens.size() <= incomingSeqFlowSet.size();
-        for (TSequenceFlow sf : incomingSeqFlowSet) {
+        for (int i = 0; i < incomingSeqFlowSet.size(); ++i) {
+            TSequenceFlow sf = incomingSeqFlowSet.get(i);
             for (String token : incomingTokens) {
                 if (token.equals(sf.getId())) {
                     incomingTokens.clear();
@@ -88,7 +90,7 @@ public final class ExclusiveGateway extends Gateway {
                 }
             }
         }
-        throw new LeviException("incoming sequence flows unmatched");
+        throw new LeviException("incoming sequence flows unmatched. " + this.getId());
     }
 
     @Override

@@ -18,7 +18,7 @@ public class ScriptConditionExpression implements ConditionExpression {
     }
 
     public boolean evaluate(ProcessInstance processInstance) {
-        System.out.println("Evaluating Script Condition.");
+        //System.out.println("Evaluating Condition Expression: " + conditionExpression);
         ScriptEngines scriptEngines = ScriptEngines.getInstance();
         Object result;
         result = scriptEngines.evaluate(

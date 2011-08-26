@@ -51,7 +51,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         if (variables == null) {
             this.variables = LeviUtils.newHashMap();
         } else {
-            this.variables = variables;
+            this.variables =  new HashMap<String, Object>(variables);
         }
         flowNodeFac = new FlowNodeFactory(this.processDefinition, this);
         // todo; is the following processId ok?

@@ -14,7 +14,7 @@ public class JamesConfigTest
   {
     // CREATE CLIENT INSTANCES
     MailClient erandaClient = new MailClient("eranda", "localhost");
-    MailClient ishanClient = new MailClient("ishan", "localhost");
+    MailClient ishanClient = new MailClient("john", "localhost");
     //MailClient umaClient = new MailClient("uma", "localhost");
 
     // CLEAR EVERYBODY'S INBOX
@@ -35,7 +35,7 @@ public class JamesConfigTest
     Thread.sleep(500); // Let the server catch up
 
     // LIST MESSAGES FOR Eranda and Ishan
-      erandaClient.checkInbox(MailClient.SHOW_MESSAGES);
+      erandaClient.checkInbox(MailClient.SHOW_AND_CLEAR);
     ishanClient.checkInbox(MailClient.SHOW_AND_CLEAR);
   }
 }
