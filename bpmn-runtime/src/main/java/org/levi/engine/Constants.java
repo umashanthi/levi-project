@@ -1,8 +1,5 @@
 package org.levi.engine;
 
-/**
- * @author Ishan Jayawardena
- */
 public class Constants {
     private final static String HOME = "HOME";
     public final static String BPMN_FILE_EXTENSION = ".bpmn";

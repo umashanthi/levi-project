@@ -67,19 +67,19 @@ public class StartEvent extends Event {
 
     public void run() {
         // todo see if a form is present and pause accordingly
-        processInstance.addRunning(this.getId());
+        processInstance.run(this.getId());
         if (hasInputForm()) {
             processInstance.pause(this.getId());
         } else {
             resumeTask();
         }
-        //processInstance.addRunning(getTaskId());
+        //processInstance.run(getTaskId());
         //resumeTask();
     }
 
     public void resumeTask() {
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
     }
 
     public boolean hasInputForm() {
