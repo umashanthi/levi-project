@@ -9,6 +9,6 @@
         <!-- Additional parameters -->
         <property name="hibernate.connection.pool_size">10</property>
         <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
     </session-factory>
 </hibernate-configuration>

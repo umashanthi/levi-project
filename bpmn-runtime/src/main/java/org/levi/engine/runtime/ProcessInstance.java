@@ -230,7 +230,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         for (String key : this.variables.keySet()) {
             processVariables.put(key, this.variables.get(key).toString());
         }
-        dbManager.setVariables(this.getProcessId(), processVariables);
+      dbManager.setVariables(this.getProcessId(), processVariables);
         return output;
     }
 
