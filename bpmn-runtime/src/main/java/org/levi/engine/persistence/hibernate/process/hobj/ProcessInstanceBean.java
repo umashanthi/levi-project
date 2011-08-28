@@ -1,6 +1,5 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
-
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
@@ -14,32 +13,28 @@ import java.util.*;
 @SecondaryTable(name = "process_started_user")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
-    private String processId;
-    //private String processDefId;
+    private String processInstanceId;
     private DeploymentBean deployedProcess;
-    private Map<String, Object> variables;
-    //private List<String> runningTaskIds;
-    private Map<String, TaskBean> runningTasks;
-    //private List<String> completedTaskIds;
-    private Map<String, TaskBean> completedTasks;
+    private Map<String, String> variables = new HashMap<String,String>();
+    private Map<String, TaskBean> runningTasks = new HashMap<String,TaskBean>();
+    private Map<String, TaskBean> completedTasks = new HashMap<String,TaskBean>();
     private Boolean isRunning;
     private Date startTime;
     private String startEventId;
     private String endEventId;
-    private List<TaskBean> tasks;
 
 
     @Id
-    public String getProcessId() {
-        return processId;
+    public String getProcessInstanceId() {
+        return processInstanceId;
     }
 
-    public void setProcessId(String processId) {
-        this.processId = processId;
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
     }
 
 
-    @OneToOne(targetEntity = DeploymentBean.class)
+    @ManyToOne(targetEntity = DeploymentBean.class)
     public DeploymentBean getDeployedProcess() {
         return deployedProcess;
     }
@@ -48,38 +43,24 @@ public class ProcessInstanceBean extends HObject {
         this.deployedProcess = deployedProcess;
     }
 
-    /*
-    public String getProcessDefId() {
-        return processDefId;
-    }
-
-    public void setProcessDefId(String processDefId) {
-        this.processDefId = processDefId;
-    }
-    */
-
-    @Transient //TODO Object (use a wrapper class)
-    public Map<String, Object> getVariables() {
+    @ElementCollection
+    @CollectionTable(name="process_variables", joinColumns ={ @JoinColumn(name="processInstanceId")})
+    @MapKeyColumn(name = "variable")
+    @Column(name = "value")
+    public Map<String, String> getVariables() {
         return variables;
     }
 
-    public void setVariables(Map<String, Object> variables) {
+    public void setVariables(Map<String, String> variables) {
         this.variables = variables;
     }
 
-    /*
-    public List<String> getRunningTaskIds() {
-        return runningTaskIds;
-    }
-
-    public void setRunningTaskIds(ArrayList<String> runningTaskIds) {
-        this.runningTaskIds = runningTaskIds;
-    }
-    */
-
-    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
-    @MapKey(name = "taskId")
-    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
+//    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
+//    @MapKey(name = "taskId")
+//    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @ElementCollection
+    @CollectionTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
     }
@@ -88,20 +69,12 @@ public class ProcessInstanceBean extends HObject {
         this.runningTasks = runningTasks;
     }
 
-    /*
-    @Transient
-    public List<String> getCompletedTaskIds() {
-        return completedTaskIds;
-    }
-
-    public void setCompletedTaskIds(ArrayList<String> completedTaskIds) {
-        this.completedTaskIds = completedTaskIds;
-    }
-    */
-
-    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
-    @MapKey(name = "taskId")
-    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
+//    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
+//    @MapKey(name = "taskId")
+//    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @ElementCollection
+    @CollectionTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;
     }
@@ -119,7 +92,7 @@ public class ProcessInstanceBean extends HObject {
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "start_user", table = "process_started_user")
+    @JoinColumn(name = "startUser", table = "process_started_user")
     public UserBean getStartUser() {
         return startUser;
     }
@@ -150,15 +123,6 @@ public class ProcessInstanceBean extends HObject {
 
     public void setEndEventId(String endEventId) {
         this.endEventId = endEventId;
-    }
-
-    @OneToMany(targetEntity = TaskBean.class, mappedBy = "processeInstance", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public List<TaskBean> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<TaskBean> tasks) {
-        this.tasks = tasks;
     }
 
     public void addToCompletedTask(TaskBean taskBean) {

@@ -293,11 +293,11 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 throw new LeviException("No running element found for the processId " + taskId);
             }
             runningTaskIds.remove(taskId);
-            dbManager.removeRunningTask(taskId);
+            dbManager.removeRunningTask(taskId, this.processId);
         }
         synchronized (completedTaskIds) {
             completedTaskIds.add(taskId);
-            dbManager.addCompletedTask(taskId);
+            dbManager.addCompletedTask(taskId, this.processId);
         }
         dbManager.unassignTask(taskId);
 
@@ -318,10 +318,10 @@ public class ProcessInstance extends BPMNJacobRunnable {
             if (soup.isComplete()) {
                 TaskBean taskBeanObj;
                 for (String id : runningTaskIds) {
-                    dbManager.addRunningTask(id);
+                    dbManager.addRunningTask(id, this.processId);
                 }
                 for (String id : completedTaskIds) {
-                    dbManager.addCompletedTask(id);
+                    dbManager.addCompletedTask(id, this.processId);
                 }
                 System.out.println("Writing the processs to the database.");
             } else {

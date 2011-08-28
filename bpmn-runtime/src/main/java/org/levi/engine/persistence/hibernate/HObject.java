@@ -16,9 +16,7 @@ public class HObject {
     private int _id;
     private Date _dateCreated;
 
-
     //TODO autogenerate the date
-    //@Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name = "created", insertable = false, updatable = false)
     public Date get_dateCreated() {
