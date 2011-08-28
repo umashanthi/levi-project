@@ -7,6 +7,8 @@ import org.levi.engine.bpmn.BPMNJacobRunnable;
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.FlowNodeFactory;
+import org.levi.engine.impl.bpmn.StartEvent;
+import org.levi.engine.impl.bpmn.UserTask;
 import org.levi.engine.impl.bpmn.WaitedTask;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.impl.db.DBManagerImpl;
@@ -19,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Ishan Jayawardena.
+ */
 public class ProcessInstance extends BPMNJacobRunnable {
     private ProcessDefinition processDefinition;
     private boolean isRunning;
@@ -46,7 +51,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         if (variables == null) {
             this.variables = LeviUtils.newHashMap();
         } else {
-            this.variables = variables;
+            this.variables =  new HashMap<String, Object>(variables);
         }
         flowNodeFac = new FlowNodeFactory(this.processDefinition, this);
         // todo; is the following processId ok?
@@ -244,7 +249,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
             processVariables.put(key, this.variables.get(key).toString());
         }
         dbManager.setVariables(this.getProcessId(), processVariables);
-
     }
 
     public RunnableFlowNode executeNext(RunnableFlowNode currentFlowNode) {
@@ -255,18 +259,18 @@ public class ProcessInstance extends BPMNJacobRunnable {
         return flowNodeFac.getNextNode(currentSeqFlow);
     }
 
-    public ProcessDefinition getObjectModel() {
+    public ProcessDefinition getProcessDefinition() {
         return processDefinition;
     }
 
-    // TODO
+    // TODO XXX
     public void continueUserTask(String userTaskId, Map<String, Object> variables) {
         if (userTaskId == null) {
             throw new NullPointerException("User task id is null.");
         }
         waitedTasks.get(userTaskId).resume(variables);
     }
-
+    // TODO XXX
     public void addWaitedTask(String id, WaitedTask waitedTask) {
         if (id == null) {
             throw new NullPointerException("Task ID is null.");
@@ -274,7 +278,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         waitedTasks.put(id, waitedTask);
     }
 
-    public void addRunning(String id) {
+    public void run(String id) {
         synchronized (runningTaskIds) {
             if (!runningTaskIds.contains(id)) {
                 runningTaskIds.add(id);
@@ -283,7 +287,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
     }
 
-    public void addCompleted(String taskId) {
+    public void complete(String taskId) {
         synchronized (runningTaskIds) {
             if (!runningTaskIds.contains(taskId)) {
                 throw new LeviException("No running element found for the processId " + taskId);
@@ -297,14 +301,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
         dbManager.unassignTask(taskId);
 
-    }
-
-    public synchronized List<String> getRunningTaskIds() {
-        return runningTaskIds;
-    }
-
-    public synchronized List<String> getCompletedTaskIds() {
-        return completedTaskIds;
     }
 
     public void pause(String taskId) {
@@ -331,10 +327,39 @@ public class ProcessInstance extends BPMNJacobRunnable {
             } else {
                 throw new RuntimeException("Incomplete Runtime soup. Cannot pause the process instance.");
             }
-            addRunning(taskId);
+            run(taskId);
         }
     }
 
+    public void resume(String taskId) {
+        System.out.println("Retrieved process data from the database.");
+        if (checkResumeSignal(taskId)) {
+            if (isRunning()) {
+                try {
+                    flowNodeFac.getNextNode(taskId).resumeTask();
+                } catch (MessagingException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            } else {
+                execute();
+            }
+        }
+        //setIsRunning(true);
+    }
+
+    public void save(RunnableFlowNode flowNode) {
+          DBManager manager = new DBManagerImpl();
+        if (flowNode instanceof UserTask) {
+            manager.persistUserTask((UserTask)flowNode);
+        } else if (flowNode instanceof StartEvent) {
+            manager.persistStartEvent((StartEvent)flowNode);
+        }
+    }
+
+    public boolean hasStartForm() {
+        return hasStartForm;
+    }
+    
     private boolean checkPauseSignal(String taskId) {
         if (taskId == null) {
             throw new NullPointerException("TaskId is null.");
@@ -369,28 +394,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
         return false;
     }
 
-    public void resume() {
-        System.out.println("Retrieved process data from the database.");
-        execute();
-        //setIsRunning(true);
-    }
-
-    public void resume(String taskId) {
-        System.out.println("Retrieved process data from the database.");
-        if (checkResumeSignal(taskId)) {
-            if (isRunning()) {
-                try {
-                    flowNodeFac.getNextNode(taskId).resumeTask();
-                } catch (MessagingException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-            } else {
-                execute();
-            }
-        }
-        //setIsRunning(true);
-    }
-
     private synchronized boolean isRunning() {
         return isRunning;
     }
@@ -399,7 +402,4 @@ public class ProcessInstance extends BPMNJacobRunnable {
         isRunning = value;
     }
 
-    public boolean hasStartForm() {
-        return hasStartForm;
-    }
 }

@@ -27,8 +27,8 @@ public abstract class Gateway extends RunnableFlowNode {
         }
         this.processInstance = processInstance;
         this.gateway = gateway;
-        this.incomingSeqFlowSet = processInstance.getObjectModel().getTargetSequenceFlowSet(this.gateway.getId());
-        this.outgoingSeqFlowSet = processInstance.getObjectModel().getSourceSequenceFlowSet(this.gateway.getId());
+        this.incomingSeqFlowSet = processInstance.getProcessDefinition().getTargetSequenceFlowSet(this.gateway.getId());
+        this.outgoingSeqFlowSet = processInstance.getProcessDefinition().getSourceSequenceFlowSet(this.gateway.getId());
         incomingTokens = LeviUtils.newArrayList(incomingSeqFlowSet.size());
         gatewayDirection = this.gateway.getGatewayDirection().intValue();
     }

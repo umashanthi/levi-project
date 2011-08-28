@@ -108,7 +108,7 @@ public class FlowNodeFactory {
             // TODO is this thread safe?
             registerNode(flowNode);
         } else {
-            System.err.println("flownode already exists: " + flowNode.getId());
+            //System.err.println("flownode already exists: " + flowNode.getId());
         }
         if (flowNode == null) {
             throw new NullPointerException("Could not find the flow node");

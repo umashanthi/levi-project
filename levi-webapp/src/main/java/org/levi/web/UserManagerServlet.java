@@ -92,6 +92,17 @@ public class UserManagerServlet extends HttpServlet {
                     dbManager.removeUserFromGroup(username, grpId);
                 }
             }
+            /* */
+            UserBean userBean = dbManager.getUser(request.getSession().getAttribute("username").toString());
+            String userGroupsString = "";
+            if (userBean.getUserGroups() != null && userBean.getUserGroups().size() > 0) {
+                for (GroupBean grp : userBean.getUserGroups()) {
+                    userGroupsString += grp.getGroupName() + " , ";
+                }
+            }
+            request.getSession().setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
+
+            /* */
             response.sendRedirect("usrmng");
         }
     }

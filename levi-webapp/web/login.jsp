@@ -15,7 +15,7 @@
     <div id="logo">
         <h1><a href="#"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;</a></h1>
 
-        <p>The native bpmn2.0 execution engine</p>
+        <p>The Native BPMN 2.0 Execution Engine</p>
     </div>
     <div id="menu">
         <ul id="main">

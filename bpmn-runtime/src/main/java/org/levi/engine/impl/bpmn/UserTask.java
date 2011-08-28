@@ -1,8 +1,6 @@
 package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
-import org.levi.engine.db.DBManager;
-import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
@@ -16,7 +14,6 @@ public class UserTask extends RunnableFlowNode {
     private final boolean hasInputForm;
 
     public static class Builder {
-        private FlowNodeFactory flowNodeFac;
         private TUserTask task;
         private ProcessInstance process;
 
@@ -45,40 +42,18 @@ public class UserTask extends RunnableFlowNode {
         //THumanPerformer humanPerformer = (THumanPerformer)resourceRoles[1];
         //humanPerformer.getResourceAssignmentExpression().getExpression();
         hasInputForm = task.getInputForm() != null;
-        // todo check and write the input form data.
-        if (hasInputForm()) {
-            persistUserTask();
-        }
-    }
-
-    private void persistUserTask() {
-        //TODO rename this to Persist() 
-        DBManager manager = new DBManagerImpl();
-        manager.persistUserTask(this);
     }
 
     public void run() {
-        processInstance.addRunning(getId());
-        // get the details
-        System.out.println("UserTask run(): Getting the task details.");
-        // write them to the db
-        System.out.println("UserTask run(): Wrote details to the db.");
-        // see if a form is there
-        System.out.println("UserTask run(): Checking for an input form.");
-        // if yes then create a waitedtask and wait for it
-        System.out.println("UserTask run(): Creating the waited task for the form.");
-        System.out.println("UserTask run(): Waiting for the form reply...");
-        //WaitedTaskChannel channel = newChannel(WaitedTaskChannel.class, "channel");
-        //WaitedTask task = new WaitedTask(channel);
-        //processInstance.addWaitedTask(getTaskId(), task);
-        //instance(task);
-        // todo:
+        processInstance.run(getId());
+        System.out.println("Running UserTask: " + getId());
         if (hasInputForm()) {
-            System.out.println("Usertask hasInputForm. Pause.");
+            processInstance.save(this);
+            System.out.println("Pause UserTask: " + getId());
             processInstance.pause(getId());
-        } //else {
-        //    resumeTask();
-        //}
+        } else {
+            resumeTask();
+        }
         /*
         object(new WaitedTaskChannelListener(channel) {
             @Override
@@ -106,16 +81,15 @@ public class UserTask extends RunnableFlowNode {
     }
 
     public void resumeTask() {
-        // todo this is what must happen when
-        // processInstance.getVariables().putAll(vars);
-        System.out.println("Resuming user task id " + getId());
+        System.out.println("Resuming UserTask: " + getId());
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
 
     }
 
-    // todo
     public boolean hasInputForm() {
         return hasInputForm;
     }
+
+
 }

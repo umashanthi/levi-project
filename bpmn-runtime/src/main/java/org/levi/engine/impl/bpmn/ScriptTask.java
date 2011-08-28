@@ -68,7 +68,7 @@ public class ScriptTask extends RunnableFlowNode {
     @Override
     public void run() {
         // todo: see if a form is present and pause the process accordingly
-        System.out.println("Evaluating Script Task.");
+        //System.out.println("Evaluating Script Task.");
         ScriptEngines scriptEngines = ScriptEngines.getInstance();
         Object result = null;
         result = scriptEngines.evaluate(

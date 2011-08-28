@@ -8,6 +8,8 @@ import org.levi.engine.impl.ProcessEngineImpl;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.impl.identity.GroupImpl;
 import org.levi.engine.impl.identity.UserImpl;
+import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
+import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -82,6 +84,15 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 dbManager.saveUser(user);
             }
             // Couldn't redirect to the target. Redirect to the site's home page.
+
+            UserBean userBean = dbManager.getUser(username);
+            String userGroupsString = "";
+            if (userBean.getUserGroups() != null && userBean.getUserGroups().size() > 0) {
+                for (GroupBean grp : userBean.getUserGroups()) {
+                    userGroupsString += grp.getGroupName() + " , ";
+                }
+            }
+            session.setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
             response.sendRedirect("index.jsp");
         }
 

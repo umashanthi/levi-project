@@ -9,6 +9,7 @@ import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.utils.LeviUtils;
 
 import java.sql.Types;
 import java.util.List;
@@ -24,11 +25,11 @@ public class HqlManager {
 
     Session session;
 
-    public HqlManager(){
+    public HqlManager() {
         session = SessionFactoryUtil.getSession();
     }
 
-    public List<UserBean> getUserObjects(){
+    public List<UserBean> getUserObjects() {
         refresh();
         List<UserBean> users = session.createQuery("from UserBean").list();
         return users;
@@ -37,7 +38,7 @@ public class HqlManager {
         //return users;
     }
 
-    public List<GroupBean> getGroupObjects(){
+    public List<GroupBean> getGroupObjects() {
         refresh();
         List<GroupBean> groups = session.createQuery("from GroupBean").list();
         return groups;
@@ -46,7 +47,7 @@ public class HqlManager {
         //return groups;
     }
 
-    public List<String> getGroupIds(){
+    public List<String> getGroupIds() {
         refresh();
         List<String> groupIds = session.createQuery("select groupId from GroupBean").list();
         return groupIds;
@@ -54,12 +55,18 @@ public class HqlManager {
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
         refresh();
-        List<TaskBean> tasks = session.createQuery("from TaskBean as task left join fetch task.potentialGroup as group where" +
-                "group.groupId = "+groupId+" and assigned = false and active = true").list();
-        return tasks;
+        List<TaskBean> tasks = session.createQuery("from TaskBean as task where " +
+                "task.assigned = false and task.active = true").list();
+        List<TaskBean> unassigedTask = LeviUtils.newArrayList();
+        for (TaskBean task : tasks) {
+            if (task.getPotentialGroup().getGroupId().equals(groupId)) {
+                unassigedTask.add(task);
+            }
+        }
+        return unassigedTask;
     }
 
-    private void refresh(){
+    private void refresh() {
         session.close();
         session = SessionFactoryUtil.getSession();
     }

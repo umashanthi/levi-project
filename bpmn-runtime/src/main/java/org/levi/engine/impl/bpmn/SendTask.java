@@ -56,7 +56,7 @@ public class SendTask extends RunnableFlowNode {
         //}
     }
 
-    private void persistSendTask(SendTask sendTask) {
+     private void persistSendTask(SendTask sendTask) {
         HibernateDao dao = new HibernateDao();
         // todo remove later
 //        processInstance.setVariable("recipient", "eranda");
@@ -136,7 +136,7 @@ public class SendTask extends RunnableFlowNode {
     }
 
     public void run() {
-        processInstance.addRunning(getId());
+        processInstance.run(getId());
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
         String to = (String) processInstance.getVariable(getId()+"_to");
@@ -199,7 +199,7 @@ public class SendTask extends RunnableFlowNode {
         System.out.println("SendTask persistSendTask(): Content:" + content);
         marketingClient.sendMessage(to+"@localhost", subject,  content);
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
 
     }
 
