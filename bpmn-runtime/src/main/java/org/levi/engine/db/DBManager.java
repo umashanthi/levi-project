@@ -87,11 +87,6 @@ public interface DBManager {
 
     List<TaskBean> getActiveTasks(String processId);
 
-    // given the taskId, the id of the process instance that task belongs to should be retrieved
-    // TaskBean has a processInstanceId attribute
-    // Can this be retrieved from the TaskBean table?
-    String getProcessInstanceId(String taskId);
-
     TaskBean getTaskBean(String taskId);
 
     // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
@@ -134,11 +129,11 @@ public interface DBManager {
 
     void persistStartEvent(StartEvent startEvent);
 
-    void addRunningTask(String taskId);
+    void addRunningTask(String taskId, String processInstanceId);
 
-    void removeRunningTask(String taskId);
+    void removeRunningTask(String taskId, String processInstanceId);
 
-    void addCompletedTask(String taskId);
+    void addCompletedTask(String taskId, String processInstanceId);
 
     List<String> getDeploymentIds();
 

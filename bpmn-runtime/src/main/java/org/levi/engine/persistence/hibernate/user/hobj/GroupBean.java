@@ -1,6 +1,5 @@
 package org.levi.engine.persistence.hibernate.user.hobj;
 
-import org.levi.engine.identity.Group;
 import org.levi.engine.persistence.hibernate.HObject;
 
 import javax.persistence.*;

@@ -4,7 +4,6 @@ import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.runtime.ProcessInstance;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -95,9 +94,9 @@ public class UserBean extends HObject implements Serializable {
 
     /*
         @OneToMany - One user can assign many tasks
-        mappedBy = "assignee" - attribute mapped in TaskBean 
+        mappedBy = "assignee" - attribute mapped in TaskBean
         fetch = FetchType.LAZY - fetching 'UserBean' must not fetch its owned 'TaskBean's
-        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve 
+        CascadeType.ALL - Delete a UserBean must cause delete its data in all other tables  which he involve
      */
     @OneToMany(targetEntity = TaskBean.class, mappedBy = "assignee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<TaskBean> getAssigned() {

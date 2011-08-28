@@ -1,7 +1,6 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -9,6 +8,7 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -17,11 +17,8 @@ import java.util.Map;
 @Table(name = "task")
 @SecondaryTables(value = {@SecondaryTable(name = "task_owner"),@SecondaryTable(name = "task_assignee"),@SecondaryTable(name = "task_process_instance")})
 public class TaskBean extends HObject{
-    private String taskId;// primary key
-    //private String processInstanceId;
+    private String taskId;
     private GroupBean potentialGroup;
-    private ProcessInstanceBean processeInstance;
-    //private String processDefName;
     private String taskName;
     private String taskDescription;
     private UserBean owner;
@@ -30,7 +27,7 @@ public class TaskBean extends HObject{
     private Date endTime;
     private boolean isActive;
     private boolean isAssigned;
-    private Map<String,String> properties;
+    private Map<String,String> properties = new HashMap<String,String>();
     private boolean hasUserForm;
     private String formName;
     private String fromPath;
@@ -38,6 +35,7 @@ public class TaskBean extends HObject{
     private boolean isEndEvent;
 
     @Id
+    //This id should unique to each process (processId + taskId)
     public String getTaskId() {
         return taskId;
     }
@@ -46,16 +44,6 @@ public class TaskBean extends HObject{
         this.taskId = taskId;
     }
 
-    /*
-    public String getProcessInstanceId() {
-        return processInstanceId;
-    }
-
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
-    }
-    */
-
     @OneToOne(targetEntity = GroupBean.class, cascade = CascadeType.PERSIST)
     public GroupBean getPotentialGroup() {
         return potentialGroup;
@@ -63,16 +51,6 @@ public class TaskBean extends HObject{
 
     public void setPotentialGroup(GroupBean potentialGroup) {
         this.potentialGroup = potentialGroup;
-    }
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "processinstance", table = "task_process_instance")
-    public ProcessInstanceBean getProcesseInstance() {
-        return processeInstance;
-    }
-
-    public void setProcesseInstance(ProcessInstanceBean processeInstance) {
-        this.processeInstance = processeInstance;
     }
 
     public String getTaskName() {
@@ -127,16 +105,6 @@ public class TaskBean extends HObject{
         this.endTime = endTime;
     }
 
-    /*
-    public String getProcessDefName() {
-        return processDefName;
-    }
-
-    public void setProcessDefName(String processDefName) {
-        this.processDefName = processDefName;
-    }
-    */
-
     public boolean isActive() {
         return isActive;
     }
@@ -153,9 +121,10 @@ public class TaskBean extends HObject{
         isAssigned = assigned;
     }
 
-    @CollectionOfElements
-	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinTable( name="task_properties",joinColumns={ @JoinColumn(name="taskId")})
+    @ElementCollection
+    @CollectionTable(name="task_properties",joinColumns={ @JoinColumn(name="taskId")})
+	@MapKeyColumn(name = "property")
+    @Column(name = "value")
     public Map<String, String> getProperties() {
         return properties;
     }

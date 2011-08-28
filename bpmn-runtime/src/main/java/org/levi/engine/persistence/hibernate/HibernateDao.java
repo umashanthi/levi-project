@@ -39,6 +39,7 @@ public class HibernateDao {
             session.flush();
         } catch (ConstraintViolationException e) {
             System.out.println("[error] Constrained violated");
+            System.out.println(e);
         }
     }
 
