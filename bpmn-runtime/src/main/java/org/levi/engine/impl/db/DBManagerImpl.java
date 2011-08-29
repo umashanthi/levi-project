@@ -31,13 +31,6 @@ public class DBManagerImpl implements DBManager {
         qlManager = new HqlManager();
     }
 
-    /**
-     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
-     *
-     * @param user The user
-     */
-
-
     public void saveUser(UserBean user) {
         dao.save(user);
     }
@@ -132,12 +125,6 @@ public class DBManagerImpl implements DBManager {
         dao.update(user);
     }
 
-    /**
-     * Given the userId, return the list of groups the user has membership of
-     *
-     * @param userId
-     * @return
-     */
     public List<String> getGroupIds(String userId) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -223,7 +210,6 @@ public class DBManagerImpl implements DBManager {
         return task;
     }
 
-    // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
     public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
         TaskBean task = dao.getTask(taskId, processInstanceId);
         if (task != null) {
@@ -274,9 +260,6 @@ public class DBManagerImpl implements DBManager {
         }
     }
 
-    /*
-            This method can be use to remove the TASK from the task list of the USER
-     */
     public void removeTask(String taskId, String userId) {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         UserBean user = (UserBean) dao.getObject(UserBean.class, userId);
@@ -290,7 +273,6 @@ public class DBManagerImpl implements DBManager {
             EngineDataBean bean = getEngineDataBean();
             Bean2Impl b2i = new Bean2Impl();
             engineData = b2i.engineData(bean);
-            //TODO need to clarified the exception
         } catch (Exception e) {
             engineData = new EngineData();
         }
