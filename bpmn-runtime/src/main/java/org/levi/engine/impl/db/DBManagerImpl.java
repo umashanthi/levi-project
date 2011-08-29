@@ -162,10 +162,6 @@ public class DBManagerImpl implements DBManager {
         dao.remove(DeploymentBean.class, processId);
     }
 
-    public void updateProcess(ProcessInstanceBean process) {
-        dao.update(process);
-    }
-
     public void saveProcessInstance(ProcessInstanceBean process) {
         dao.save(process);
     }

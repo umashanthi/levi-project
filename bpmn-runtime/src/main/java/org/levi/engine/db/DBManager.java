@@ -24,11 +24,12 @@ import java.util.Map;
 
 public interface DBManager {
 
-    /**
-     * This method saves a UserBean to the database; if the UserBean already exists, it updates the attributes
-     *
-     * @param user The user
-     */
+    EngineData getEngineData();
+
+    EngineDataBean getEngineDataBean();
+
+    
+
     void saveUser(UserBean user);
 
     void saveGroup(GroupBean group);
@@ -39,19 +40,25 @@ public interface DBManager {
 
     void addUserToGroup(String userId, String groupId);
 
-    void deleteUser(String userId);        //?? Only ids or the UserBean object?
+    void deleteUser(String userId);
 
     void deleteGroup(String groupId);
 
-    void removeUserFromGroup(String userId, String groupId); //?? UserBean& Group objects or simple the ids?
+    void removeUserFromGroup(String userId, String groupId);
 
-    /**
-     * Given the userId, return the list of groups the user has membership of
-     *
-     * @param userId
-     * @return
-     */
     List<String> getGroupIds(String userId);
+
+    List<UserBean> getUserList();
+
+    List<GroupBean> getGroupList();
+
+    List<String> getGroupIdList();
+
+    void saveGroup(Group group);
+
+    void saveUser(User user);
+    
+
 
     void saveTask(TaskBean task);
 
@@ -59,11 +66,25 @@ public interface DBManager {
 
     void updateTask(TaskBean task);
 
+
+
     void saveProcess(DeploymentBean process);
 
     void deleteProcess(String processId);
 
-    void updateProcess(ProcessInstanceBean process);
+    void updateProcess(DeploymentBean process);
+
+    List<DeploymentBean> getDeployedProcessList();
+
+    void persistDeployment(Deployment deployment);
+
+    void undeployProcess(String processId);
+
+    String getProcessDefinition(String processId);
+
+    List<String> getDeploymentIds();
+
+
 
     void saveProcessInstance(ProcessInstanceBean process);
 
@@ -71,13 +92,19 @@ public interface DBManager {
 
     void updateProcessInstance(ProcessInstanceBean process);
 
-    List<TaskBean> getUserTaskList(String userId);
-
     List<ProcessInstanceBean> getRunningProcessesInstancesList();
 
-    List<DeploymentBean> getDeployedProcessList();
+    void persistProcessInstance(ProcessInstance processInstance);
+
+    public void setVariables(String processId, Map<String, String> variables);
+
+    public Map<String, String> getVariables(String processId);
+
+
 
     UserBean getAssigneeForTask(String taskId);
+
+    List<TaskBean> getUserTaskList(String userId);
 
     List<TaskBean> getActiveTasks();
 
@@ -89,37 +116,13 @@ public interface DBManager {
 
     TaskBean getTaskBean(String taskId);
 
-    // Update the database to set assignee=username for the Task identified by taskId & processInstanceId
     boolean claimUserTask(String taskId, String processInstanceId, String username);
-
-    List<UserBean> getUserList();
-
-    List<GroupBean> getGroupList();
-
-    List<String> getGroupIdList();
 
     void assignTask(String taskId, String userId);
 
     void unassignTask(String taskId);
 
     void removeTask(String taskId, String userId);
-
-    EngineData getEngineData();
-
-    EngineDataBean getEngineDataBean();
-
-    void persistDeployment(Deployment deployment);
-
-
-    void undeployProcess(String processId);
-
-    void saveGroup(Group group);
-
-    void saveUser(User user);
-
-    void persistProcessInstance(ProcessInstance processInstance);
-
-    String getProcessDefinition(String processId);
 
     List<String> getCompletedTasks(String processId);
 
@@ -135,13 +138,8 @@ public interface DBManager {
 
     void addCompletedTask(String taskId, String processInstanceId);
 
-    List<String> getDeploymentIds();
-
     public String getPotentialGroup(String taskId);
 
-    public void setVariables(String processId, Map<String, String> variables);
-
-    public Map<String, String> getVariables(String processId);
 
     void closeSession();
 }

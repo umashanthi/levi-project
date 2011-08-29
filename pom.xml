@@ -97,7 +97,6 @@
             <artifactId>javassist</artifactId>
             <version>3.12.1.GA</version>
         </dependency>
-        
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
