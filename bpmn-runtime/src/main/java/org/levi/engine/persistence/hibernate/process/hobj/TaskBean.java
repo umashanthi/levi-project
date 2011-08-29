@@ -172,4 +172,8 @@ public class TaskBean extends HObject{
     public void setEndEvent(boolean endEvent) {
         isEndEvent = endEvent;
     }
+
+    public String getProcessInstanceId(){
+        return (taskId.split("#"))[0];   
+    }
 }
