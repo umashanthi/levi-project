@@ -13,7 +13,7 @@ import java.util.*;
 @SecondaryTable(name = "process_started_user")
 public class ProcessInstanceBean extends HObject {
     private UserBean startUser;
-    private String processInstanceId;
+    private String processId;
     private DeploymentBean deployedProcess;
     private Map<String, String> variables = new HashMap<String,String>();
     private Map<String, TaskBean> runningTasks = new HashMap<String,TaskBean>();
@@ -25,12 +25,12 @@ public class ProcessInstanceBean extends HObject {
 
 
     @Id
-    public String getProcessInstanceId() {
-        return processInstanceId;
+    public String getProcessId() {
+        return processId;
     }
 
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
 
@@ -44,7 +44,7 @@ public class ProcessInstanceBean extends HObject {
     }
 
     @ElementCollection
-    @CollectionTable(name="process_variables", joinColumns ={ @JoinColumn(name="processInstanceId")})
+    @CollectionTable(name="process_variables", joinColumns ={ @JoinColumn(name="processId")})
     @MapKeyColumn(name = "variable")
     @Column(name = "value")
     public Map<String, String> getVariables() {
@@ -57,9 +57,9 @@ public class ProcessInstanceBean extends HObject {
 
 //    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
 //    @MapKey(name = "taskId")
-//    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+//    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @ElementCollection
-    @CollectionTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @CollectionTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getRunningTasks() {
         return runningTasks;
@@ -71,9 +71,9 @@ public class ProcessInstanceBean extends HObject {
 
 //    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
 //    @MapKey(name = "taskId")
-//    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+//    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @ElementCollection
-    @CollectionTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processInstanceId")})
+    @CollectionTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getCompletedTasks() {
         return completedTasks;

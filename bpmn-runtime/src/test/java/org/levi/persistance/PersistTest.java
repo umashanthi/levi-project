@@ -98,7 +98,7 @@ public class PersistTest {
         dao.save(task2);
 
         ProcessInstanceBean instance1 = new ProcessInstanceBean();
-        instance1.setProcessInstanceId("p1");
+        instance1.setProcessId("p1");
         instance1.setDeployedProcess(deployment);
         instance1.getRunningTasks().put(task1.getTaskId(),task1);
         instance1.getCompletedTasks().put(task2.getTaskId(),task2);
@@ -125,7 +125,7 @@ public class PersistTest {
         dao.save(task4);
 
         ProcessInstanceBean instance2 = new ProcessInstanceBean();
-        instance2.setProcessInstanceId("p2");
+        instance2.setProcessId("p2");
         instance2.setDeployedProcess(deployment);
         instance2.getRunningTasks().put(task3.getTaskId(),task3);
         instance2.getCompletedTasks().put(task4.getTaskId(),task4);
@@ -152,7 +152,7 @@ public class PersistTest {
         dao.save(task6);
 
         ProcessInstanceBean instance3 = new ProcessInstanceBean();
-        instance3.setProcessInstanceId("p3");
+        instance3.setProcessId("p3");
         instance3.setDeployedProcess(deployment);
         instance3.getRunningTasks().put(task5.getTaskId(),task5);
         instance3.getCompletedTasks().put(task6.getTaskId(),task6);
@@ -165,9 +165,9 @@ public class PersistTest {
         EngineDataBean engine = new EngineDataBean();
         engine.setId("engine");
         engine.getDeployedProcesses().put(deployment.getDefinitionsId(), deployment);
-        engine.getRunningProcesses().put(instance1.getProcessInstanceId(),instance1);
-        engine.getStoppedProcesses().put(instance2.getProcessInstanceId(),instance2);
-        engine.getPausedProcesses().put(instance3.getProcessInstanceId(),instance3);
+        engine.getRunningProcesses().put(instance1.getProcessId(),instance1);
+        engine.getStoppedProcesses().put(instance2.getProcessId(),instance2);
+        engine.getPausedProcesses().put(instance3.getProcessId(),instance3);
 
         dao.save(engine);
 

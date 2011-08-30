@@ -192,15 +192,15 @@ Released : 20090303
                         boolean isStopBtnActive = false; // by default it is false;
                         //show whether the process is started
                         if (request.getParameter("isProcessStarted") != null
-                                && request.getParameter("processInstanceId") != null
+                                && request.getParameter("processId") != null
                                 && request.getParameter("isProcessStarted").equals("true")
-                                && request.getParameter("processInstanceId").equals(process.toString())) {
+                                && request.getParameter("processId").equals(process.toString())) {
                             isStartBtnActive = false;
                             isStopBtnActive = true;
                         } else if (request.getParameter("isProcessStopped") != null
-                                && request.getParameter("processInstanceId") != null
+                                && request.getParameter("processId") != null
                                 && request.getParameter("isProcessStopped").equals("true")
-                                && request.getParameter("processInstanceId").equals(process.toString())) {
+                                && request.getParameter("processId").equals(process.toString())) {
                             isStartBtnActive = true;
                             isStopBtnActive = false;
                         } else {

@@ -174,6 +174,11 @@ public class TaskBean extends HObject{
     }
 
     public String getProcessInstanceId(){
-        return (taskId.split("#"))[0];   
+        return (taskId.split("#"))[0];
     }
+
+    public void setProcessInstanceId(String processId){
+    }
+
+
 }

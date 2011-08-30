@@ -316,7 +316,6 @@ public class ProcessInstance extends BPMNJacobRunnable {
                 soup.dequeueReaction();
             }
             if (soup.isComplete()) {
-                TaskBean taskBeanObj;
                 for (String id : runningTaskIds) {
                     dbManager.addRunningTask(id, this.processId);
                 }
