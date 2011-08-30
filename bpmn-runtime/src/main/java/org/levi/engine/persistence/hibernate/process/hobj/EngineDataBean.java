@@ -98,6 +98,6 @@ public class EngineDataBean extends HObject {
         if (runningProcesses == null) {
             runningProcesses = new HashMap<String, ProcessInstanceBean>();
         }
-        runningProcesses.put(processInstanceBean.getProcessInstanceId(), processInstanceBean);
+        runningProcesses.put(processInstanceBean.getProcessId(), processInstanceBean);
     }
 }
