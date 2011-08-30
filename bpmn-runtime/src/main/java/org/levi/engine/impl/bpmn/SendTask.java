@@ -123,14 +123,11 @@ public class SendTask extends RunnableFlowNode {
             starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-            starteventbean.setProcesseInstance(processInstanceBean);
-            //UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            //starteventbean.setAssignee(user);
+            processInstanceBean.getRunningTasks().put(starteventbean.getTaskId(),starteventbean);
             starteventbean.setFormName(task.getName());
             starteventbean.setTaskName(task.getName());
-            // starteventbean.setHasUserForm(hasInputForm());
-            //starteventbean.setFromPath(task.getInputForm());
             dao.save(starteventbean);
+            dao.save(processInstanceBean);
         }
         dao.close();
     }
