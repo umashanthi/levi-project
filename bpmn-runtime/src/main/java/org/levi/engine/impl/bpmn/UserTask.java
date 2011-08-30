@@ -69,7 +69,7 @@ public class UserTask extends RunnableFlowNode {
     }
 
     public String getId() {
-        return task.getId();
+        return processInstance.getProcessId() + '#' + task.getId();
     }
 
     public TUserTask getTTask(){
