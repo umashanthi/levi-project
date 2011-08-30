@@ -318,7 +318,7 @@ public class DBManagerImpl implements DBManager {
         DeploymentBean deploymentBean = (DeploymentBean) dao.getObject(DeploymentBean.class, processInstance.getDefinitionsId());
         assert deploymentBean != null;
         ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
-        processInstanceBean.setProcessInstanceId(processInstance.getProcessId());
+        processInstanceBean.setProcessId(processInstance.getProcessId());
         processInstanceBean.setDeployedProcess(deploymentBean);
         UserBean userBean = new UserBean();
         userBean.setUserId(processInstance.getStartUserId());
