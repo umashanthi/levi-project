@@ -82,5 +82,32 @@ public class LeviUtils {
     public static String getFileName(String path) {
         return path.substring(path.lastIndexOf('/')+1, path.length());
     }
+
+    public static String getNotProcessId(String Id) {
+        if (Id == null) {
+            throw new NullPointerException("Id is null.");
+        }
+        String[] parts = Id.split("#");
+        if (parts.length <= 1) {
+            return  parts[0];
+        } else {
+            return parts[1];
+        }
+    }
+
+    public static String getNotTaskId(String Id) {
+        if (Id == null) {
+            throw new NullPointerException("Id is null.");
+        }
+        return Id.split("#")[0];
+    }
+
+    public static String combineTaskId(String processId, String taskId) {
+        if (processId != null && taskId != null) {
+            return processId + "#" + taskId;
+        } else {
+            throw new NullPointerException("Either Process Id or task Id is null.");
+        }
+    }
 }
 

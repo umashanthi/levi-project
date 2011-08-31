@@ -24,18 +24,20 @@ public class ScriptTask extends RunnableFlowNode {
         private String name;
 
         public Builder(TScriptTask scriptTask) {
-           script = scriptTask.getScript().newXMLStreamReader().getText();
-           language = scriptTask.getScriptFormat();
-           if (language == null) {
-               language = ScriptEngines.DEFAULT_SCRIPTING_LANGUAGE;
-           }
-           id = LeviUtils.trimAndReplace(scriptTask.getId());
-           name = scriptTask.getName();
+            script = scriptTask.getScript().newXMLStreamReader().getText();
+            language = scriptTask.getScriptFormat();
+            if (language == null) {
+                language = ScriptEngines.DEFAULT_SCRIPTING_LANGUAGE;
+            }
+            id = LeviUtils.trimAndReplace(scriptTask.getId());
+            name = scriptTask.getName();
         }
+
         public Builder processInstance(ProcessInstance process) {
             this.processInstance = process;
             return this;
         }
+
         public ScriptTask build() {
             return new ScriptTask(this);
         }
@@ -80,7 +82,7 @@ public class ScriptTask extends RunnableFlowNode {
     }
 
     public String getId() {
-        return id;
+       return LeviUtils.combineTaskId(processInstance.getProcessId(), id);
     }
 
     public void resumeTask() {
@@ -89,7 +91,7 @@ public class ScriptTask extends RunnableFlowNode {
 
     @Override
     public String toString() {
-        return "[" + language + ", " + resultVariableName +", "+ processInstance +", " + script +"]";
+        return "[" + language + ", " + resultVariableName + ", " + processInstance + ", " + script + "]";
     }
 
     // todo

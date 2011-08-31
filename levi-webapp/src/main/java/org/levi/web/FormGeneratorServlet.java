@@ -30,9 +30,9 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         /* Retrieve TaskBean object for the given taskId */
         assert request.getParameter("taskId") != null;
         String taskId = request.getParameter("taskId");
-        TaskBean taskBean = dbManager.getTaskBean(taskId);
-        assert taskBean != null;
-        String processInsId = taskBean.getProcessInstanceId();
+       // TaskBean taskBean = dbManager.getTaskBean(taskId);
+        //assert taskBean != null;
+        String processInsId = request.getParameter("processInstanceId");
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
         /* retrieve process variables */

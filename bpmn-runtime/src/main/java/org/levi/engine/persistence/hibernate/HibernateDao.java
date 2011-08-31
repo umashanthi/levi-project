@@ -94,8 +94,8 @@ public class HibernateDao {
 
     public TaskBean getTask(String taskId, String processInstanceId) {
         Criteria criteria = session.createCriteria(TaskBean.class);
-        criteria.add(Restrictions.eq("taskId", taskId));
-        criteria.add(Restrictions.eq("processeInstance.processId", processInstanceId));
+        criteria.add(Restrictions.eq("taskId", processInstanceId+"#"+taskId));
+       // criteria.add(Restrictions.eq("processeInstance.processId", processInstanceId));
         if (criteria.list().size() > 0) {
             return (TaskBean) criteria.list().get(0);
         } else {

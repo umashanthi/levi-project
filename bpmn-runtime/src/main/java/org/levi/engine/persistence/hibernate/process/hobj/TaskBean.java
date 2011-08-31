@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cascade;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
+import org.levi.engine.utils.LeviUtils;
 
 import javax.persistence.*;
 
@@ -174,7 +175,7 @@ public class TaskBean extends HObject{
     }
 
     public String getProcessInstanceId(){
-        return (taskId.split("#"))[0];
+        return LeviUtils.getNotTaskId(taskId);
     }
 
     public void setProcessInstanceId(String processId){

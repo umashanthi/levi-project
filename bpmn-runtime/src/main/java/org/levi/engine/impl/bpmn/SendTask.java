@@ -6,6 +6,7 @@ import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSendTask;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -180,7 +181,7 @@ public class SendTask extends RunnableFlowNode {
     }
 
     public String getId() {
-        return task.getId();
+        return LeviUtils.combineTaskId(processInstance.getProcessId(), task.getId());
     }
 
     public void resumeTask() throws MessagingException {

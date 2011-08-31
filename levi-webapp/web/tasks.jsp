@@ -1,6 +1,7 @@
 <%@ page import="org.levi.engine.db.DBManager" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.TaskBean" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.levi.engine.utils.LeviUtils" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -35,7 +36,7 @@ Released : 20090303
 <body>
 
 <script type="text/javascript">
-    function displayForm(taskId, formPath) {
+    function displayForm(taskId, processInstanceId,formPath) {
         popwidth = 600
         popheight = 600
         function getpos() {
@@ -48,11 +49,11 @@ Released : 20090303
         }
 
         getpos()
-        formWindow = window.open("vel?taskId=" + taskId + "&formPath=" + formPath, "", "location=0,status=0,scrollbars=1,width=600,height=600");
+        formWindow = window.open("vel?taskId=" + taskId + "&processInstanceId="+processInstanceId+"&formPath=" + formPath, "", "location=0,status=0,scrollbars=1,width=600,height=600");
         formWindow.moveTo(leftpos, toppos);
     }
-    function claimTask(username, taskId, processInstanceId) {
-        var form = document.claimTaskForm;
+    function claimTask(username, taskId, processInstanceId,submitFormName) {
+        var form = document.getElementById(submitFormName);
         form.method = "post";
         form.action = "taskAction?action=claimTask&taskId=" + taskId + "&username=" + username + "&processInstanceId=" + processInstanceId;
         form.submit();
@@ -128,7 +129,7 @@ Released : 20090303
                     String taskFromPath = task.getFromPath(); %>
 
                 <input type="button" value="Start Form"
-                       onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
+                       onclick="displayForm('<%=LeviUtils.getNotProcessId(taskId)%>','<%=LeviUtils.getNotTaskId(taskId)%>','<%=taskFromPath%>'); return false">
 
                 <%
                 } else {
@@ -137,7 +138,7 @@ Released : 20090303
                     String taskFromPath = task.getFromPath();
                 %>
                 <input type="button" value="Start Task"
-                       onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
+                       onclick="displayForm('<%=LeviUtils.getNotProcessId(taskId)%>','<%=LeviUtils.getNotTaskId(taskId)%>','<%=taskFromPath%>'); return false">
                 <%}%>
             </td>
             <%
@@ -161,13 +162,13 @@ Released : 20090303
                 for (TaskBean unassignedTask : unassignedTaskList) { %>
 
         <tr>
-            <form name="claimTaskForm" action="" method="post">
+            <form id="<%=unassignedTask.getTaskId()+"Form"%>" action="" method="post">
                 <td>
                     <%=unassignedTask.getTaskName()%>
                 </td>
                 <td>
-                    <input type="button" value="Claim Task"
-                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=unassignedTask.getTaskId()%>','<%=unassignedTask.getProcesseInstance().getProcessId()%>');return false">
+                    <input type="button" value="Claim Task" id="<%=unassignedTask.getTaskName()+"Button"%>"
+                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=LeviUtils.getNotProcessId(unassignedTask.getTaskId())%>','<%=LeviUtils.getNotTaskId(unassignedTask.getTaskId())%>','<%=unassignedTask.getTaskId()+"Form"%>');return false">
                 </td>
             </form>
         </tr>
