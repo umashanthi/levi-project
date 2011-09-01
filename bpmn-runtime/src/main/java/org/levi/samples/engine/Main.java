@@ -61,18 +61,18 @@ public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
         Main.createDb();
-        engine.deploy("/home/ishan/devel/levi/bpmnsamples/tests/0001.lar");
+        engine.deploy("/home/ishan/devel/levi/bpmnsamples/troubleTicket.lar");
         //engine.deploy("/home/ishan/Desktop/bpmnsamples/HelloWorldScriptTask.lar");
         //engine.deploy(Constants.LAR_PATH + "book_fig61.lar"); // ProduceAdvertisement
         //engine.deploy(Constants.LAR_PATH + "book_fig49.1.lar"); // Process:Figure-49
         //engine.deploy(Constants.LAR_PATH + "book_fig49.1modified.lar");
         //engine.deploy(Constants.LAR_PATH + "book_fig49.1modified2.lar");
-        Map<String, Object> variables = LeviUtils.newHashMap(1);
-        variables.put("i", 0);
-        long startTime = System.currentTimeMillis();
-        engine.startProcess("test0001", variables, "admin");      // "ProduceAdvertisement"
-        long endTime = System.currentTimeMillis();
-        System.out.println("Time Elapsed: " + (endTime - startTime));
+        //Map<String, Object> variables = LeviUtils.newHashMap(1);
+        //variables.put("i", 0);
+        //long startTime = System.currentTimeMillis();
+        //engine.startProcess("test0001", variables, "admin");      // "ProduceAdvertisement"
+        //long endTime = System.currentTimeMillis();
+        //System.out.println("Time Elapsed: " + (endTime - startTime));
         //engine.undeploy("ExclusiveGatewayTest1");
 
         //ScriptTaskTest test = new ScriptTaskTest();
