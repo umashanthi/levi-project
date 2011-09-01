@@ -101,7 +101,7 @@ public class ProcessDefinition implements Serializable {
                 }
             } else if (e instanceof TStartEvent) {
                 startEvent = (TStartEvent) e;
-            } else {
+            } else {           
                 flowElementMap.put(e.getId(), e);
             }
         }

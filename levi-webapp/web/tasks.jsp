@@ -1,6 +1,7 @@
 <%@ page import="org.levi.engine.db.DBManager" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.TaskBean" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.levi.engine.utils.LeviUtils" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -35,7 +36,7 @@ Released : 20090303
 <body>
 
 <script type="text/javascript">
-    function displayForm(taskId, formPath) {
+    function displayForm(taskId, processInstanceId,formPath) {
         popwidth = 600
         popheight = 600
         function getpos() {
@@ -48,11 +49,11 @@ Released : 20090303
         }
 
         getpos()
-        formWindow = window.open("vel?taskId=" + taskId + "&formPath=" + formPath, "", "location=0,status=0,scrollbars=1,width=600,height=600");
+        formWindow = window.open("vel?taskId=" + taskId + "&processInstanceId="+processInstanceId+"&formPath=" + formPath, "", "location=0,status=0,scrollbars=1,width=600,height=600");
         formWindow.moveTo(leftpos, toppos);
     }
-    function claimTask(username, taskId, processInstanceId) {
-        var form = document.claimTaskForm;
+    function claimTask(username, taskId, processInstanceId,submitFormName) {
+        var form = document.getElementById(submitFormName);
         form.method = "post";
         form.action = "taskAction?action=claimTask&taskId=" + taskId + "&username=" + username + "&processInstanceId=" + processInstanceId;
         form.submit();
@@ -60,10 +61,19 @@ Released : 20090303
 </script>
 <!-- start header -->
 <div id="header">
+
     <div id="logo">
         <h1><a href="#"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;</a></h1>
 
-        <p>The native bpmn2.0 execution engine</p>
+
+        <p>The Native BPMN 2.0 Execution Engine</p>
+        <%
+            if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
+        <div id="name">You are logged in as <span>
+               <% out.print(session.getAttribute("username").toString()); %> </span>as a member of <span><%
+            out.print(session.getAttribute("userGroupList").toString()); %></span></div>
+        <%}%>
+
     </div>
     <div id="menu">
         <ul id="main">
@@ -96,32 +106,6 @@ Released : 20090303
         <% if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {
         %>
         <tr>
-            <h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3>
-        </tr>
-        <%
-            if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
-                // display unassigned tasks
-                assert request.getSession().getAttribute("unassignedTasks") != null;
-                List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
-                if (unassignedTaskList.size() > 0) {
-                    for (TaskBean task : unassignedTaskList) { %>
-
-        <tr>
-            <form name="claimTaskForm" action="" method="post">
-                <td>
-                    <%=task.getTaskName()%>
-                </td>
-                <td>
-                    <input type="button" value="Claim Task"
-                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=task.getTaskId()%>','<%=task.getProcesseInstance().getProcessId()%>');return false">
-                </td>
-            </form>
-        </tr>
-        <%
-                }
-            }
-        } else { %>
-        <tr>
             <h3><a href="tasks">My Tasks </a></h3></tr>
         <tr>
             <%
@@ -145,20 +129,58 @@ Released : 20090303
                     String taskFromPath = task.getFromPath(); %>
 
                 <input type="button" value="Start Form"
-                       onclick="displayForm('<%=taskId%>','<%=taskFromPath%>'); return false">
+                       onclick="displayForm('<%=LeviUtils.getNotProcessId(taskId)%>','<%=LeviUtils.getNotTaskId(taskId)%>','<%=taskFromPath%>'); return false">
 
-                <%} else {%>
-                <input type="button" value="Start Task" onclick="">
+                <%
+                } else {
+                    String taskId = task.getTaskId();
+                    String taskFormName = task.getFormName();
+                    String taskFromPath = task.getFromPath();
+                %>
+                <input type="button" value="Start Task"
+                       onclick="displayForm('<%=LeviUtils.getNotProcessId(taskId)%>','<%=LeviUtils.getNotTaskId(taskId)%>','<%=taskFromPath%>'); return false">
                 <%}%>
             </td>
-            <%--</form>--%>
+            <%
+                    }
+                }
+            %>
         </tr>
-        <% }
-        }
-        }
-        } else {
+    </table>
+    <table>
+        <br>
+        <br>
+        <tr>
+            <h3><a href="tasks?unassigned=true">Unassigned Tasks </a></h3>
+        </tr>
+        <%
+            //         if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
+            // display unassigned tasks
+            assert request.getSession().getAttribute("unassignedTasks") != null;
+            List<TaskBean> unassignedTaskList = (List<TaskBean>) request.getSession().getAttribute("unassignedTasks");
+            if (unassignedTaskList.size() > 0) {
+                for (TaskBean unassignedTask : unassignedTaskList) { %>
 
-            //nothing
+        <tr>
+            <form id="<%=unassignedTask.getTaskId()+"Form"%>" action="" method="post">
+                <td>
+                    <%=unassignedTask.getTaskName()%>
+                </td>
+                <td>
+                    <input type="button" value="Claim Task" id="<%=unassignedTask.getTaskName()+"Button"%>"
+                           onclick="claimTask('<%=session.getAttribute("username")%>','<%=LeviUtils.getNotProcessId(unassignedTask.getTaskId())%>','<%=LeviUtils.getNotTaskId(unassignedTask.getTaskId())%>','<%=unassignedTask.getTaskId()+"Form"%>');return false">
+                </td>
+            </form>
+        </tr>
+        <%
+                }
+            }
+
+            //     } else { %>
+
+        <% } else {
+
+            response.sendRedirect("login.jsp?error=not-logged");
         }%>
     </table>
 

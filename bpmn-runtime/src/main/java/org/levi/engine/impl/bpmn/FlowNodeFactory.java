@@ -57,8 +57,8 @@ public class FlowNodeFactory {
     // this method will be invoked by RunnableFlowNode objects other than
     // the Gateway objects.
     public synchronized RunnableFlowNode getNextNode(RunnableFlowNode currentFlowNode) {
-        // get next seq flow (from the source based map)
-        SequenceFlowSet sfs = processDefinition.getSourceSequenceFlowSet(currentFlowNode.getId());
+        // get next seq flow (from the source based map) ]
+        SequenceFlowSet sfs = processDefinition.getSourceSequenceFlowSet(LeviUtils.getNotProcessId(currentFlowNode.getId()));
         if (sfs.isMultiSet()) {// TODO this method name is funny! i know :P
             // TODO we do not support this yet.
             throw new RuntimeException("sequence flow set size is greater than 1");
@@ -79,7 +79,7 @@ public class FlowNodeFactory {
         if (id == null) {
             throw new IllegalArgumentException("Trying to create a new node from a null id");
         }
-        TFlowElement e = processDefinition.getFlowElement(id);
+        TFlowElement e = processDefinition.getFlowElement(LeviUtils.getNotProcessId(id));
         // task, gateway, intermediate event, end event
         RunnableFlowNode flowNode = getNode(e.getId());
         if (flowNode == null) {
@@ -108,7 +108,7 @@ public class FlowNodeFactory {
             // TODO is this thread safe?
             registerNode(flowNode);
         } else {
-            System.err.println("flownode already exists: " + flowNode.getId());
+            //System.err.println("flownode already exists: " + flowNode.getId());
         }
         if (flowNode == null) {
             throw new NullPointerException("Could not find the flow node");

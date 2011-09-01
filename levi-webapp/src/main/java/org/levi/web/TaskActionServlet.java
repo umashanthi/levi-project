@@ -1,5 +1,6 @@
 package org.levi.web;
 
+
 import org.levi.engine.db.DBManager;
 
 import javax.servlet.ServletException;
@@ -35,7 +36,12 @@ public class TaskActionServlet extends HttpServlet {
             assert request.getSession().getAttribute("dbManager") != null;
             DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
             dbManager.claimUserTask(taskId, processInstanceId, username);
+            if(request.getParameter("ord")!=null){
+               response.sendRedirect("ordering/tasks.jsp");
+            }
+            else{
             response.sendRedirect("tasks");
+            }
         } else {
             //other task actions should be handled here
         }

@@ -8,6 +8,7 @@ import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.bpmn.parser.ProcessDefinition;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.levi.engine.utils.ObjectLoader;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class RuntimeServiceImpl implements RuntimeService {
         if (engineData == null) {
             throw new LeviException("EngineData is null.");
         }
-        this.engineData = engineData;        
+        this.engineData = engineData;
     }
 
     public boolean start() {
@@ -64,6 +65,7 @@ public class RuntimeServiceImpl implements RuntimeService {
         }
         // create a new process instance with that processDefinition
         ProcessInstance processInstance = new ProcessInstance(processDefinition, variables);
+        //processInstance.setVariables(variables);
         processInstance.setStartUserId(userId);
 
         System.out.println("[Info] Process running : " + definitionsId);
@@ -136,11 +138,18 @@ public class RuntimeServiceImpl implements RuntimeService {
         //completed.add("theStart");
         List<String> running = dbManager.getRunningTasks(processId);
         //running.add("theTask2");
-        
+        Map<String, Object> variables = LeviUtils.newHashMap();
+        Map<String, String> processVariables = dbManager.getVariables(processId);
+        if (processVariables != null) {
+            for (String key : processVariables.keySet()) {
+                variables.put(key, processVariables.get(key));
+            }
+        }
         ProcessInstance p = new ProcessInstance.Builder(processDefinition)
                 .completedIds(completed)
                 .runningIds(running)
                 .processId(processId)
+                .variables(variables)
                 .build();
         p.resume(running.get(0));
         return true;

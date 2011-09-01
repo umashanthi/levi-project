@@ -60,13 +60,12 @@ public class UserManagerServlet extends HttpServlet {
             dbManager.saveUser(user);
             // retrieve selected groups for this user
             // get the group name lists, get the request parameter for checkbox & radio, , get groups, and add groups to the user bean
-            List<String> groupIdList=dbManager.getGroupIdList();
-            for(String grpId:groupIdList){
-                if(request.getParameter(grpId)!=null){
-                    dbManager.addUserToGroup(username,grpId);
-                }
-                else{
-                    dbManager.removeUserFromGroup(username,grpId);
+            List<String> groupIdList = dbManager.getGroupIdList();
+            for (String grpId : groupIdList) {
+                if (request.getParameter(grpId) != null) {
+                    dbManager.addUserToGroup(username, grpId);
+                } else {
+                    dbManager.removeUserFromGroup(username, grpId);
                 }
             }
 
@@ -85,15 +84,25 @@ public class UserManagerServlet extends HttpServlet {
             user.setUserId(username);
             user.setPassword(password);
             dbManager.saveUser(user);
-            List<String> groupIdList=dbManager.getGroupIdList();
-            for(String grpId:groupIdList){
-                if(request.getParameter(grpId)!=null){
-                    dbManager.addUserToGroup(username,grpId);
-                }
-                else{
-                    dbManager.removeUserFromGroup(username,grpId);
+            List<String> groupIdList = dbManager.getGroupIdList();
+            for (String grpId : groupIdList) {
+                if (request.getParameter(grpId) != null) {
+                    dbManager.addUserToGroup(username, grpId);
+                } else {
+                    dbManager.removeUserFromGroup(username, grpId);
                 }
             }
+            /* */
+            UserBean userBean = dbManager.getUser(request.getSession().getAttribute("username").toString());
+            String userGroupsString = "";
+            if (userBean.getUserGroups() != null && userBean.getUserGroups().size() > 0) {
+                for (GroupBean grp : userBean.getUserGroups()) {
+                    userGroupsString += grp.getGroupName() + " , ";
+                }
+            }
+            request.getSession().setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
+
+            /* */
             response.sendRedirect("usrmng");
         }
     }

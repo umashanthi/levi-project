@@ -13,7 +13,6 @@ import java.util.List;
 public final class ParallelGateway extends Gateway {
     private final List<TSequenceFlow> output;
 
-    @Override
     public void resumeTask() {
         throw new AssertionError("resumeTask() is not intended to be called.");
     }
@@ -40,11 +39,11 @@ public final class ParallelGateway extends Gateway {
     }
 
     public List<TSequenceFlow> evaluate() {
-        System.out.println("<Parallel Gateway " + getName() + " Evaluating>");
+        //System.out.println("<Parallel Gateway " + getName() + " Evaluating>");
         output.clear();
         if (compare()) {
-            for (TSequenceFlow sf : outgoingSeqFlowSet) {
-                output.add(sf);
+            for (int i = 0; i < outgoingSeqFlowSet.size(); ++i) {
+                output.add(outgoingSeqFlowSet.get(i));
             }
         }
 
@@ -54,7 +53,8 @@ public final class ParallelGateway extends Gateway {
     private boolean compare() {
         boolean result = false;
         if (incomingTokens.size() == incomingSeqFlowSet.size()) {
-            for (TSequenceFlow sf : incomingSeqFlowSet) {
+            for (int i = 0; i < incomingSeqFlowSet.size(); ++i) {
+                TSequenceFlow sf = incomingSeqFlowSet.get(i);
                 for (String token : incomingTokens) {
                     if (token.equals(sf.getId())) {
                         result = true;

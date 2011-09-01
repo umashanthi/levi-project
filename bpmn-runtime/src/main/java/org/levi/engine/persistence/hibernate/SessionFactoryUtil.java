@@ -2,7 +2,7 @@ package org.levi.engine.persistence.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.levi.engine.persistence.hibernate.process.hobj.*;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
@@ -19,19 +19,14 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 public class SessionFactoryUtil {
 
     /**
-     * The single instance of hibernate SessionFactory
-     */
-    //private static SessionFactory sessionFactory;
-
-    /**
      * disable constructor to guaranty a single instance
      */
     private SessionFactoryUtil() {
     }
 
-
     private static SessionFactory sessionFactory;
-    private static AnnotationConfiguration config;
+    private static Configuration config;
+
     /**
      * Opens a session configured with the default settings.
      *
@@ -43,9 +38,9 @@ public class SessionFactoryUtil {
     }
 
     public static void init(){
-        config = new AnnotationConfiguration();
+        config = new Configuration();
         config.addAnnotatedClass(UserBean.class);
-        config.addAnnotatedClass(GroupBean.class);  //TODO need to transfer this to a default add
+        config.addAnnotatedClass(GroupBean.class);
         config.addAnnotatedClass(DeploymentBean.class);
         config.addAnnotatedClass(ProcessInstanceBean.class);
         config.addAnnotatedClass(TaskBean.class);

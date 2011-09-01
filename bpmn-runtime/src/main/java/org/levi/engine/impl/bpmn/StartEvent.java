@@ -4,6 +4,7 @@ import org.levi.engine.bpmn.Event;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 
 /**
@@ -50,32 +51,36 @@ public class StartEvent extends Event {
 
 
     public String getId() {
-        return startEvent.getId();
+        return LeviUtils.combineTaskId(processInstance.getProcessId(), startEvent.getId());
     }
 
-    public TStartEvent getTStartEvent(){
+    public String getName() {
+        return startEvent.getName();
+    }
+
+    public TStartEvent getTStartEvent() {
         return startEvent;
     }
 
-    public ProcessInstance getProcessInstance(){
+    public ProcessInstance getProcessInstance() {
         return processInstance;
     }
 
     public void run() {
         // todo see if a form is present and pause accordingly
-        processInstance.addRunning(this.getId());
+        processInstance.run(this.getId());
         if (hasInputForm()) {
             processInstance.pause(this.getId());
         } else {
             resumeTask();
         }
-        //processInstance.addRunning(getTaskId());
+        //processInstance.run(getTaskId());
         //resumeTask();
     }
 
     public void resumeTask() {
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
     }
 
     public boolean hasInputForm() {

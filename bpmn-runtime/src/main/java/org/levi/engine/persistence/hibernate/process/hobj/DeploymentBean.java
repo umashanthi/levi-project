@@ -1,15 +1,10 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CollectionOfElements;
-import org.levi.engine.identity.User;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Ishan Jayawardena.
@@ -26,11 +21,9 @@ public class DeploymentBean extends HObject {
     private Date deploymentTime;
     private String businessArchiveName;
     private String businessArchiveLocation;
-    //private List<String> businessArchiveContents;// should list all the contents eg:forms etc
     private UserBean undeployedUser;
     private Date undeployedTime;
-    private boolean isUndeployed; // i.e. undeployed
-    private EngineDataBean engineDataBean;
+    private boolean isUndeployed;
 
     @Id
     public String getDefinitionsId() {
@@ -66,7 +59,7 @@ public class DeploymentBean extends HObject {
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "deployeduser", table = "process_deployed_user")
+    @JoinColumn(name = "deployed_user", table = "process_deployed_user")
     public UserBean getDeployedUser() {
         return deployedUser;
     }
@@ -99,22 +92,8 @@ public class DeploymentBean extends HObject {
         this.businessArchiveLocation = businessArchiveLocation;
     }
 
-    /*
-    @CollectionOfElements
-	@Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	@JoinTable( name="businessarchivecontents",joinColumns={ @JoinColumn(name="definitionsId")})
-    public List<String> getBusinessArchiveContents() {
-        return businessArchiveContents;
-    }
-
-    public void setBusinessArchiveContents(ArrayList<String> businessArchiveContents) {
-        this.businessArchiveContents = businessArchiveContents;
-    }
-    */
-
-
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "undeployeduser", table = "process_undeployed_user")
+    @JoinColumn(name = "undeployed_user", table = "process_undeployed_user")
     public UserBean getUndeployedUser() {
         return undeployedUser;
     }
@@ -137,14 +116,5 @@ public class DeploymentBean extends HObject {
 
     public void setUndeployed(boolean undeployed) {
         isUndeployed = undeployed;
-    }
-
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    public EngineDataBean getEngineDataBean() {
-        return engineDataBean;
-    }
-
-    public void setEngineDataBean(EngineDataBean engineDataBean) {
-        this.engineDataBean = engineDataBean;
     }
 }

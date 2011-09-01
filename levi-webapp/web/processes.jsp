@@ -120,7 +120,13 @@ Released : 20090303
     <div id="logo">
         <h1><a href="#"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;</a></h1>
 
-        <p>The native bpmn2.0 execution engine</p>
+        <p>The Native BPMN 2.0 Execution Engine</p>
+        <%
+            if (session.getAttribute("logged") != null && session.getAttribute("logged").toString().equals("true")) {%>
+        <div id="name">You are logged in as <span>
+               <% out.print(session.getAttribute("username").toString()); %> </span>as a member of <span><%
+            out.print(session.getAttribute("userGroupList").toString()); %></span></div>
+        <%}%>
     </div>
     <div id="menu">
         <ul id="main">
@@ -186,15 +192,15 @@ Released : 20090303
                         boolean isStopBtnActive = false; // by default it is false;
                         //show whether the process is started
                         if (request.getParameter("isProcessStarted") != null
-                                && request.getParameter("processInstanceId") != null
+                                && request.getParameter("processId") != null
                                 && request.getParameter("isProcessStarted").equals("true")
-                                && request.getParameter("processInstanceId").equals(process.toString())) {
+                                && request.getParameter("processId").equals(process.toString())) {
                             isStartBtnActive = false;
                             isStopBtnActive = true;
                         } else if (request.getParameter("isProcessStopped") != null
-                                && request.getParameter("processInstanceId") != null
+                                && request.getParameter("processId") != null
                                 && request.getParameter("isProcessStopped").equals("true")
-                                && request.getParameter("processInstanceId").equals(process.toString())) {
+                                && request.getParameter("processId").equals(process.toString())) {
                             isStartBtnActive = true;
                             isStopBtnActive = false;
                         } else {

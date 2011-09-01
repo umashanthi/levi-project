@@ -39,6 +39,7 @@ public class HibernateDao {
             session.flush();
         } catch (ConstraintViolationException e) {
             System.out.println("[error] Constrained violated");
+            System.out.println(e);
         }
     }
 
@@ -82,20 +83,24 @@ public class HibernateDao {
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
+        session.close();
+        session = SessionFactoryUtil.getSession();
         Criteria criteria = session.createCriteria(TaskBean.class);
         criteria.add(Restrictions.eq("potentialGroup.groupId", groupId));
         criteria.add(Restrictions.eq("assigned", false));
+        criteria.add(Restrictions.eq("active", true));
         return criteria.list();
     }
 
     public TaskBean getTask(String taskId, String processInstanceId) {
         Criteria criteria = session.createCriteria(TaskBean.class);
-        criteria.add(Restrictions.eq("taskId", taskId));
-        criteria.add(Restrictions.eq("processeInstance.processId", processInstanceId));
-        if (criteria.list().size() > 0)
+        criteria.add(Restrictions.eq("taskId", processInstanceId+"#"+taskId));
+       // criteria.add(Restrictions.eq("processeInstance.processId", processInstanceId));
+        if (criteria.list().size() > 0) {
             return (TaskBean) criteria.list().get(0);
-        else
+        } else {
             return null;
+        }
     }
 
     public void close() {

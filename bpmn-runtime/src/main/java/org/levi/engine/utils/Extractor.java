@@ -31,12 +31,12 @@ public final class Extractor {
             //TODO in the storage service, after checking for duplicates, these dirs must be deleted
             boolean result = (new File(destDir)).mkdir();
             if (!result) {
-                throw new LeviException("Could not extract " + larPath + ". " + destDir + " already exists.");
+                throw new LeviException("Could not extract 1 " + larPath + ". " + destDir + " already exists.");
             }
             String topLevelDir = destDir + entry.getName();
             result = (new File(topLevelDir)).mkdir();
             if (!result) {
-                throw new LeviException("Could not extract " + larPath + ". " + topLevelDir + " already exists.");
+                throw new LeviException("Could not extract 2 " + larPath + ". " + topLevelDir + " already exists.");
             }
             exData.setExtractPath(topLevelDir);
         }

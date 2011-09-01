@@ -1,18 +1,13 @@
 package org.levi.persistance;
 
-
-import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
+import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
+import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -71,7 +66,7 @@ public class PersistTest {
 
         GroupBean group2 = new GroupBean();
         group2.setGroupId("2");
-        group2.setGroupName("Mora");
+        group2.setGroupName("Pera");
         group2.setGroupDescription("fun group2");
 
         group2.getMembers().add(user1);
@@ -80,79 +75,101 @@ public class PersistTest {
 
         dao.save(group2);
 
+        DeploymentBean deployment = new DeploymentBean();
+        deployment.setDefinitionsId("d1");
+        deployment.setDeployedUser(user1);
+
+        dao.save(deployment);
+
         TaskBean task1 = new TaskBean();
         task1.setTaskId("task1");
+        task1.getProperties().put("p1","value1");
+        task1.getProperties().put("p2","value2");
+        task1.getProperties().put("p3","value3");
 
         dao.save(task1);
 
         TaskBean task2 = new TaskBean();
         task2.setTaskId("task2");
+        task2.getProperties().put("p1","value1");
+        task2.getProperties().put("p2","value2");
+        task2.getProperties().put("p3","value3");
 
         dao.save(task2);
 
-        DBManagerImpl manager = new DBManagerImpl();
-        manager.assignTask("task1","1");
-        manager.assignTask("task2","1");
+        ProcessInstanceBean instance1 = new ProcessInstanceBean();
+        instance1.setProcessId("p1");
+        instance1.setDeployedProcess(deployment);
+        instance1.getRunningTasks().put(task1.getTaskId(),task1);
+        instance1.getCompletedTasks().put(task2.getTaskId(),task2);
+        instance1.getVariables().put("v1","value1");
+        instance1.getVariables().put("v2","value2");
+        instance1.setRunning(true);
 
-        for(TaskBean task:dao.getAssignedTasks("1")){
-             System.out.println(task.getTaskId());
-        }
+        dao.save(instance1);
 
-        manager.unassignTask("task1");
-        manager.removeTask("task1", "1");
+        TaskBean task3 = new TaskBean();
+        task3.setTaskId("task3");
+        task3.getProperties().put("p1","value1");
+        task3.getProperties().put("p2","value2");
+        task3.getProperties().put("p3","value3");
 
-        for(UserBean user:dao.getUserObjects()){
-             System.out.println(user.getFirstName());
-        }
+        dao.save(task3);
 
-        /*
-        DeploymentBean deploymentBean = new DeploymentBean();
-        deploymentBean.setDefinitionsId("ssd");
-        EngineDataBean engineDataBean = new EngineDataBean();
-        engineDataBean.setTaskId("1");
-        engineDataBean.set_dateCreated(new Date());
-        engineDataBean.addDeployment(deploymentBean);
-        dao.save(deploymentBean);
-        dao.save(engineDataBean);
-                                                */
+        TaskBean task4 = new TaskBean();
+        task4.setTaskId("task4");
+        task4.getProperties().put("p1","value1");
+        task4.getProperties().put("p2","value2");
+        task4.getProperties().put("p3","value3");
 
+        dao.save(task4);
 
-        //EngineDataBean enginedata = (EngineDataBean)dao.getObject(EngineDataBean.class, "1");
-        //System.out.println(enginedata.getTaskId());
-        //System.out.println(enginedata.getDeployedProcesses().get("ssd").getDefinitionsId());
+        ProcessInstanceBean instance2 = new ProcessInstanceBean();
+        instance2.setProcessId("p2");
+        instance2.setDeployedProcess(deployment);
+        instance2.getRunningTasks().put(task3.getTaskId(),task3);
+        instance2.getCompletedTasks().put(task4.getTaskId(),task4);
+        instance2.getVariables().put("v1","value1");
+        instance2.getVariables().put("v2","value2");
+        instance2.setRunning(false);
 
+        dao.save(instance2);
 
+        TaskBean task5 = new TaskBean();
+        task5.setTaskId("task5");
+        task5.getProperties().put("p1","value1");
+        task5.getProperties().put("p2","value2");
+        task5.getProperties().put("p3","value3");
 
-        HqlManager mgr= new HqlManager();
-        mgr.getUserObjects();
+        dao.save(task5);
 
-        for(UserBean user : mgr.getUserObjects()){
-             System.out.println(user.getFirstName());
-        }
+        TaskBean task6 = new TaskBean();
+        task6.setTaskId("task6");
+        task6.getProperties().put("p1","value1");
+        task6.getProperties().put("p2","value2");
+        task6.getProperties().put("p3","value3");
 
-        for(GroupBean group:mgr.getGroupObjects()){
-            System.out.println(group.getGroupName());
-        }
+        dao.save(task6);
 
+        ProcessInstanceBean instance3 = new ProcessInstanceBean();
+        instance3.setProcessId("p3");
+        instance3.setDeployedProcess(deployment);
+        instance3.getRunningTasks().put(task5.getTaskId(),task5);
+        instance3.getCompletedTasks().put(task6.getTaskId(),task6);
+        instance3.getVariables().put("v1","value1");
+        instance3.getVariables().put("v2","value2");
+        instance3.setRunning(false);
 
-        ProcessInstanceBean processInstanceBean = new ProcessInstanceBean();
-        processInstanceBean.setProcessId("process1");
+        dao.save(instance3);
 
-        Map<String, TaskBean> map = new HashMap<String, TaskBean>();
+        EngineDataBean engine = new EngineDataBean();
+        engine.setId("engine");
+        engine.getDeployedProcesses().put(deployment.getDefinitionsId(), deployment);
+        engine.getRunningProcesses().put(instance1.getProcessId(),instance1);
+        engine.getStoppedProcesses().put(instance2.getProcessId(),instance2);
+        engine.getPausedProcesses().put(instance3.getProcessId(),instance3);
 
-        map.put("task1",task1);
-        map.put("task2",task2);
-
-        processInstanceBean.setRunningTasks(map);
-
-        manager.saveProcessInstance(processInstanceBean);
-
-        List<String> running = manager.getRunningTasks("process1");
-        System.out.println("Getting running tasks...");
-
-         for(String s:running){
-             System.out.println(s);
-         }
+        dao.save(engine);
 
         dao.close();
 

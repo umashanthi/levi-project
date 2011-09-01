@@ -6,6 +6,7 @@ import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TSendTask;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -56,13 +57,13 @@ public class SendTask extends RunnableFlowNode {
         //}
     }
 
-    private void persistSendTask(SendTask sendTask) {
+     private void persistSendTask(SendTask sendTask) {
         HibernateDao dao = new HibernateDao();
         // todo remove later
-        processInstance.setVariable("recipient", "eranda");
-        processInstance.setVariable("orderId", 1234);
-        processInstance.setVariable("male", true);
-        processInstance.setVariable("recipientName", "Eranda");
+//        processInstance.setVariable("recipient", "eranda");
+//        processInstance.setVariable("orderId", 1234);
+//        processInstance.setVariable("male", true);
+//        processInstance.setVariable("recipientName", "Eranda");
         processInstance.setVariable("now", new Date());
         TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
         if (starteventbean == null) {
@@ -118,33 +119,29 @@ public class SendTask extends RunnableFlowNode {
                 if (key == null || value == null) {
                     throw new RuntimeException("Malformed sendTask.");
                 }
-                processInstance.setVariable(key, value);
+                processInstance.setVariable(getId()+"_"+key, value);
             }
             starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
-            starteventbean.setProcesseInstance(processInstanceBean);
-            //UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            //starteventbean.setAssignee(user);
+            processInstanceBean.getRunningTasks().put(starteventbean.getTaskId(),starteventbean);
             starteventbean.setFormName(task.getName());
             starteventbean.setTaskName(task.getName());
-            // starteventbean.setHasUserForm(hasInputForm());
-            //starteventbean.setFromPath(task.getInputForm());
             dao.save(starteventbean);
+            dao.save(processInstanceBean);
         }
         dao.close();
     }
 
     public void run() {
-        processInstance.addRunning(getId());
+        processInstance.run(getId());
         // get the details
         System.out.println("SendTask run(): Getting the task details.");
-
-        String to = (String) processInstance.getVariable("to");
+        String to = (String) processInstance.getVariable(getId()+"_to");
         System.out.println("SendTask persistSendTask(): Recipent:" + to);
-        String subject = (String) processInstance.getVariable("subject");
+        String subject = (String) processInstance.getVariable(getId()+"_subject");
         System.out.println("SendTask persistSendTask(): Subject:" + subject);
-        String content = (String) processInstance.getVariable("content");
+        String content = (String) processInstance.getVariable(getId()+"_content");
         System.out.println("SendTask persistSendTask(): Content:" + content);
 
         // write them to the db
@@ -184,7 +181,7 @@ public class SendTask extends RunnableFlowNode {
     }
 
     public String getId() {
-        return task.getId();
+        return LeviUtils.combineTaskId(processInstance.getProcessId(), task.getId());
     }
 
     public void resumeTask() throws MessagingException {
@@ -192,15 +189,15 @@ public class SendTask extends RunnableFlowNode {
         // processInstance.getVariables().putAll(vars);
         System.out.println("Resuming send task id " + getId());
           MailClient marketingClient = new MailClient("marketing", "localhost");
-        String to = (String) processInstance.getVariable("to");
+        String to = (String) processInstance.getVariable(getId()+"_to");
         System.out.println("SendTask persistSendTask(): Recipent:" + to);
-        String subject = (String) processInstance.getVariable("subject");
+        String subject = (String) processInstance.getVariable(getId()+"_subject");
         System.out.println("SendTask persistSendTask(): Subject:" + subject);
-        String content = (String) processInstance.getVariable("content");
+        String content = (String) processInstance.getVariable(getId()+"_content");
         System.out.println("SendTask persistSendTask(): Content:" + content);
         marketingClient.sendMessage(to+"@localhost", subject,  content);
         instance(processInstance.executeNext(this));
-        processInstance.addCompleted(getId());
+        processInstance.complete(getId());
 
     }
 
