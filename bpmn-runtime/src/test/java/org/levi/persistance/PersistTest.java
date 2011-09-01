@@ -177,8 +177,5 @@ public class PersistTest {
 
         dao.close();
 
-        HqlManager manager = new HqlManager();
-        manager.getUnassignedTasks("group1", "d1");
-
     }
 }
