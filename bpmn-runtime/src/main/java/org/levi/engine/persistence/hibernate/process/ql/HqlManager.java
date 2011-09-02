@@ -93,7 +93,7 @@ public class HqlManager {
 
     public Map<String, TaskBean> getActiveTasks(String definitionId){
         refresh();
-        Iterator<TaskBean> tasks = session.createQuery("select tasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.active=true and deployment.definitionsId='"+definitionId+"'").list().iterator();
+        Iterator<TaskBean> tasks = session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.active=true and deployment.definitionsId='"+definitionId+"'").list().iterator();
         Map<String, TaskBean> map = new HashMap<String, TaskBean>();
         while(tasks.hasNext()){
             TaskBean task = tasks.next();
