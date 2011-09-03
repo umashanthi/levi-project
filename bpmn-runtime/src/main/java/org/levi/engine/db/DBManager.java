@@ -142,4 +142,8 @@ public interface DBManager {
 
 
     void closeSession();
+    List<TaskBean> getUnassignedTasks(String groupId, String definitionId);
+    List<TaskBean> getUserTaskList(String userName, String definitionId);
+    Map<String, ProcessInstanceBean>  getRunningProcessInstances(String definitionId);
+    List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId);
 }
