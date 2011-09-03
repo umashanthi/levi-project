@@ -493,4 +493,20 @@ public class DBManagerImpl implements DBManager {
     public void closeSession() {
         dao.close();
     }
+
+    public List<TaskBean> getUnassignedTasks(String groupId, String definitionId) {
+        return qlManager.getUnassignedTasks(groupId,definitionId);
+    }
+
+    public List<TaskBean> getUserTaskList(String userName, String definitionId) {
+        return qlManager.getUserTaskList(userName,definitionId);
+    }
+
+    public Map<String, ProcessInstanceBean> getRunningProcessInstances(String definitionId) {
+        return getRunningProcessInstances(definitionId);
+    }
+
+    public List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId) {
+        return getCompletedProcessInstances(definitionId);
+    }
 }
