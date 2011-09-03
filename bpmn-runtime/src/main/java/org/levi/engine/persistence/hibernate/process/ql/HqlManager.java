@@ -72,17 +72,16 @@ public class HqlManager {
 
     public List<TaskBean> getUnassignedTasks(String groupId, String definitionId){
         refresh();
-        return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.assigned=false and tasks.potentialGroup.groupId='"+groupId+"' and deployment.definitionsId='"+definitionId+"'").list();
+        return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.assigned=false and tasks.potentialGroup.groupId='"+groupId+"' and deployment.definitionsId='"+definitionId.trim()+"'").list();
     }
 
     public List<TaskBean> getUserTaskList(String userName, String definitionId){
         refresh();
-        return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment and tasks.assignee.userId='"+userName+"' and deployment.definitionsId='"+definitionId+"'").list();
-    }
+        return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.assignee.userId='"+userName+"' and deployment.definitionsId='"+definitionId+"'").list();    }
 
     public Map<String, ProcessInstanceBean>  getRunningProcessInstances(String definitionId){
         refresh();
-        Iterator<ProcessInstanceBean> running = session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId+"' and instance.running=true").list().iterator();
+        Iterator<ProcessInstanceBean> running = session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId.trim()+"' and instance.running=true").list().iterator();
         Map<String, ProcessInstanceBean> map = new HashMap<String, ProcessInstanceBean>();
         while(running.hasNext()){
             ProcessInstanceBean instance = running.next();
@@ -93,7 +92,7 @@ public class HqlManager {
 
     public List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId){
         refresh();
-        return session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId+"' and instance.running=false").list();
+        return session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId.trim()+"' and instance.running=false").list();
     }
 
     private void refresh() {
