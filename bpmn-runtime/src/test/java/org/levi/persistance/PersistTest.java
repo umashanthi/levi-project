@@ -177,5 +177,8 @@ public class PersistTest {
 
         dao.close();
 
+        HqlManager hql = new HqlManager();
+        hql.getUserTaskList("user1","d1");
+
     }
 }

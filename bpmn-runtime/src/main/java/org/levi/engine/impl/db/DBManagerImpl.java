@@ -490,6 +490,10 @@ public class DBManagerImpl implements DBManager {
         return processInstanceBean.getVariables();
     }
 
+    public Map<String, TaskBean> getActiveTasksMap(String definitionId){
+        return qlManager.getActiveTasks(definitionId);   
+    }
+
     public void closeSession() {
         dao.close();
     }

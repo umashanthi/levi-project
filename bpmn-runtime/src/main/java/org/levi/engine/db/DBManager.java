@@ -114,6 +114,8 @@ public interface DBManager {
 
     List<TaskBean> getActiveTasks(String processId);
 
+    Map<String, TaskBean> getActiveTasksMap(String definitionId);
+
     TaskBean getTaskBean(String taskId);
 
     boolean claimUserTask(String taskId, String processInstanceId, String username);
@@ -138,8 +140,7 @@ public interface DBManager {
 
     void addCompletedTask(String taskId, String processInstanceId);
 
-    public String getPotentialGroup(String taskId);
-
+    String getPotentialGroup(String taskId);
 
     void closeSession();
     List<TaskBean> getUnassignedTasks(String groupId, String definitionId);

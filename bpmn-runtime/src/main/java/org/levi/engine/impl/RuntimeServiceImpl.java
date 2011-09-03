@@ -65,7 +65,7 @@ public class RuntimeServiceImpl implements RuntimeService {
         }
         // create a new process instance with that processDefinition
         ProcessInstance processInstance = new ProcessInstance(processDefinition, variables);
-        //processInstance.setVariables(variables);
+      //  processInstance.setVariables(variables);
         processInstance.setStartUserId(userId);
 
         System.out.println("[Info] Process running : " + definitionsId);
