@@ -28,8 +28,6 @@ public interface DBManager {
 
     EngineDataBean getEngineDataBean();
 
-    
-
     void saveUser(UserBean user);
 
     void saveGroup(GroupBean group);
@@ -57,16 +55,12 @@ public interface DBManager {
     void saveGroup(Group group);
 
     void saveUser(User user);
-    
-
 
     void saveTask(TaskBean task);
 
     void deleteTask(String taskId);
 
     void updateTask(TaskBean task);
-
-
 
     void saveProcess(DeploymentBean process);
 
@@ -84,8 +78,6 @@ public interface DBManager {
 
     List<String> getDeploymentIds();
 
-
-
     void saveProcessInstance(ProcessInstanceBean process);
 
     void deleteProcessInstance(String processId);
@@ -99,8 +91,6 @@ public interface DBManager {
     public void setVariables(String processId, Map<String, String> variables);
 
     public Map<String, String> getVariables(String processId);
-
-
 
     UserBean getAssigneeForTask(String taskId);
 
@@ -143,4 +133,14 @@ public interface DBManager {
     String getPotentialGroup(String taskId);
 
     void closeSession();
+
+    List<TaskBean> getUnassignedTasks(String groupId, String definitionId);
+
+    List<TaskBean> getUserTaskList(String userName, String definitionId);
+
+    Map<String, TaskBean> getActiveProcessInstances(String definitionId);
+
+    List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId);
+
+    void persistEndEvent(String processInsId);
 }

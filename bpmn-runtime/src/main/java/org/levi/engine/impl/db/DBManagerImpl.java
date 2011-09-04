@@ -397,7 +397,7 @@ public class DBManagerImpl implements DBManager {
             dao.save(userTaskBean);
 
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, userTask.getProcessInstance().getProcessId());
-            processInstanceBean.getRunningTasks().put(userTaskBean.getTaskId(),userTaskBean);
+            processInstanceBean.getRunningTasks().put(userTaskBean.getTaskId(), userTaskBean);
             dao.update(processInstanceBean);
         }
     }
@@ -414,21 +414,21 @@ public class DBManagerImpl implements DBManager {
         starteventbean.setFromPath(startEvent.getTStartEvent().getInputForm());
         dao.save(starteventbean);
 
-        processInstanceBean.getRunningTasks().put(starteventbean.getTaskId(),starteventbean);
+        processInstanceBean.getRunningTasks().put(starteventbean.getTaskId(), starteventbean);
         dao.update(processInstanceBean);
     }
 
     public void addRunningTask(String taskId, String processInstanceId) {
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstanceId);
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         if (task != null) {
-            processInstanceBean.getRunningTasks().put(taskId,task);
+            processInstanceBean.getRunningTasks().put(taskId, task);
             dao.update(processInstanceBean);
         }
     }
 
     public void removeRunningTask(String taskId, String processInstanceId) {
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstanceId);
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         if (task != null) {
             processInstanceBean.getRunningTasks().remove(taskId);
@@ -437,7 +437,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void addCompletedTask(String taskId, String processInstanceId) {
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstanceId);
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         if (task != null) {
             processInstanceBean.getCompletedTasks().put(taskId, task);
@@ -465,21 +465,43 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void setVariables(String processInstanceId, Map<String, String> variables) {
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstanceId);
         processInstanceBean.getVariables().putAll(variables);
         dao.update(processInstanceBean);
     }
 
     public Map<String, String> getVariables(String processInstanceId) {
-        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstanceId);
         return processInstanceBean.getVariables();
     }
 
-    public Map<String, TaskBean> getActiveTasksMap(String definitionId){
-        return qlManager.getActiveTasks(definitionId);   
+    public Map<String, TaskBean> getActiveTasksMap(String definitionId) {
+        return qlManager.getActiveTasks(definitionId);
     }
 
     public void closeSession() {
         dao.close();
+    }
+
+    public List<TaskBean> getUnassignedTasks(String groupId, String definitionId) {
+        return qlManager.getUnassignedTasks(groupId, definitionId);
+    }
+
+    public List<TaskBean> getUserTaskList(String userName, String definitionId) {
+        return qlManager.getUserTaskList(userName, definitionId);
+    }
+
+    public Map<String, TaskBean> getActiveProcessInstances(String definitionId) {
+        return qlManager.getActiveTasks(definitionId);
+    }
+
+    public List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId) {
+        return qlManager.getCompletedProcessInstances(definitionId);
+    }
+
+    public void persistEndEvent(String processInsId) {
+        ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInsId);
+        processInstanceBean.setRunning(false);
+        dao.update(processInstanceBean);
     }
 }
