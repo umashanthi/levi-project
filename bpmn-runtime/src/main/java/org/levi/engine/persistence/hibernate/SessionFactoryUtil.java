@@ -8,33 +8,17 @@ import org.levi.engine.persistence.hibernate.process.hobj.*;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
-
-/**
- * Created by IntelliJ IDEA.
- * UserBean: eranda
- * Date: May 3, 2011
- * Time: 11:53:32 AM
- * To change this template use File | Settings | File Templates.
- */
 public class SessionFactoryUtil {
 
-    /**
-     * disable constructor to guaranty a single instance
-     */
     private SessionFactoryUtil() {
     }
 
     private static SessionFactory sessionFactory;
     private static Configuration config;
 
-    /**
-     * Opens a session configured with the default settings.
-     *
-     * @return the session
-     */
     public static void exportSchema(){
         init();
-        new SchemaExport(config).create(true, true);
+        new SchemaExport(config).create(true, false);
     }
 
     public static void init(){
@@ -53,11 +37,6 @@ public class SessionFactoryUtil {
         return sessionFactory.openSession();
     }
 
-    /**
-     * Opens a session and will not bind it to a session context
-     *
-     * @return the session
-     */
     public Session openSession() {
         return sessionFactory.openSession();
     }
@@ -66,9 +45,6 @@ public class SessionFactoryUtil {
         return sessionFactory.getCurrentSession();
     }
 
-    /**
-     * closes the session factory
-     */
     public static void close() {
         if (sessionFactory != null) {
             sessionFactory.close();

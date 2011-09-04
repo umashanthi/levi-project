@@ -22,11 +22,11 @@ public class PersistTest {
 
     public static void main(String[] args) {
         PersistTest pt = new PersistTest();
-        pt.start();
+        SessionFactoryUtil.exportSchema();
+        //pt.start();
     }
 
     public void start() {
-        SessionFactoryUtil.exportSchema();
         HibernateDao dao = new HibernateDao();
 
         UserBean user1 = new UserBean();

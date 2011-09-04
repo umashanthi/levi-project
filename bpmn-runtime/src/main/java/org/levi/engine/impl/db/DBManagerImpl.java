@@ -36,7 +36,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void saveUser(User user) {
-        UserBean userBean = null;
+        UserBean userBean;
         if (dao.getObject(UserBean.class, user.getUserId()) != null) {
             userBean = (UserBean) dao.getObject(UserBean.class, user.getUserId());
             dao.update(Impl2Bean.getUserBean(user, userBean, true));
@@ -56,8 +56,8 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void saveGroup(Group group) {
-        GroupBean groupBean = null;
-        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) { // group Exists
+        GroupBean groupBean;
+        if (dao.getObject(GroupBean.class, group.getGroupId()) != null) {
             groupBean = (GroupBean) dao.getObject(GroupBean.class, group.getGroupId());
             dao.update(Impl2Bean.getGroupBean(group, groupBean, true));
         } else {
@@ -92,7 +92,6 @@ public class DBManagerImpl implements DBManager {
             user.getUserGroups().add(group);
         }
         dao.update(user);
-        //dao.update(group);
     }
 
     public void deleteUser(String userId) {
@@ -126,7 +125,7 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<String> getGroupIds(String userId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public void saveTask(TaskBean task) {
@@ -177,11 +176,11 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<ProcessInstanceBean> getRunningProcessesInstancesList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public List<DeploymentBean> getDeployedProcessList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public UserBean getAssigneeForTask(String taskId) {
@@ -190,11 +189,11 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getActiveTasks() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public List<TaskBean> getUnassignedTasks() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
@@ -202,12 +201,11 @@ public class DBManagerImpl implements DBManager {
     }
 
     public List<TaskBean> getActiveTasks(String processId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public TaskBean getTaskBean(String taskId) {
-        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
-        return task;
+        return (TaskBean)dao.getObject(TaskBean.class, taskId);
     }
 
     public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
@@ -224,18 +222,15 @@ public class DBManagerImpl implements DBManager {
             dao.update(task);
             return true;
         } else {
-            // throw exception
             return false;
         }
     }
 
     public List<UserBean> getUserList() {
-        //return dao.getUserObjects();
         return qlManager.getUserObjects();
     }
 
     public List<GroupBean> getGroupList() {
-        //return dao.getGroupObjects();
         return qlManager.getGroupObjects();
     }
 
@@ -285,7 +280,6 @@ public class DBManagerImpl implements DBManager {
     }
 
     public void persistDeployment(Deployment deployment) {
-        //Converting to DeploymentBean
         DeploymentBean deploymentBean = new DeploymentBean();
         deploymentBean.setDefinitionsId(deployment.getDefinitionsId());
         deploymentBean.setExtractPath(deployment.getExtractPath());
@@ -301,7 +295,6 @@ public class DBManagerImpl implements DBManager {
         } else {
             engineDataBean = new EngineDataBean();
             engineDataBean.setId("1");
-            //engineDataBean.set_dateCreated(new Date());
             engineDataBean.addDeployment(deploymentBean);
             dao.save(engineDataBean);
         }
@@ -328,14 +321,9 @@ public class DBManagerImpl implements DBManager {
         } else {
             processInstanceBean.setStartUser(userBean);
         }
-
         processInstanceBean.setStartTime(new Date());
-
-        //processInstanceBean.setVariables(processInstance.getVariables());
         processInstanceBean.setStartEventId(processInstance.getProcessDefinition().getStartEvent().getId());
-
         processInstanceBean.setRunning(true);
-
         dao.save(processInstanceBean);
         if (user != null) {
             user.addStartedProcessInstances(processInstanceBean);
@@ -382,7 +370,7 @@ public class DBManagerImpl implements DBManager {
 
     public void persistUserTask(UserTask userTask) {
         TaskBean userTaskBean = (TaskBean) dao.getObject(TaskBean.class, userTask.getId());
-        if (userTaskBean == null) {   //TODO what is the purpose of such validation
+        if (userTaskBean == null) {
             userTaskBean = new TaskBean();
             userTaskBean.setTaskId(userTask.getId());
             userTaskBean.setTaskId(userTask.getId());
@@ -396,14 +384,12 @@ public class DBManagerImpl implements DBManager {
                     userTaskBean.setAssignee(assignee);
                 }
             } else {
-                String potentialOwner = ((TPotentialOwner) (task.getResourceRoleArray()[0])).getResourceAssignmentExpression().getExpression().getDomNode().getChildNodes().item(0).getNodeValue();
+                String potentialOwner = (task.getResourceRoleArray()[0]).getResourceAssignmentExpression().getExpression().getDomNode().getChildNodes().item(0).getNodeValue();
                 GroupBean potentialGroup = (GroupBean) dao.getObject(GroupBean.class, potentialOwner);
                 if (potentialGroup != null) {
                     userTaskBean.setPotentialGroup(potentialGroup);
                 }
             }
-            /*UserBean user = (UserBean) dao.getObject(UserBean.class, task.getAssignee());
-            userTaskBean.setAssignee(user);*/
             userTaskBean.setFormName(task.getName());
             userTaskBean.setTaskName(task.getName());
             userTaskBean.setHasUserForm(userTask.hasInputForm());
@@ -468,7 +454,7 @@ public class DBManagerImpl implements DBManager {
         Map<String, DeploymentBean> deployedProcesses = engineDataBean.getDeployedProcesses();
         List<String> deploymentIds = new ArrayList<String>();
         for (String id : deployedProcesses.keySet()) {
-            deploymentIds.add(((DeploymentBean) deployedProcesses.get(id)).getDefinitionsId());
+            deploymentIds.add(deployedProcesses.get(id).getDefinitionsId());
         }
         return deploymentIds;
     }
@@ -477,7 +463,6 @@ public class DBManagerImpl implements DBManager {
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         return task.getPotentialGroup().getGroupId();
     }
-
 
     public void setVariables(String processInstanceId, Map<String, String> variables) {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
