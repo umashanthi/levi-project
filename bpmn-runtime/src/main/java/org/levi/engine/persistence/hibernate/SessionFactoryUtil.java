@@ -8,6 +8,11 @@ import org.levi.engine.persistence.hibernate.process.hobj.*;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
+/**
+ *
+ * Create Hibernate Sessions
+ *
+ */
 public class SessionFactoryUtil {
 
     private SessionFactoryUtil() {

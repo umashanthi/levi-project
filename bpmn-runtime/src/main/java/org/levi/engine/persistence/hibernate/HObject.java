@@ -3,6 +3,11 @@ package org.levi.engine.persistence.hibernate;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ *
+ * Hibernate Object
+ *
+ */
 @MappedSuperclass
 public class HObject {
     private Date _dateCreated;

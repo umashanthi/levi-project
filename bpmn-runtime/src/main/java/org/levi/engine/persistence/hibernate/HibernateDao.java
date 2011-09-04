@@ -11,6 +11,11 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.List;
 
+/**
+ *
+ * Save, Update and Delete Hibernate Objects
+ *
+ */
 public class HibernateDao {
 
     Session session;
