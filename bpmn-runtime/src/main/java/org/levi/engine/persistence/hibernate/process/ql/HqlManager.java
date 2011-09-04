@@ -58,15 +58,8 @@ public class HqlManager {
      */
     public List<TaskBean> getUnassignedTasks(String groupId) {
         refresh();
-        List<TaskBean> tasks = session.createQuery("from TaskBean as task where " +
-                "task.assigned = false and task.active = true").list();
-        List<TaskBean> unassigedTask = LeviUtils.newArrayList();
-        for (TaskBean task : tasks) {
-            if (task.getPotentialGroup().getGroupId().equals(groupId)) {
-                unassigedTask.add(task);
-            }
-        }
-        return unassigedTask;
+        return session.createQuery("from TaskBean as task join task.potentialGroup as group where " +
+                "task.assigned=false and task.active=true and group.groupId='"+groupId+"'").list();
     }
 
     /**
