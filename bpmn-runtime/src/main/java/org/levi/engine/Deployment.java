@@ -1,6 +1,10 @@
 package org.levi.engine;
 
+import org.levi.engine.utils.LeviUtils;
+
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ishan Jayawardena
@@ -11,8 +15,9 @@ public final class Deployment {
     private String processDefinitionPath;
     private String diagramPath;
     private Date deploymentTime;
+    private Map<String, List<String>> otherFiles;
 
-    public Deployment(String pid, String op, String dp, String extractPath, Date depTime) {
+    public Deployment(String pid, String op, String dp, String extractPath, Date depTime, Map<String, List<String>> otherFiles) {
         assert pid != null;
         assert op != null;
         assert dp != null;
@@ -23,6 +28,7 @@ public final class Deployment {
         diagramPath = dp;
         this.extractPath = extractPath;
         deploymentTime = depTime;
+        this.otherFiles = otherFiles;
     }
 
     public String getDefinitionsId() {
@@ -44,6 +50,22 @@ public final class Deployment {
     public Date getDate() {
         return deploymentTime;
     }
+
+    public String getOtherFile(String fileName) {
+        String ext = LeviUtils.getFileExtension(fileName);
+
+        if (ext == null || ext == "" )  {
+            return "";
+        }
+        List<String> paths = otherFiles.get(ext);
+        for (String path : paths) {
+            if (path.endsWith(fileName)) {
+                return path;
+            }
+        }
+        return "";
+    }
+
     public String toString() {
         String s;
         s = "{" + definitionsId + ", "

@@ -80,6 +80,10 @@ public class StorageServiceImpl implements StorageService {
         return path;
     }
 
+    public String getDiagram(String id, String fileName) {
+        return engineData.getDeployment(id).getOtherFile(fileName);
+    }
+
     public void undeployAll() throws IOException {
         for (String id : engineData.getDeploymentIds()) {
             undeploy(id);
@@ -153,7 +157,7 @@ public class StorageServiceImpl implements StorageService {
             // TODO we must save the details of exData aswell
             Deployment d = new Deployment(definitionsId,
                     omPath, diagramPath.substring(start, end),
-                    exData.getExtractPath(), new Date());
+                    exData.getExtractPath(), new Date(), exData.getOtherFiles());
             createdDeployments.add(d);
         } catch (LeviException e) {
             delete(exData.getExtractPath(), true);

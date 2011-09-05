@@ -299,7 +299,8 @@ public class GraphViz
                 continue;
             }
             for (TSequenceFlow seqFlow : processDefinition.getSourceSequenceFlowSet(e.getId())) {
-                sf.sequenceFlow(processDefinition.getModifiedId(e), processDefinition.modify(seqFlow.getTargetRef()));
+                sf.sequenceFlow
+                        (processDefinition.getModifiedId(e), processDefinition.modify(seqFlow.getTargetRef()));
             }
         }
         sf.end_BPMN_graph();
