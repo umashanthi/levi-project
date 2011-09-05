@@ -102,7 +102,7 @@
     %>
 
     <% } else { %>
-    response.sendRedirect("login.jsp?error=not-logged");
+   <div id="bodylogo"></div>
     <%}%>
 </div>
 <div id="footer">
