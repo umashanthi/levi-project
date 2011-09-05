@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This Servlet retrieve user task list and unassigned task list and sets a session attribute
+ * So that it can be accessed in user's dashboard
+ */
 public class ListTasksServlet extends HttpServlet {
 
 
@@ -36,8 +40,6 @@ public class ListTasksServlet extends HttpServlet {
             String username = request.getSession().getAttribute("username").toString();
             assert request.getSession().getAttribute("dbManager") != null;
             DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
-            //  if (request.getParameter("unassigned") != null && request.getParameter("unassigned").equals("true")) {
-            // get unassigned tasks for this user's groups
             UserBean user = dbManager.getUser(username);
             List<GroupBean> userGroups = user.getUserGroups();
             assert userGroups != null;
@@ -53,21 +55,13 @@ public class ListTasksServlet extends HttpServlet {
             }
             //set as session attribute
             request.getSession().setAttribute("unassignedTasks", unassignedTaskList);
-            //     response.sendRedirect("tasks.jsp?unassigned=true");
-            //  } else {
-            // retrieve tasks assigned to this user
-            /* HibernateDao dao = new HibernateDao();
-         UserBean userBean = (UserBean) dao.getObject(UserBean.class, username);
-         assert userBean != null;
-       //  List<TaskBean> userTaskList = userBean.getAssigned();*/
             List<TaskBean> userTaskList = dbManager.getUserTaskList(username);
-            //  dao.close();
             request.getSession().setAttribute("userTaskList", userTaskList);
             response.sendRedirect("tasks.jsp");
         }
-        // }
+
         catch (Exception ex) {
-            response.getWriter().write("exception");
+            response.sendRedirect("login.jsp?error=not-logged");
         }
 
     }
