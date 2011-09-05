@@ -1,6 +1,7 @@
 <%@ page import="org.levi.engine.ProcessEngine" %>
 <%@ page import="org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.levi.web.troubleticket.Constants" %>
 
 
 <%--
@@ -12,17 +13,7 @@
 --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
 
-Name : Premium Series
-Description: A three-column, fixed-width blog design.
-Version : 1.0
-Released : 20090303
-
--->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -176,7 +167,6 @@ Released : 20090303
                        value="Undeploy all" <% if (processesList.isEmpty()) {%>
                        disabled="true" <%}%>
                        onclick="">
-
             </td>
         </tr>
 
@@ -215,13 +205,16 @@ Released : 20090303
                                                                     onclick="startProcess('<%=process.getDefinitionsId()%>')">
 
                 </td>
-                <td>
-
+                <!--td>
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="button"
-                                                                    value="Stop" <%if(!isStopBtnActive){%>
-                                                                    disabled="true" <%} %>
-                                                                    onclick="stopProcess('<%=process.getDefinitionsId()%>')">
+                                                                    value="Stop" <!--%if(!isStopBtnActive){%>
+                                                                    disabled="true" <!--%} %>
+                                                                    onclick="stopProcess('<!--%=process.getDefinitionsId()%>')">
 
+                </td-->
+                <td>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<%
+                    String url = Constants.getAppURL(process.getDefinitionsId()); %><a href="<%=url%>">Start App</a>
                 </td>
                 <td>
                     <% ProcessEngine engine = (ProcessEngine) session.getAttribute("processEngine");
@@ -232,13 +225,6 @@ Released : 20090303
                                                                     onclick="jkpopimage('<%=diagramPath%>', 800, 500, ''); return false">
 
                 </td>
-                <%--<td>
-
-                    <input type="button" value="Show Form"
-                           onclick="displayForm('<%=process.getDefinitionsId()%>'); return false">
-                </td>--%>
-
-
             </form>
         </tr>
         <% }
@@ -249,13 +235,12 @@ Released : 20090303
 
 
     <% } else { %>
-    <div id="bodylogo"></div>
+    response.sendRedirect("login.jsp?error=not-logged");
 
     <%}%>
 </div>
 <div id="footer">
-    <p class="copyright">&copy;&nbsp;&nbsp;2011 All Rights Reserved &nbsp;&bull;&nbsp; Design by <a
-            href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+    <p class="copyright">&copy;&nbsp;&nbsp;Levi&nbsp;&bull;&nbsp;
 
     <p class="link"><a href="#">Privacy Policy</a>&nbsp;&#8226;&nbsp;<a href="#">Terms of Use</a>
     </p>
