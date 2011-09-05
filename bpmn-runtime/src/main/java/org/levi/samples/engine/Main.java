@@ -60,7 +60,7 @@ public class Main {
     }
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         ProcessEngine engine = ProcessEngineImpl.getProcessEngine();
-        Main.createDb();
+        //Main.createDb();
         engine.deploy("/home/ishan/devel/levi/bpmnsamples/troubleTicket.lar");
         //engine.deploy("/home/ishan/Desktop/bpmnsamples/HelloWorldScriptTask.lar");
         //engine.deploy(Constants.LAR_PATH + "book_fig61.lar"); // ProduceAdvertisement

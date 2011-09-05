@@ -445,7 +445,7 @@ public class DBManagerImpl implements DBManager {
         ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class,processInstanceId);
         TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         if (task != null) {
-            processInstanceBean.getRunningTasks().remove(task);
+            processInstanceBean.getRunningTasks().remove(taskId);
             dao.update(processInstanceBean);
         }
     }

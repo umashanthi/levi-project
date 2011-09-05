@@ -66,6 +66,8 @@ public class SubmitUserTaskFormServlet extends HttpServlet {
         // we can also have a naming convention for the required request parameters and filter them from this map
         //Save this map to the process instance
         engine.resumeProcessInstance(processId);
+        String requestOrigin=request.getHeader("referer");
+
         response.sendRedirect("success.jsp");
     }
 

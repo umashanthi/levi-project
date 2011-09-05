@@ -270,6 +270,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
         }
         waitedTasks.get(userTaskId).resume(variables);
     }
+
     // TODO XXX
     public void addWaitedTask(String id, WaitedTask waitedTask) {
         if (id == null) {
@@ -289,7 +290,7 @@ public class ProcessInstance extends BPMNJacobRunnable {
 
     public void complete(String taskId) {
         synchronized (runningTaskIds) {
-            if (!runningTaskIds.contains(taskId)) {
+            if (!(runningTaskIds.contains(taskId))) {
                 throw new LeviException("No running element found for the processId " + taskId);
             }
             runningTaskIds.remove(taskId);
@@ -347,18 +348,18 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     public void save(RunnableFlowNode flowNode) {
-          DBManager manager = new DBManagerImpl();
+        DBManager manager = new DBManagerImpl();
         if (flowNode instanceof UserTask) {
-            manager.persistUserTask((UserTask)flowNode);
+            manager.persistUserTask((UserTask) flowNode);
         } else if (flowNode instanceof StartEvent) {
-            manager.persistStartEvent((StartEvent)flowNode);
+            manager.persistStartEvent((StartEvent) flowNode);
         }
     }
 
     public boolean hasStartForm() {
         return hasStartForm;
     }
-    
+
     private boolean checkPauseSignal(String taskId) {
         if (taskId == null) {
             throw new NullPointerException("TaskId is null.");

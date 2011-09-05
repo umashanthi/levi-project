@@ -4,6 +4,7 @@ import org.levi.engine.bpmn.Event;
 import org.levi.engine.db.DBManager;
 import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TStartEvent;
 
 /**
@@ -50,7 +51,7 @@ public class StartEvent extends Event {
 
 
     public String getId() {
-        return startEvent.getId();
+        return LeviUtils.combineTaskId(processInstance.getProcessId(), startEvent.getId());
     }
 
     public String getName() {

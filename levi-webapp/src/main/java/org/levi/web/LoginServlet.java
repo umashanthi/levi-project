@@ -93,7 +93,12 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 }
             }
             session.setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
+            if(username.equals("john")){
+                response.sendRedirect("userprocess.jsp");
+            }
+            else{
             response.sendRedirect("index.jsp");
+            }
         }
 
     }

@@ -2,6 +2,7 @@ package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.RunnableFlowNode;
 import org.levi.engine.runtime.ProcessInstance;
+import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TUserTask;
 
 
@@ -69,7 +70,7 @@ public class UserTask extends RunnableFlowNode {
     }
 
     public String getId() {
-        return processInstance.getProcessId() + '#' + task.getId();
+        return LeviUtils.combineTaskId(processInstance.getProcessId(), task.getId());
     }
 
     public TUserTask getTTask(){

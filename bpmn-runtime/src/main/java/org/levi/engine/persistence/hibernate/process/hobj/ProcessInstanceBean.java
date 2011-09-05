@@ -58,7 +58,7 @@ public class ProcessInstanceBean extends HObject {
 //    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
 //    @MapKey(name = "taskId")
 //    @JoinTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "running_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getRunningTasks() {
@@ -72,7 +72,7 @@ public class ProcessInstanceBean extends HObject {
 //    @OneToMany(targetEntity = TaskBean.class, fetch = FetchType.EAGER)
 //    @MapKey(name = "taskId")
 //    @JoinTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "completed_tasks", joinColumns = {@JoinColumn(name = "processId")})
     @MapKeyColumn(name = "taskId")
     public Map<String, TaskBean> getCompletedTasks() {
