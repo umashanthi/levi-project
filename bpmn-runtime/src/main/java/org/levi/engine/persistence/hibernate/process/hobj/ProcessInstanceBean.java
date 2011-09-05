@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.*;
 
 /* This class represents a Process instance  */
-
 @Entity
 @Table(name = "process_instance")
 @SecondaryTable(name = "process_started_user")

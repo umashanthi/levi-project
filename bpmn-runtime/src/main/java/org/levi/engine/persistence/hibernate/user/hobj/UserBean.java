@@ -10,14 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * UserBean: eranda
- * Date: May 11, 2011
- * Time: 7:52:29 AM
- * To change this template use File | Settings | File Templates.
- */
-
 @Entity
 @Table(name = "users")
 public class UserBean extends HObject implements Serializable {
@@ -33,9 +25,6 @@ public class UserBean extends HObject implements Serializable {
     private List<DeploymentBean> deployed = new ArrayList<DeploymentBean>();
     private List<DeploymentBean> undeployed = new ArrayList<DeploymentBean>();
 
-    /*
-        Bean Identifier-UserId
-     */
     @Id
     public String getUserId() {
         return this.userId;

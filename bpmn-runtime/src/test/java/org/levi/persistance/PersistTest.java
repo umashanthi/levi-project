@@ -6,6 +6,7 @@ import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
 import org.levi.engine.persistence.hibernate.process.hobj.EngineDataBean;
 import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
+import org.levi.engine.persistence.hibernate.process.ql.HqlManager;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
@@ -21,11 +22,11 @@ public class PersistTest {
 
     public static void main(String[] args) {
         PersistTest pt = new PersistTest();
-        pt.start();
+        SessionFactoryUtil.exportSchema();
+        //pt.start();
     }
 
     public void start() {
-        SessionFactoryUtil.exportSchema();
         HibernateDao dao = new HibernateDao();
 
         UserBean user1 = new UserBean();
@@ -83,6 +84,7 @@ public class PersistTest {
 
         TaskBean task1 = new TaskBean();
         task1.setTaskId("task1");
+        task1.setAssigned(false);
         task1.getProperties().put("p1","value1");
         task1.getProperties().put("p2","value2");
         task1.getProperties().put("p3","value3");
@@ -110,6 +112,7 @@ public class PersistTest {
 
         TaskBean task3 = new TaskBean();
         task3.setTaskId("task3");
+        task3.setAssigned(false);
         task3.getProperties().put("p1","value1");
         task3.getProperties().put("p2","value2");
         task3.getProperties().put("p3","value3");
@@ -137,6 +140,7 @@ public class PersistTest {
 
         TaskBean task5 = new TaskBean();
         task5.setTaskId("task5");
+        task5.setAssigned(false);
         task5.getProperties().put("p1","value1");
         task5.getProperties().put("p2","value2");
         task5.getProperties().put("p3","value3");
@@ -172,6 +176,9 @@ public class PersistTest {
         dao.save(engine);
 
         dao.close();
+
+        HqlManager hql = new HqlManager();
+        hql.getUserTaskList("user1","d1");
 
     }
 }

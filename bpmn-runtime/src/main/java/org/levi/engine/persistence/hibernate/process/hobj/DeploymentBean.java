@@ -6,9 +6,6 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * @author Ishan Jayawardena.
- */
 @Entity
 @Table(name = "deployment")
 @SecondaryTables(value = {@SecondaryTable(name = "process_deployed_user"),@SecondaryTable(name = "process_undeployed_user")})

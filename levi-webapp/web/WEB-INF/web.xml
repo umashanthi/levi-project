@@ -54,6 +54,10 @@
         <servlet-class>org.levi.web.FormGeneratorServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>TTFormGeneratorServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTFormGeneratorServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>TaskActionServlet</servlet-name>
         <servlet-class>org.levi.web.TaskActionServlet</servlet-class>
     </servlet>
@@ -61,6 +65,58 @@
         <servlet-name>UserManagerServlet</servlet-name>
         <servlet-class>org.levi.web.UserManagerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TTListTaskServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTListTaskServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TTTaskActionServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTTaskActionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TTProcessActionServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTProcessActionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TTSubmitUserTaskServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTSubmitUserTaskServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TTLoginServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTLoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TTListProcessServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTListProcessServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TTListTaskServlet</servlet-name>
+        <url-pattern>/troubleticket/tasks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTTaskActionServlet</servlet-name>
+        <url-pattern>/troubleticket/taskAction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTProcessActionServlet</servlet-name>
+        <url-pattern>/troubleticket/startProcess</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTListProcessServlet</servlet-name>
+        <url-pattern>/troubleticket/listProcesses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTSubmitUserTaskServlet</servlet-name>
+        <url-pattern>/troubleticket/submitUserTaskForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTLoginServlet</servlet-name>
+        <url-pattern>/troubleticket/login</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>TTFormGeneratorServlet</servlet-name>
+        <url-pattern>/troubleticket/vel</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -105,6 +161,7 @@
         <servlet-name>UserManagerServlet</servlet-name>
         <url-pattern>/usrmng</url-pattern>
     </servlet-mapping>
+
     <jsp-config>
         <taglib>
             <taglib-uri>http://jakarta.apache.org/taglibs/veltag-1.0</taglib-uri>

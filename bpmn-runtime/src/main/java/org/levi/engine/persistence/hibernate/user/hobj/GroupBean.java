@@ -6,13 +6,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: eranda
- * Date: May 11, 2011
- * Time: 8:07:02 AM
- * To change this template use File | Settings | File Templates.
- */
 @Entity
 @Table(name = "groups")
 public class GroupBean extends HObject{
@@ -46,9 +39,6 @@ public class GroupBean extends HObject{
         this.groupDescription = description;
     }
 
-    /*
-        @ManyToMany - One group can have many users
-     */
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_group", joinColumns = {@JoinColumn(name = "groupId")}, inverseJoinColumns = {@JoinColumn(name = "userId")}, uniqueConstraints = @UniqueConstraint(columnNames = {"userId","groupId"}))
     public List<UserBean> getMembers() {

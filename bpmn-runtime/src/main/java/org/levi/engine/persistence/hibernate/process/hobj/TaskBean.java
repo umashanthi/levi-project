@@ -1,6 +1,5 @@
 package org.levi.engine.persistence.hibernate.process.hobj;
 
-import org.hibernate.annotations.Cascade;
 import org.levi.engine.persistence.hibernate.HObject;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/* This class represents a single task in the process (including usertask) */
+/* This class represents a single task in the process */
 @Entity
 @Table(name = "task")
 @SecondaryTables(value = {@SecondaryTable(name = "task_owner"),@SecondaryTable(name = "task_assignee"),@SecondaryTable(name = "task_process_instance")})

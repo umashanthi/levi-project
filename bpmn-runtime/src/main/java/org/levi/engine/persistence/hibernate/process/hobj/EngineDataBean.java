@@ -5,13 +5,6 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: eranda
- * Date: May 27, 2011
- * Time: 12:53:22 AM
- * To change this template use File | Settings | File Templates.
- */
 @Entity
 @Table(name = "engine_data")
 public class EngineDataBean extends HObject {
@@ -49,7 +42,7 @@ public class EngineDataBean extends HObject {
 //    @MapKey(name = "processId")
 //    @JoinTable(name = "process_instance_data", joinColumns = {@JoinColumn(name = "id")})
     @ElementCollection
-    @CollectionTable(name = "process_instances", joinColumns = {@JoinColumn(name = "id")})
+    @CollectionTable(name = "running_process_instances", joinColumns = {@JoinColumn(name = "id")})
     @MapKeyColumn(name = "processId")
     public Map<String, ProcessInstanceBean> getRunningProcesses() {
         return runningProcesses;

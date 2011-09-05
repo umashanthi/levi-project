@@ -11,13 +11,10 @@ import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.List;
 
-
 /**
- * Created by IntelliJ IDEA.
- * UserBean: eranda
- * Date: May 10, 2011
- * Time: 8:31:12 AM
- * To change this template use File | Settings | File Templates.
+ *
+ * Save, Update and Delete Hibernate Objects
+ *
  */
 public class HibernateDao {
 
@@ -46,8 +43,7 @@ public class HibernateDao {
     public Object getObject(Class hibCls, String id) {
         session.close();
         session = SessionFactoryUtil.getSession();
-        Object obj = session.get(hibCls, id);
-        return obj;
+        return session.get(hibCls, id);
     }
 
     public Object remove(Class hibCls, String id) {
@@ -67,13 +63,11 @@ public class HibernateDao {
     }
 
     public List<UserBean> getUserObjects() {
-        List objects = session.createCriteria(UserBean.class).list();
-        return objects;
+        return session.createCriteria(UserBean.class).list();
     }
 
     public List<GroupBean> getGroupObjects() {
-        List objects = session.createCriteria(GroupBean.class).list();
-        return objects;
+        return session.createCriteria(GroupBean.class).list();
     }
 
     public List<TaskBean> getAssignedTasks(String userId) {
@@ -95,7 +89,6 @@ public class HibernateDao {
     public TaskBean getTask(String taskId, String processInstanceId) {
         Criteria criteria = session.createCriteria(TaskBean.class);
         criteria.add(Restrictions.eq("taskId", processInstanceId+"#"+taskId));
-       // criteria.add(Restrictions.eq("processeInstance.processId", processInstanceId));
         if (criteria.list().size() > 0) {
             return (TaskBean) criteria.list().get(0);
         } else {

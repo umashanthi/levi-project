@@ -230,11 +230,14 @@ public class ProcessInstance extends BPMNJacobRunnable {
         if (variables == null) {
             throw new NullPointerException("Process variables map is null.");
         }
-        Object output = variables.put(name, value);
+        Object output = this.variables.put(name, value);
         Map<String, String> processVariables = LeviUtils.newHashMap();
         for (String key : this.variables.keySet()) {
-            processVariables.put(key, this.variables.get(key).toString());
+            if (this.variables.get(key) != null) {
+                processVariables.put(key, this.variables.get(key).toString());
+            }
         }
+        output = this.variables.put(name, value);
         dbManager.setVariables(this.getProcessId(), processVariables);
         return output;
     }
@@ -246,7 +249,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
         this.variables.putAll(variables);
         Map<String, String> processVariables = LeviUtils.newHashMap();
         for (String key : this.variables.keySet()) {
+            if (this.variables.get(key) != null) {
             processVariables.put(key, this.variables.get(key).toString());
+            }
         }
         dbManager.setVariables(this.getProcessId(), processVariables);
     }
