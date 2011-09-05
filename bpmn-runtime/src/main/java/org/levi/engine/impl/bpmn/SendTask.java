@@ -58,16 +58,16 @@ public class SendTask extends RunnableFlowNode {
     }
 
      private void persistSendTask(SendTask sendTask) {
-        HibernateDao dao = new HibernateDao();
+       // HibernateDao dao = new HibernateDao();
         // todo remove later
 //        processInstance.setVariable("recipient", "eranda");
 //        processInstance.setVariable("orderId", 1234);
 //        processInstance.setVariable("male", true);
 //        processInstance.setVariable("recipientName", "Eranda");
         processInstance.setVariable("now", new Date());
-        TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
-        if (starteventbean == null) {
-            starteventbean = new TaskBean();
+        //TaskBean starteventbean = (TaskBean) dao.getObject(TaskBean.class, sendTask.getId());
+        //if (starteventbean == null) {
+           // starteventbean = new TaskBean();
             Node exElems = task.getExtensionElements().getDomNode();
             NodeList children = exElems.getChildNodes();
             for (int i = 0; i < children.getLength(); ++i) {
@@ -121,16 +121,16 @@ public class SendTask extends RunnableFlowNode {
                 }
                 processInstance.setVariable(getId()+"_"+key, value);
             }
-            starteventbean.setTaskId(sendTask.getId());
+            /*starteventbean.setTaskId(sendTask.getId());
             starteventbean.setTaskId(sendTask.getId());
             ProcessInstanceBean processInstanceBean = (ProcessInstanceBean) dao.getObject(ProcessInstanceBean.class, processInstance.getProcessId());
             processInstanceBean.getRunningTasks().put(starteventbean.getTaskId(),starteventbean);
             starteventbean.setFormName(task.getName());
             starteventbean.setTaskName(task.getName());
             dao.save(starteventbean);
-            dao.save(processInstanceBean);
-        }
-        dao.close();
+            dao.save(processInstanceBean);*/
+        //}
+        //dao.close();
     }
 
     public void run() {
