@@ -32,6 +32,7 @@ import java.util.Date;
 public class ServiceTask extends RunnableFlowNode {
     private final TServiceTask task;
     private final ProcessInstance processInstance;
+    private String resultVariableName;
 
     // private String from;
 
@@ -100,8 +101,8 @@ public class ServiceTask extends RunnableFlowNode {
                 // key must be one of {from, to, subject, content}. we must handle this
                 // from the xsd.
                 if (!("url".equals(key) || "isbn".equals(key)
-                        || "key".equals(key))) {
-                    throw new RuntimeException("Field name must be one of {url,isbn,key}. " + key);
+                        || "key".equals(key) || "result".equals(key))) {
+                    throw new RuntimeException("Field name must be one of {url,isbn,key,result}. " + key);
                 }
                 Node stringValueAttribute = field.getAttributes().getNamedItem("stringValue");
                 Node expressionAttribute = field.getAttributes().getNamedItem("expression");
@@ -134,6 +135,9 @@ public class ServiceTask extends RunnableFlowNode {
                 }
                 if (key == null || value == null) {
                     throw new RuntimeException("Malformed serviceTask.");
+                }
+                if ("result".equals(key)) {
+                    resultVariableName = value;
                 }
                 processInstance.setVariable(getId() + "_" + key, value);
             }
@@ -228,7 +232,10 @@ public class ServiceTask extends RunnableFlowNode {
             System.out.println(output);
             System.out.println(response.toString());
 
-            processInstance.setVariable(getId() + "_result", output);
+            if (resultVariableName == null) {
+                throw new NullPointerException("Result variable name is null.");
+            }
+            processInstance.setVariable(resultVariableName, output);
 
 
         } catch (Exception e) {
