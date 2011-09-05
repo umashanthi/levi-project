@@ -3,6 +3,8 @@ package org.levi.engine.impl.bpmn;
 
 import org.levi.engine.bpmn.Event;
 import org.levi.engine.bpmn.FlowNode;
+import org.levi.engine.db.DBManager;
+import org.levi.engine.impl.db.DBManagerImpl;
 import org.levi.engine.runtime.ProcessInstance;
 import org.levi.engine.utils.LeviUtils;
 import org.omg.spec.bpmn.x20100524.model.TEndEvent;
@@ -37,6 +39,8 @@ public class EndEvent extends Event implements FlowNode {
 
     public void run() {
         System.out.println(this.getClassName());
+        DBManager dbManager=new DBManagerImpl();
+        dbManager.persistEndEvent(this.processInstance.getProcessId());
     }
 
     public String getId() {
