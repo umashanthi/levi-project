@@ -1,0 +1,30 @@
+<!-- CSS goes in the document HEAD or added to your external stylesheet -->
+<style type="text/css">
+table.hovertable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 0px;
+	border-color: #999999;
+	border-collapse: collapse;
+}
+table.hovertable th {
+	background-color:#739FCD;
+	border-width: 0px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+	color: #ffffff;
+}
+table.hovertable tr {
+	background-color:#ffffff;
+}
+table.hovertable td {
+	border-width: 0px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #a9c6c9;
+}
+table {
+		width: 100%;
+}
