@@ -21,13 +21,8 @@ public class restClient {
         try {
 
             Client client = Client.create();
-            WebResource webResource = client
-                    .resource("http://www.goodreads.com/author/list/");
-            MultivaluedMap queryParams = new MultivaluedMapImpl();
-            queryParams.add("id", "18541");
-            queryParams.add("key", "OQJFyv38jHqbrpammjHwWg");
-            ClientResponse response = webResource.queryParams(queryParams).get(ClientResponse.class);
-
+            ClientResponse response = goodReadsAuthor(client);
+           // ClientResponse response =  ip2place(client);
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatus());
@@ -42,5 +37,22 @@ public class restClient {
             e.printStackTrace();
         }
 
+    }
+
+    private static ClientResponse goodReadsAuthor(Client client) {
+        WebResource webResource = client
+                .resource("http://www.goodreads.com/book/isbn_to_id");
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("isbn", "0441172717");
+        queryParams.add("key", "OQJFyv38jHqbrpammjHwWg");
+        return webResource.queryParams(queryParams).get(ClientResponse.class);
+    }
+
+     private static ClientResponse ip2place(Client client) {
+        WebResource webResource = client
+                .resource("http://www.geoplugin.net/xml.gp");
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("ip", "101.2.184.134");
+        return webResource.queryParams(queryParams).get(ClientResponse.class);
     }
 }
