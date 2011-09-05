@@ -26,15 +26,8 @@
     <div class="header">
         <div class="header_resize">
             <div class="searchform">
-                <span><a href="logout">Logout</a> </span>
-
-                <form id="formsearch" name="formsearch" method="post" action="#">
-          <span>
-          <input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="80" value="Search our ste:"
-                 type="text"/>
-          </span>
-                    <input name="button_search" src="images/search.gif" class="button_search" type="image"/>
-                </form>
+            You are logged in as <%=session.getAttribute("username").toString()%> of <%=session.getAttribute("usergroup").toString()%>
+             <a href="logout">Logout</a>
             </div>
             <div class="logo">
                 <h1><a href="index.html">Shuffle<span>Bug</span>
