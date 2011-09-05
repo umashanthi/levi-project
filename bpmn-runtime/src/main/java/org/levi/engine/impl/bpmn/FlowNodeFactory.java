@@ -97,6 +97,10 @@ public class FlowNodeFactory {
                 flowNode = new EndEvent.Builder((TEndEvent) e)
                         .processInstance(process)
                         .build();
+            } else if (e instanceof TServiceTask) {
+                flowNode = new ServiceTask.Builder((TServiceTask) e)
+                        .processInstance(process)
+                        .build();
             } else if (e instanceof TSendTask) {
                 flowNode = new SendTask.Builder((TSendTask) e)
                         .processInstance(process)
