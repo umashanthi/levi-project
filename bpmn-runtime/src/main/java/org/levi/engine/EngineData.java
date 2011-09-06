@@ -158,8 +158,8 @@ public class EngineData implements Serializable {
             String diagramPath = (String) s.readObject();
             String extractPath = (String) s.readObject();
             Date date = (Date) s.readObject();
-            Deployment d = new Deployment(processId, omPath, diagramPath, extractPath, date);
-            addDeployment(d);
+            //Deployment d = new Deployment(processId, omPath, diagramPath, extractPath, date);
+            //addDeployment(d);
         }
     }
 

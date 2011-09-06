@@ -61,8 +61,9 @@ public class StorageServiceImpl implements StorageService {
         if (d == null) {
             throw new LeviException("Null Deployment. Deployment failed.");
         }
-        dbManager.persistDeployment(d);
-        engineData.addDeployment(d);
+            dbManager.persistDeployment(d);
+            engineData.addDeployment(d);
+
         System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return d;
     }
@@ -78,6 +79,10 @@ public class StorageServiceImpl implements StorageService {
             throw new LeviException("No diagram found for definitions id " + id);
         }
         return path;
+    }
+
+    public String getDiagram(String id, String fileName) {
+        return engineData.getDeployment(id).getOtherFile(fileName);
     }
 
     public void undeployAll() throws IOException {
@@ -153,7 +158,7 @@ public class StorageServiceImpl implements StorageService {
             // TODO we must save the details of exData aswell
             Deployment d = new Deployment(definitionsId,
                     omPath, diagramPath.substring(start, end),
-                    exData.getExtractPath(), new Date());
+                    exData.getExtractPath(), new Date(), exData.getOtherFiles());
             createdDeployments.add(d);
         } catch (LeviException e) {
             delete(exData.getExtractPath(), true);

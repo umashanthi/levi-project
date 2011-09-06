@@ -54,7 +54,6 @@ public class ProcessEngineImpl implements ProcessEngine {
         }
         File extractPath = new File(Constants.LAR_EXTRACT_PATH);
         if (!extractPath.exists()) {
-            //extractPath.mkdir();
             if (!extractPath.mkdir()) {
                 throw new LeviException("Could not create LAR_EXTRACT_PATH at " + Constants.LAR_EXTRACT_PATH);
             }
@@ -76,23 +75,8 @@ public class ProcessEngineImpl implements ProcessEngine {
         //TODO this is a short fix for the database schema recreating problem
         //TODO the problem: restart the server will recreate the db schema
         SessionFactoryUtil.exportSchema();
-
-        /*
-        File engineDataFile = new File(Constants.ENGINEDATA_PATH);
-        if (engineDataFile.exists()) {
-            ObjectLoader loader = new ObjectLoader(Constants.ENGINEDATA_PATH);
-            EngineData engineData = (EngineData) loader.readNextObject();
-            if (engineData == null) {
-                throw new RuntimeException("Retrieved engine data is null.");
-            }
-            this.engineData = engineData;
-        } else {
-            engineData = new EngineData();
-        }
-        */
         DBManager manager = new DBManagerImpl();
         engineData = manager.getEngineData();
-
         storageService = new StorageServiceImpl(engineData);
         storageService.start();
         runtimeService = new RuntimeServiceImpl(engineData);
@@ -120,7 +104,7 @@ public class ProcessEngineImpl implements ProcessEngine {
         File f = new File(Constants.ENGINEDATA_PATH);
         if (f.exists()) {
             f.delete();
-        } // todo this is too bad! fix it
+        }
         ObjectSaver saver = new ObjectSaver(Constants.ENGINEDATA_PATH);
         saver.saveObject(this.engineData);
         storageService.stop();
@@ -152,7 +136,7 @@ public class ProcessEngineImpl implements ProcessEngine {
 
     public synchronized String startProcess(String id)
             throws IOException, ClassNotFoundException {
-        return startProcess(id, LeviUtils.<String, Object>newHashMap(), null);   // Collections.<String, Object>emptyMap()   //TODO:Check!! userId=null??
+        return startProcess(id, LeviUtils.<String, Object>newHashMap(), null);
     }
 
     public synchronized String startProcess(String id, Map<String, Object> variables, String userId)
@@ -227,6 +211,4 @@ public class ProcessEngineImpl implements ProcessEngine {
         engineData.getProcessInstance(processId).getProcessId();
         return false;
     }
-
-
 }
