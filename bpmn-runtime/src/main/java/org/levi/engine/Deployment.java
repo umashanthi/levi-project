@@ -1,5 +1,7 @@
 package org.levi.engine;
 
+import org.levi.engine.utils.ExtractData;
+import org.levi.engine.utils.Extractor;
 import org.levi.engine.utils.LeviUtils;
 
 import java.util.Date;
@@ -54,8 +56,11 @@ public final class Deployment {
     public String getOtherFile(String fileName) {
         String ext = LeviUtils.getFileExtension(fileName);
 
-        if (ext == null || ext == "" )  {
+        if (ext == null)  {
             return "";
+        }
+        if ("".equals(ext)) {
+            ext = ExtractData.EMPTY_EXTENSION;
         }
         List<String> paths = otherFiles.get(ext);
         for (String path : paths) {

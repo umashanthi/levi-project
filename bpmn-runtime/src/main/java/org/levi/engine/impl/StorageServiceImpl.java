@@ -61,8 +61,9 @@ public class StorageServiceImpl implements StorageService {
         if (d == null) {
             throw new LeviException("Null Deployment. Deployment failed.");
         }
-        dbManager.persistDeployment(d);
-        engineData.addDeployment(d);
+            dbManager.persistDeployment(d);
+            engineData.addDeployment(d);
+
         System.out.println("[Info] Deployed : " + d.getDefinitionsId());
         return d;
     }
