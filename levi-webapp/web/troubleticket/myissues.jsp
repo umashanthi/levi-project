@@ -74,7 +74,7 @@
                         %>
                         <tr onmouseover="this.style.backgroundColor='#e8e8e8';"
                             onmouseout="this.style.backgroundColor='#ffffff';">
-                            <td>ISSUE:<%=task.getTaskId()%>
+                            <td><%=task.getTaskName()%>
                             </td>
                             <td><%=processVariables.get("summary").toString()%>
                             </td>

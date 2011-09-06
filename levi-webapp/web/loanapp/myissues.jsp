@@ -73,7 +73,7 @@
                 %>
                 <table class="hovertable">
                     <tr>
-                        <th>Application ID</th>
+                        <th>Task</th>
                         <th>Customer Name</th>
                         <th>Action</th>
                     </tr>
@@ -83,7 +83,7 @@
                     %>
                     <tr onmouseover="this.style.backgroundColor='#e8e8e8';"
                         onmouseout="this.style.backgroundColor='#ffffff';">
-                        <td>APP:<%=task.getTaskId()%>
+                        <td><%=task.getTaskName()%>
                         </td>
                         <td><%
                             String customerName = processVariables.get("title") + "." + processVariables.get("firstName") + " " + processVariables.get("lastName");%>
