@@ -89,6 +89,10 @@
         <servlet-name>TTListProcessServlet</servlet-name>
         <servlet-class>org.levi.web.troubleticket.TTListProcessServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TTLogoutServlet</servlet-name>
+        <servlet-class>org.levi.web.troubleticket.TTLogoutServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TTListTaskServlet</servlet-name>
         <url-pattern>/troubleticket/tasks</url-pattern>
@@ -113,9 +117,45 @@
         <servlet-name>TTLoginServlet</servlet-name>
         <url-pattern>/troubleticket/login</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTLogoutServlet</servlet-name>
+        <url-pattern>/troubleticket/logout</url-pattern>
+    </servlet-mapping>
      <servlet-mapping>
         <servlet-name>TTFormGeneratorServlet</servlet-name>
         <url-pattern>/troubleticket/vel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTListTaskServlet</servlet-name>
+        <url-pattern>/loanapp/tasks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTTaskActionServlet</servlet-name>
+        <url-pattern>/loanapp/taskAction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTProcessActionServlet</servlet-name>
+        <url-pattern>/loanapp/startProcess</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTListProcessServlet</servlet-name>
+        <url-pattern>/loanapp/listProcesses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTSubmitUserTaskServlet</servlet-name>
+        <url-pattern>/loanapp/submitUserTaskForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTLoginServlet</servlet-name>
+        <url-pattern>/loanapp/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TTLogoutServlet</servlet-name>
+        <url-pattern>/loanapp/logout</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>TTFormGeneratorServlet</servlet-name>
+        <url-pattern>/loanapp/vel</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>

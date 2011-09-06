@@ -23,6 +23,11 @@ import java.util.List;
  * Time: 1:18 PM
  * To change this template use File | Settings | File Templates.
  */
+
+/**
+ * This Servlet handles the User Management Operations via the Web UI
+ * It handles actions: add user, add group, edit user, update user
+ */
 public class UserManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -38,7 +43,6 @@ public class UserManagerServlet extends HttpServlet {
             List<GroupBean> groupBeanList = dbManager.getGroupList();
             request.setAttribute("usersList", userBeanList);
             request.setAttribute("groupList", groupBeanList);
-            //response.sendRedirect("usermanagement.jsp");
             request.getRequestDispatcher("usermanagement.jsp").forward(request, response);
         } else if (action.equals("addgroup")) {  // add group
             String groupName = request.getParameter("groupname");
@@ -76,7 +80,7 @@ public class UserManagerServlet extends HttpServlet {
             UserBean userBean = dbManager.getUser(username);
             assert userBean != null;
             request.setAttribute("user", userBean);
-            request.getRequestDispatcher("edituser.jsp").forward(request, response); // TODO: Check whether this works
+            request.getRequestDispatcher("edituser.jsp").forward(request, response);
         } else if (action.equals("updateUser")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");

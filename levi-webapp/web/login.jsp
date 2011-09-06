@@ -73,8 +73,7 @@
     %>
 </div>
 <div id="footer">
-    <p class="copyright">&copy;&nbsp;&nbsp;2011 All Rights Reserved &nbsp;&bull;&nbsp; Design by <a
-            href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+    <p class="copyright">&copy;&nbsp;&nbsp;Levi&nbsp;&bull;&nbsp;
 
     <p class="link"><a href="#">Privacy Policy</a>&nbsp;&#8226;&nbsp;<a href="#">Terms of Use</a>
     </p>
