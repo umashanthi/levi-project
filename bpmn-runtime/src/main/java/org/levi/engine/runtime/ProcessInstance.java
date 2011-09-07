@@ -224,6 +224,10 @@ public class ProcessInstance extends BPMNJacobRunnable {
     }
 
     public Object setVariable(String name, Object value) {
+              return setVariable(name, value, true);
+    }
+
+    public Object setVariable(String name, Object value, boolean setDb) {
         if (name == null) {
             throw new LeviException("Cannot save a variable with a null name");
         }
@@ -238,7 +242,9 @@ public class ProcessInstance extends BPMNJacobRunnable {
             }
         }
         output = this.variables.put(name, value);
-        dbManager.setVariables(this.getProcessId(), processVariables);
+        if (setDb == true) {
+            dbManager.setVariables(this.getProcessId(), processVariables);
+        }
         return output;
     }
 

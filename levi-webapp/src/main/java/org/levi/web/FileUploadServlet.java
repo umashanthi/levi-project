@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This Servlet class handles the uploading of business process archives to Levi Engine
+ * It get user input .lar file and deploys it to the engine
+ */
+
 public class FileUploadServlet extends HttpServlet {
 
 
@@ -69,7 +74,7 @@ public class FileUploadServlet extends HttpServlet {
                     }
                 }
             } catch (FileUploadException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                response.sendRedirect("index.jsp?isUploadSuccess=false");
             }
 
 

@@ -20,6 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+/**
+ * This Servlet handles the generation of dynamic forms using Apache Velocity
+ * Given the path of the .vm file, its generates the template, merge it and redirect to the page which shows the form
+ */
+
 public class FormGeneratorServlet extends VelocityViewServlet {
     public Template handleRequest(HttpServletRequest request,
                                   HttpServletResponse response, Context context) {
@@ -30,8 +35,6 @@ public class FormGeneratorServlet extends VelocityViewServlet {
         /* Retrieve TaskBean object for the given taskId */
         assert request.getParameter("taskId") != null;
         String taskId = request.getParameter("taskId");
-        // TaskBean taskBean = dbManager.getTaskBean(taskId);
-        //assert taskBean != null;
         String processInsId = request.getParameter("processInstanceId");
         assert request.getParameter("formPath") != null;
         String taskFormPath = request.getParameter("formPath");
@@ -51,9 +54,7 @@ public class FormGeneratorServlet extends VelocityViewServlet {
             }
         }
         try {
-
             template = getTemplate(taskFormPath);   // <-- taskFormPath should be the input parameter
-
         } catch (Exception e) {
             System.out.println("Error " + e);
         }

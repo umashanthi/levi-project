@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Handles user logouts and invalidates the browser session
+ */
 public class LogoutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
@@ -24,6 +27,7 @@ public class LogoutServlet extends HttpServlet {
         engine.stop();
         request.getSession().removeAttribute("logged");
         request.getSession().removeAttribute("username");
+        request.getSession().invalidate();
         response.sendRedirect("index.jsp");
     }
 }

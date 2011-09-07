@@ -18,6 +18,10 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 
+
+/**
+ * This Servlet handles the actions related to Tasks such as Claim User Task
+ */
 public class TaskActionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);

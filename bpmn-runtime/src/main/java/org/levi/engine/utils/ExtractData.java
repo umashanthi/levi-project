@@ -1,14 +1,16 @@
 package org.levi.engine.utils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ishan Jayawardena
  */
 public final class ExtractData {
+    public static String EMPTY_EXTENSION = "EMPTYEXTENSION";
     private String extractPath;
     private List<String> bpmnFiles = LeviUtils.newArrayList();
-    private List<String> otherFiles = LeviUtils.newArrayList();
+    private Map<String, List<String>> otherFiles = LeviUtils.newHashMap();
 
     public boolean validate() {
         if (extractPath == null) {
@@ -44,12 +46,22 @@ public final class ExtractData {
 
     public void addOtherFile(String otherFile) {
         assert otherFile != null;
-        if (!otherFiles.contains(otherFile)) {
-            otherFiles.add(otherFile);
+        String extension = LeviUtils.getFileExtension(otherFile);
+        if ("".equals(extension) || extension == null || otherFile.equals(extension)) {
+            extension = EMPTY_EXTENSION;
+        }
+        if (otherFiles.containsKey(extension)) {
+            if (!otherFiles.get(extension).contains(otherFile)) {
+                otherFiles.get(extension).add(otherFile);
+            }
+        } else {
+            List<String> files = LeviUtils.newArrayList();
+            files.add(otherFile);
+            otherFiles.put(extension, files);
         }
     }
 
-    public List<String> getOtherFiles() {
+    public Map<String, List<String>> getOtherFiles() {
         return otherFiles;
     }
 }

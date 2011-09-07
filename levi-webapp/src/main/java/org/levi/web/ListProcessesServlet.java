@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This Servlet retrieves the currently deployed process lists
+ * and uses to list in the UI
+ */
 public class ListProcessesServlet extends HttpServlet {
 
 
@@ -28,16 +32,16 @@ public class ListProcessesServlet extends HttpServlet {
             assert request.getSession().getAttribute("processEngine") != null;
             ProcessEngine engine = (ProcessEngine) request.getSession().getAttribute("processEngine");
             List<String> processesList = engine.getDeploymentIds();
-            if(processesList!=null){
-            request.getSession().setAttribute("processList", processesList);
+            if (processesList != null) {
+                request.getSession().setAttribute("processList", processesList);
             }
             List<DeploymentBean> deployments = engine.getDeploymentBeans();
-            if(deployments!=null){
-            request.getSession().setAttribute("deployments", deployments);
+            if (deployments != null) {
+                request.getSession().setAttribute("deployments", deployments);
             }
             response.sendRedirect("processes.jsp");
         } catch (Exception ex) {
-            response.getWriter().write("exception");
+            response.sendRedirect("login.jsp?error=not-logged");
         }
 
     }

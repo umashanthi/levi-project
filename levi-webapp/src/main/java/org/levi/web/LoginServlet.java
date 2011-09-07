@@ -17,6 +17,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the login action of the admin-console web app
+ */
 public class LoginServlet extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request,
                           javax.servlet.http.HttpServletResponse response)
@@ -48,7 +51,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             request.getSession().setAttribute("processEngine", engine);
             DBManager dbManager = new DBManagerImpl();
             request.getSession().setAttribute("dbManager", dbManager);
-            //TODO: Need to change!!!
+            /* Default User, Group Configuration */
             Group group = new GroupImpl();
             group.setGroupId("Administration");
             group.setGroupName("Administration");
@@ -93,21 +96,15 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 }
             }
             session.setAttribute("userGroupList", userGroupsString.substring(0, userGroupsString.length() - 2));
-            if(username.equals("john")){
-                response.sendRedirect("userprocess.jsp");
-            }
-            else{
+
             response.sendRedirect("index.jsp");
-            }
+
         }
 
     }
 
     protected boolean allowUser(String username, String password) {
-        //TODO: Handle UserBean Authentication here
-
         if (username.trim().equals("admin") && password.trim().equals("admin")) {
-
             return true;
         } else if (username.trim().equals("john") && password.trim().equals("john")) {
             return true;
