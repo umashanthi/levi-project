@@ -1,13 +1,8 @@
 package org.levi.engine.persistence.hibernate;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
-import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
-import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
-import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 import java.util.List;
 
@@ -60,40 +55,6 @@ public class HibernateDao {
         session.saveOrUpdate(hobj);
         tx.commit();
         session.flush();
-    }
-
-    public List<UserBean> getUserObjects() {
-        return session.createCriteria(UserBean.class).list();
-    }
-
-    public List<GroupBean> getGroupObjects() {
-        return session.createCriteria(GroupBean.class).list();
-    }
-
-    public List<TaskBean> getAssignedTasks(String userId) {
-        Criteria criteria = session.createCriteria(TaskBean.class);
-        criteria.add(Restrictions.eq("active", true));
-        return criteria.list();
-    }
-
-    public List<TaskBean> getUnassignedTasks(String groupId) {
-        session.close();
-        session = SessionFactoryUtil.getSession();
-        Criteria criteria = session.createCriteria(TaskBean.class);
-        criteria.add(Restrictions.eq("potentialGroup.groupId", groupId));
-        criteria.add(Restrictions.eq("assigned", false));
-        criteria.add(Restrictions.eq("active", true));
-        return criteria.list();
-    }
-
-    public TaskBean getTask(String taskId, String processInstanceId) {
-        Criteria criteria = session.createCriteria(TaskBean.class);
-        criteria.add(Restrictions.eq("taskId", processInstanceId+"#"+taskId));
-        if (criteria.list().size() > 0) {
-            return (TaskBean) criteria.list().get(0);
-        } else {
-            return null;
-        }
     }
 
     public void close() {

@@ -35,7 +35,7 @@ public class TaskActionServlet extends HttpServlet {
             String processInstanceId = request.getParameter("processInstanceId");
             assert request.getSession().getAttribute("dbManager") != null;
             DBManager dbManager = (DBManager) request.getSession().getAttribute("dbManager");
-            dbManager.claimUserTask(taskId, processInstanceId, username);
+            dbManager.claimUserTask(processInstanceId+"#"+taskId, username);
             if(request.getParameter("ord")!=null){
                response.sendRedirect("ordering/tasks.jsp");
             }

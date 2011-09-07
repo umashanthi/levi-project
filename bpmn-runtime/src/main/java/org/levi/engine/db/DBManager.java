@@ -294,11 +294,10 @@ public interface DBManager {
     /**
      *
      * @param taskId - id of the task
-     * @param processInstanceId - id of the process instance
      * @param username - id of the user
      * @return - boolean, can claim or not
      */
-    boolean claimUserTask(String taskId, String processInstanceId, String username);
+    boolean claimUserTask(String taskId, String username);
 
     /**
      *
@@ -389,13 +388,6 @@ public interface DBManager {
      * @return - list of tasks (TaskBean)
      */
     List<TaskBean> getUserTaskList(String userName, String definitionId);
-
-    /**
-     *
-     * @param definitionId - definition id of the deployed process
-     * @return - map of tasks in the process instances of the deployed process
-     */
-    Map<String, TaskBean> getActiveProcessInstances(String definitionId);
 
     /**
      *

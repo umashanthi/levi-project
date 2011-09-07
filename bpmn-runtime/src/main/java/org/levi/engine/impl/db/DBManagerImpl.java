@@ -208,8 +208,8 @@ public class DBManagerImpl implements DBManager {
         return (TaskBean)dao.getObject(TaskBean.class, taskId);
     }
 
-    public boolean claimUserTask(String taskId, String processInstanceId, String userId) {
-        TaskBean task = dao.getTask(taskId, processInstanceId);
+    public boolean claimUserTask(String taskId, String userId) {
+        TaskBean task = (TaskBean) dao.getObject(TaskBean.class, taskId);
         if (task != null) {
             if (task.isAssigned()) {
                 return false;
@@ -476,11 +476,13 @@ public class DBManagerImpl implements DBManager {
     }
 
     public Map<String, TaskBean> getActiveTasksMap(String definitionId) {
-        return qlManager.getActiveTasks(definitionId);
-    }
-
-    public void closeSession() {
-        dao.close();
+        Iterator<TaskBean> tasks = qlManager.getActiveTasks(definitionId).iterator();
+        Map<String, TaskBean> map = new HashMap<String, TaskBean>();
+        while(tasks.hasNext()){
+            TaskBean task = tasks.next();
+            map.put(task.getTaskId(), task);
+        }
+        return map;
     }
 
     public List<TaskBean> getUnassignedTasks(String groupId, String definitionId) {
@@ -489,10 +491,6 @@ public class DBManagerImpl implements DBManager {
 
     public List<TaskBean> getUserTaskList(String userName, String definitionId) {
         return qlManager.getUserTaskList(userName, definitionId);
-    }
-
-    public Map<String, TaskBean> getActiveProcessInstances(String definitionId) {
-        return qlManager.getActiveTasks(definitionId);
     }
 
     public List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId) {
@@ -504,4 +502,9 @@ public class DBManagerImpl implements DBManager {
         processInstanceBean.setRunning(false);
         dao.update(processInstanceBean);
     }
+
+    public void closeSession() {
+        dao.close();
+    }
+    
 }

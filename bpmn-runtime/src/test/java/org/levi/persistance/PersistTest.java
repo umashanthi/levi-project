@@ -1,5 +1,7 @@
 package org.levi.persistance;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.levi.engine.persistence.hibernate.HibernateDao;
 import org.levi.engine.persistence.hibernate.SessionFactoryUtil;
 import org.levi.engine.persistence.hibernate.process.hobj.DeploymentBean;
@@ -11,22 +13,15 @@ import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
 
 /**
- * Created by IntelliJ IDEA.
- * UserBean: eranda
- * Date: May 10, 2011
- * Time: 10:48:43 AM
- * To change this template use File | Settings | File Templates.
+ *
+ * This class is used to test simple CRUD operations and  all custom queries implemented in the HqlManager
+ * 
  */
 public class PersistTest {
 
-
-    public static void main(String[] args) {
-        PersistTest pt = new PersistTest();
-        SessionFactoryUtil.exportSchema();
-        //pt.start();
-    }
-
+    @Before
     public void start() {
+        SessionFactoryUtil.exportSchema();
         HibernateDao dao = new HibernateDao();
 
         UserBean user1 = new UserBean();
@@ -176,9 +171,60 @@ public class PersistTest {
         dao.save(engine);
 
         dao.close();
+    }
 
-        HqlManager hql = new HqlManager();
-        hql.getUserTaskList("user1","d1");
+    @Test
+    public void testGetUserObjectList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(3,ql.getUserObjects().size());
+    }
 
+    @Test
+    public void testGetGroupObjectList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(2, ql.getGroupObjects().size());
+    }
+
+    @Test
+    public void testGetGroupIdList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(2, ql.getGroupIds().size());
+    }
+
+    @Test
+    public void testGetUnassignedTaskList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(0, ql.getUnassignedTasks("2").size());
+        junit.framework.Assert.assertEquals(0, ql.getUnassignedTasks("2", "d1").size());
+    }
+
+    @Test
+    public void testGetUserTaskListList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(0 ,ql.getUserTaskList("1", "d1").size());
+    }
+
+    @Test
+    public void testGetRUnningProcessInstanceList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(1,ql.getRunningProcessInstances("d1").size());
+    }
+
+    @Test
+    public void testGetActiveTaskList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(0, ql.getActiveTasks("d1").size());
+    }
+
+    @Test
+    public void testGetCompletedProcessInstanceList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(2, ql.getCompletedProcessInstances("d1").size());
+    }
+
+    @Test
+    public void testGetAssignedTaskList(){
+        HqlManager ql = new HqlManager();
+        junit.framework.Assert.assertEquals(0, ql.getAssignedTasks("1").size());
     }
 }

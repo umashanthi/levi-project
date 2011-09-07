@@ -6,12 +6,8 @@ import org.levi.engine.persistence.hibernate.process.hobj.ProcessInstanceBean;
 import org.levi.engine.persistence.hibernate.process.hobj.TaskBean;
 import org.levi.engine.persistence.hibernate.user.hobj.GroupBean;
 import org.levi.engine.persistence.hibernate.user.hobj.UserBean;
-import org.levi.engine.utils.LeviUtils;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class HqlManager {
 
@@ -41,7 +37,7 @@ public class HqlManager {
 
     public List<TaskBean> getUnassignedTasks(String groupId) {
         refresh();
-        return session.createQuery("from TaskBean as task join task.potentialGroup as group where " +
+        return session.createQuery("select task from TaskBean as task join task.potentialGroup as group where " +
                 "task.assigned=false and task.active=true and group.groupId='"+groupId+"'").list();
     }
 
@@ -55,26 +51,14 @@ public class HqlManager {
         return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.assignee.userId='"+userName+"' and deployment.definitionsId='"+definitionId+"'").list();
     }
 
-    public Map<String, ProcessInstanceBean>  getRunningProcessInstances(String definitionId){
+    public List<ProcessInstanceBean>  getRunningProcessInstances(String definitionId){
         refresh();
-        Iterator<ProcessInstanceBean> running = session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId.trim()+"' and instance.running=true").list().iterator();
-        Map<String, ProcessInstanceBean> map = new HashMap<String, ProcessInstanceBean>();
-        while(running.hasNext()){
-            ProcessInstanceBean instance = running.next();
-            map.put(instance.getProcessId(), instance);
-        }
-        return map;
+        return session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId.trim()+"' and instance.running=true").list();        
     }
 
-    public Map<String, TaskBean> getActiveTasks(String definitionId){
+    public List<TaskBean> getActiveTasks(String definitionId){
         refresh();
-        Iterator<TaskBean> tasks = session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.active=true and deployment.definitionsId='"+definitionId+"'").list().iterator();
-        Map<String, TaskBean> map = new HashMap<String, TaskBean>();
-        while(tasks.hasNext()){
-            TaskBean task = tasks.next();
-            map.put(task.getTaskId(), task);
-        }
-        return map;
+        return session.createQuery("select instance.runningTasks from ProcessInstanceBean as instance join instance.runningTasks as tasks join instance.deployedProcess as deployment where tasks.active=true and deployment.definitionsId='"+definitionId+"'").list();
     }
 
     public List<ProcessInstanceBean> getCompletedProcessInstances(String definitionId){
@@ -82,6 +66,11 @@ public class HqlManager {
         return session.createQuery("from ProcessInstanceBean as instance where instance.deployedProcess.definitionsId='"+definitionId.trim()+"' and instance.running=false").list();
     }
 
+    public List<TaskBean> getAssignedTasks(String userId) {
+        refresh();
+        return session.createQuery("from TaskBean as task join task.assignee as assignee where task.active=true and assignee.userId='"+userId+"'").list();
+    }
+      
     private void refresh() {
         session.close();
         session = SessionFactoryUtil.getSession();

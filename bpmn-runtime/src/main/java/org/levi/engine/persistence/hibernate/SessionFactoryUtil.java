@@ -23,7 +23,7 @@ public class SessionFactoryUtil {
 
     public static void exportSchema(){
         init();
-        new SchemaExport(config).create(true, false);
+        new SchemaExport(config).create(true, true);
     }
 
     public static void init(){
