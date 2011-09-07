@@ -30,9 +30,7 @@
              <a href="logout">Logout</a>
             </div>
             <div class="logo">
-                <h1><a href="index.html">Shuffle<span>Bug</span>
-                    <small>Company Slogan Here</small>
-                </a></h1>
+                <img src="images/<%=session.getAttribute("usergroup").toString()%>.jpg"/>
             </div>
             <div class="clr"></div>
             <div class="menu_nav">

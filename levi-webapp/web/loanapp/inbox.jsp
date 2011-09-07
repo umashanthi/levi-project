@@ -82,14 +82,14 @@
                             <th>Content</th>
                         </tr>
                         <%
-                            for (int id=messageList.size();id>0;id--) {
+                            for (int id=0;id<messageList.size();id++) {
 
                         %>
                         <tr onmouseover="this.style.backgroundColor='#e8e8e8';"
                             onmouseout="this.style.backgroundColor='#ffffff';">
-                            <td><%=(id)%>
+                            <td><%=(id+1)%>
                             </td>
-                            <td><%=(messageList.get((id)+"") != null) ? (messageList.get((id)+"")) : "n/a"%>
+                            <td><%=(messageList.get((id+1)+"") != null) ? (messageList.get((id+1)+"")) : "n/a"%>
                             </td>
                         </tr>
                         <% } %>

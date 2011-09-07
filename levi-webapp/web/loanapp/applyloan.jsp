@@ -104,7 +104,7 @@
                                 <label for="address">Address</label>
                                 <textarea id="address" name="address" rows="8" cols="50"></textarea>
                                 <input type="hidden" id="customerRepEmail" name="customerRepEmail"
-                                       value="ishan">
+                                       value="<%=session.getAttribute("username").toString()%>">
                             </li>
                             <li>
                                 <label for="loantype">Loan Type</label>

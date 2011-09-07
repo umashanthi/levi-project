@@ -95,7 +95,7 @@
                             </td>
                             <td><%=(runningProcessesList.get(processInsId).getTaskDescription() != null) ? runningProcessesList.get(processInsId).getTaskDescription() : "n/a"%>
                             </td>
-                            <td><%=(runningProcessesList.get(processInsId).getAssignee() != null) ? runningProcessesList.get(processInsId).getAssignee() : "n/a"%>
+                            <td><%=(runningProcessesList.get(processInsId).getAssignee() != null) ? runningProcessesList.get(processInsId).getAssignee().getUserId() : "n/a"%>
                             </td>
                             <td><%=(runningProcessesList.get(processInsId).getPotentialGroup().getGroupId() != null) ? runningProcessesList.get(processInsId).getPotentialGroup().getGroupId() : "n/a"%>
                             </td>

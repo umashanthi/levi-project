@@ -27,10 +27,6 @@
 <body>
 
 <script type="text/javascript">
-    // JK Pop up image viewer script- By JavaScriptKit.com
-    // Visit JavaScript Kit (http://javascriptkit.com)
-    // for free JavaScript tutorials and scripts
-    // This notice must stay intact for use
 
     var popbackground = "lightskyblue" //specify backcolor or background image for pop window
     var windowtitle = "Process Diagram"  //pop window title
@@ -56,8 +52,6 @@
         if (typeof jkpopwin == "undefined" || jkpopwin.closed)
             jkpopwin = window.open("", "", winattributes)
         else {
-//getpos() //uncomment these 2 lines if you wish subsequent popups to be centered too
-//jkpopwin.moveTo(leftpos, toppos)
             jkpopwin.resizeTo(popwidth, popheight + 30)
             jkpopwin.scrolling = true
         }
